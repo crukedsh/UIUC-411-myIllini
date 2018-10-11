@@ -1,4 +1,4 @@
-# CS411 Project Track 1 Backend Repo
+# CS411 Project Track 1 Repo
 
 ## Interface and data format Specification
 
