@@ -14,8 +14,8 @@
 * Response Body
 ```
 {
-        "error": ""
-        "data": ""
+        "error": "",
+        "data": "",
         "token":""
 }
 ```
@@ -24,17 +24,17 @@
 * POST
 ```json
 {
-     "first_name":
-     "last_name":
-     "email":
-     "password":
+     "first_name":"",
+     "last_name":"",
+     "email":"",
+     "password":""
 }
 ```
 * Response Body
 ```
 {
-        "error": ""
-        "data": ""
+        "error": "",
+        "data": "",
         "token":""
 }
 ```
