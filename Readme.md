@@ -12,11 +12,13 @@
 ```
 
 * Response Body
+```
 {
-        "error": "",
-        "data": "",
+        "error": ""
+        "data": ""
         "token":""
 }
+```
 
 #### /users/register
 * POST
@@ -29,11 +31,13 @@
 }
 ```
 * Response Body
+```
 {
-        "error": "",
-        "data": "",
+        "error": ""
+        "data": ""
         "token":""
 }
+```
 ---
 Oct.12 10:17 pm, chen zhu:
 
