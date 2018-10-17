@@ -43,7 +43,7 @@ npm start
 
 **Open the directory ./ and ./client in WebStorm respectively in order to develop backend and frontend**
 
-## [Demo](chenzhu2.web.illinois.edu)
+## [Demo](http://chenzhu2.web.illinois.edu)
 
 ## Interface and data format Specification
 #### POST /users/login
