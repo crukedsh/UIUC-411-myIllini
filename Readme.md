@@ -82,7 +82,49 @@ npm start
 }
 ```
 
+#### GET /students/course-selected
+```
+{
+"err":""
+"data":[{
+            "crn": 0
+            "title": ""
+            "grade": 0.0
+            "capacity": 0
+            },
+        {
+            "crn": 0
+            "title": ""
+            "grade": 0.0
+            "capacity": 0
+            }]
+}
+```
+
+#### POST /students/course-register
+
+Request:
+```
+{
+“user_id”:””,
+“crn”:””
+}
+```
+
+Response:
+```
+{
+    "error": "",
+    "data": "success"
+}
+```
+
+
 ---
+
+Oct 29 11:30 pm, chen zhu:
+* add student api
+
 Oct.16 10:30 pm, chen zhu:
 * Create frontend project
 * Implement Login and Register UI

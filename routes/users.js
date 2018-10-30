@@ -9,7 +9,6 @@ users.use(cors());
 
 process.env.SECRET_KEY = "cs411fall2018";
 
-
 users.post('/register', function (req, res) {
     var today = new Date();
     var appData = {
@@ -23,8 +22,8 @@ users.post('/register', function (req, res) {
         "email": req.body.email,
         "password": req.body.password,
         "created_at": today,
-        "type":req.body.role,
-        "id":req.body.netID
+        "type": req.body.role,
+        "id": req.body.netID
     }
 
     database.connection.getConnection(function (err, connection) {
