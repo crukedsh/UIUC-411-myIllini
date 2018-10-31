@@ -96,4 +96,37 @@ students.post('/course-register',function (req, res){
     });
 });
 
+students.post('/course-drop', function (req,res) {
+    var appData = {
+        "error": "",
+        "data": ""
+    };
+    var userData = {
+        "crn": req.body.crn,
+        "user_id": req.body.user_id,
+        "type":"student" //TODO: delete this attribute
+    };
+    database.connection.getConnection(function (err, connection) {
+        if (err) {
+            appData["error"] = "internal server error: database";
+            res.status(500).json(appData);
+        } else {
+            connection.query("Delete from enrollments where crn=? and user_id=?;",[userData.crn,userData.user_id],
+                function (err, rows, fields) {
+                    if (!err) {
+                        appData.error = "";
+                        appData.data = "success";
+                        res.status(200).json(appData);
+                    } else {
+                        appData.error = err.toString();
+                        appData["data"] = "Error Occured!";
+                        res.status(400).json(appData);
+                    }
+                });
+            connection.release();
+        }
+    });
+
+});
+
 module.exports = students;

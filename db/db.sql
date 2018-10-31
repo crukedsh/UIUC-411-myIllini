@@ -26,6 +26,7 @@ CREATE TABLE `enrollments` (
   PRIMARY KEY (`user_id`,`crn`),
   FOREIGN KEY (`user_id`) REFERENCES users( `id`),
   FOREIGN KEY (`crn`) REFERENCES courses(`crn`)
+  On delete Cascade
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
