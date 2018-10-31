@@ -82,7 +82,7 @@ npm start
 }
 ```
 
-#### GET /students/course-selected
+#### GET /students/course-selected/:userID
 ```
 {
 "err":""
@@ -101,7 +101,45 @@ npm start
 }
 ```
 
+#### GET /students/course-unselected/:userID
+```
+{
+"err":""
+"data":[{
+            "crn": 0,
+            "title": "",
+            "grade": 0.0,
+            "capacity": 0,
+            "enrolled_num":0
+            },
+        {
+            "crn": 0,
+            "title": "",
+            "grade": 0.0,
+            "capacity": 0,
+            "enrolled_num":0
+            }]
+}
+```
+
 #### POST /students/course-register
+
+Request:
+```
+{
+“user_id”:””,
+“crn”:””
+}
+```
+
+Response:
+```
+{
+    "error": "",
+    "data": "success"
+}
+```
+#### POST /students/course-drop
 
 Request:
 ```
