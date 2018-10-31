@@ -25,7 +25,7 @@ users.post('/register', function (req, res) {
         "created_at": today,
         "type":req.body.role,
         "id":req.body.netID
-    }
+    };
 
     database.connection.getConnection(function (err, connection) {
         if (err) {
