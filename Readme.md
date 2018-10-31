@@ -120,6 +120,130 @@ Response:
 ```
 
 
+#### POST /professors/create-course
+
+Request:
+```
+{
+"crn": [integer],
+"user_id":""
+"title":"",
+"capacity": [integer]
+}
+```
+
+Response:
+```
+{
+    "error": "",
+    "data": "success"
+}
+```
+
+
+#### POST /professors/delete-course
+
+Request:
+```
+{
+"crn": [integer],
+}
+```
+
+Response:
+```
+{
+    "error": "",
+    "data": "success"
+}
+```
+
+#### POST /professors/edit-course
+
+Request:
+```
+{
+"crn": [integer],
+"user_id":""
+"title":"",
+"capacity": [integer]
+}
+```
+
+Response:
+```
+{
+    "error": "",
+    "data": "success"
+}
+```
+
+#### POST /professors/assign-score
+
+Request:
+```
+{
+"grade": [integer],
+"user_id":""
+"crn":"",
+"type": "student"
+}
+```
+
+Response:
+```
+{
+    "error": "",
+    "data": "success"
+}
+```
+
+
+#### GET /professors/average-score
+
+Response:
+```
+{
+    "error": "",
+    "data": [
+        {
+            "crn": 411,
+            "avg(grade)": 85
+        },
+        {
+            "crn": 425,
+            "avg(grade)": 85.5
+        }
+    ]
+}
+```
+
+
+#### POST /professors/course-detail
+
+Request:
+```
+{
+"user_id": "", //professor
+"crn": [integer]
+}
+```
+
+Response:
+```
+{
+    "error": "",
+    "data": [
+        {
+            "crn": 411,
+            "title": "Database Systems",
+            "capacity": 200,
+            "enrolled_num": 2
+        }
+    ]
+}
+```
+
 ---
 
 Oct 29 11:30 pm, chen zhu:
