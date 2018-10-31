@@ -9,7 +9,6 @@ users.use(cors());
 
 process.env.SECRET_KEY = "cs411fall2018";
 
-
 users.post('/register', function (req, res) {
     var today = new Date();
     var appData = {
