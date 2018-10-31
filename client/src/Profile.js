@@ -12,13 +12,15 @@ import AssessmentIcon from "@material-ui/icons/Assessment";
 import blue from '@material-ui/core/colors/blue';
 import MyCourses from "./MyCourses";
 import UploadPage from "./UploadPage";
+import Snackbar from "@material-ui/core/Snackbar/Snackbar";
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
             // draweropen: false,
-            currentScreen: []
+            currentScreen: [],
+            snackOpen: true,
         };
     }
 
@@ -37,7 +39,7 @@ class App extends Component {
         uploadScreen.push(<MyCourses
             appContext={this.props.appContext}
             role={this.props.role}
-            userID={this.props.username}/>);
+            userID={this.props.userID}/>);
         this.props.appContext.setState({uploadScreen:uploadScreen})
     }
     handleAssignmentClick(){
@@ -85,11 +87,17 @@ class App extends Component {
 
 
 
+
+    handleClose = () => {
+        this.setState({ snackOpen: false });
+    };
+
     render() {
         const styles = {
             root: {
+
                 width: "100%",
-                maxWidth: 360,
+                maxWidth: 1000,
                 marginLeft: "auto",
                 marginRight: "auto"
             },
@@ -99,6 +107,7 @@ class App extends Component {
                 backgroundColor: blue[500],
             },
         };
+
         return (
 
             <div className="App">
@@ -116,7 +125,8 @@ class App extends Component {
                                     <ClassIcon />
                                 </Avatar>
 
-                                <ListItemText primary="Courses"/>
+                                <ListItemText
+                                    primary="Courses" />
                             </ListItem>
                             <li>
                                 <Divider inset/>
@@ -137,6 +147,17 @@ class App extends Component {
                                 <ListItemText primary="Grades"/>
                             </ListItem>
                         </List>
+                        <Snackbar
+                            anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
+                            open={this.state.snackOpen}
+                            onClose={this.handleClose}
+                            ContentProps={{
+                                'aria-describedby': 'message-id',
+                            }}
+                            message={
+                                <span id="message-id">Welcome {this.props.role}, {this.props.userID}! </span>
+                            }
+                        />
                     </div>
             </div>
         );
