@@ -219,12 +219,11 @@ Response:
 ```
 
 
-#### POST /professors/course-detail
+#### POST /courses/course-detail
 
 Request:
 ```
 {
-"user_id": "", //professor
 "crn": [integer]
 }
 ```
