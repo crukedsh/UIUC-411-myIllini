@@ -8,9 +8,9 @@ import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
 import UploadPage from './UploadPage';
 import Drawer from 'material-ui/Drawer';
-var apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
+// var apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
-//var apiBaseUrl = "http://localhost:3001/";
+var apiBaseUrl = "http://localhost:3001/";
 class Login extends Component {
   constructor(props){
     super(props);
@@ -102,8 +102,8 @@ class Login extends Component {
   handleClick(event){
     var self = this;
     var payload={
-      "netID":this.state.username,
-	    "password":this.state.password,
+        "netID":this.state.username,
+        "password":this.state.password,
       //"role":this.state.loginRole
     };
     axios.post(apiBaseUrl+'users/login', payload)

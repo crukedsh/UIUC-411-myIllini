@@ -6,6 +6,9 @@ import TextField from 'material-ui/TextField';
 import axios from 'axios';
 import Login from './Login';
 
+// var apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
+var apiBaseUrl = "http://localhost:3001/"
+
 class Register extends Component {
     constructor(props) {
         super(props);
@@ -24,8 +27,6 @@ class Register extends Component {
     }
 
     handleClick(event, role) {
-        var apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
-        //var apiBaseUrl = "http://localhost:3001/"
         console.log("values in register handler", role);
         var self = this;
         //To be done:check for empty values before hitting submit
