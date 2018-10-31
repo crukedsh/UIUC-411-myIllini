@@ -69,6 +69,7 @@ users.post('/login', function (req, res) {
                                 expiresIn: 5000
                             });
                             appData.error = 0;
+                            appData.data = rows;
                             appData["token"] = token;
                             res.status(200).json(appData);
                         } else {

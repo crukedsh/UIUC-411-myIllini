@@ -140,21 +140,25 @@ professors.post('/assign-score', function(req, res) {
 });
 
 
-// Professor queries average scores wrt crn he teaches.
-professors.get('/average-score', function(req, res) {
+// Professor queries course information wrt crn he teaches.
+professors.post('/course-info', function(req, res) {
     var appData = { // response
         "error": "",
         "data": [],
     };
 
-    var sql = "select crn, avg(grade) from enrollments group by crn";
+    var sqlParams = [req.body.user_id];
+    var sql = "select c.crn, title, avg(grade) as avg_grade, count(e.user_id) as enrolled_num " +
+        "from enrollments e inner join courses c on c.crn = e.crn " +
+        "where c.user_id = ? " +
+        "group by c.crn";
 
     database.connection.getConnection(function (err, connection) {
         if(err) {
             appData.error = "internal server error: database";
             res.status(500).json(appData);
         } else {
-            connection.query(sql, (err, rows, fields) => {
+            connection.query(sql, sqlParams, (err, rows, fields) => {
                 if(err) {
                     appData.error = err.toString();
                     appData.data = "database operation error!";

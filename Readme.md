@@ -48,22 +48,34 @@ npm start
 ## Interface and data format Specification
 #### POST /users/login
 ```
+Request
 {
      "email": "",
      "password":"",
 }
 ```
 
-* Response Body
+Response Body
 ```
 {
-        "error": "",
-        "data": "",
-        "token":""
+    "error": 0,
+    "data": [
+        {
+            "id": "goo",
+            "first_name": "goo",
+            "last_name": "goo",
+            "email": "goo@illinois.edu",
+            "password": "goo",
+            "created_at": "2018-10-31T02:50:14.000Z",
+            "type": "student"
+        }
+    ],
+    "token": ""
 }
 ```
 
 #### POST /users/register
+Request
 
 ```json
 {
@@ -73,7 +85,7 @@ npm start
      "password":""
 }
 ```
-* Response Body
+Response Body
 ```
 {
         "error": "",
@@ -199,7 +211,14 @@ Response:
 ```
 
 
-#### GET /professors/average-score
+#### POST /professors/course-info
+
+Request:
+```
+{
+"user_id":
+}
+```
 
 Response:
 ```
@@ -207,12 +226,10 @@ Response:
     "error": "",
     "data": [
         {
-            "crn": 411,
-            "avg(grade)": 85
-        },
-        {
             "crn": 425,
-            "avg(grade)": 85.5
+            "title": "Distributed Systems",
+            "avg_grade": 85.5,
+            "enrolled_num": 2
         }
     ]
 }
