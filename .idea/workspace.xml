@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="588bf9c9-2c08-4b55-8d5e-7d31c047c7bc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/MyCourses.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/Register.js" afterDir="false" />
-    </list>
+    <list default="true" id="588bf9c9-2c08-4b55-8d5e-7d31c047c7bc" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -34,7 +29,7 @@
     <session id="-1305086292">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="10" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.12" value="2" />
@@ -52,7 +47,7 @@
           <entry key="gitignore" value="7" />
           <entry key="html" value="2" />
           <entry key="ico" value="1" />
-          <entry key="js" value="64" />
+          <entry key="js" value="65" />
           <entry key="json" value="10" />
           <entry key="md" value="5" />
           <entry key="pug" value="1" />
@@ -69,7 +64,7 @@
           <entry key="Image" value="1" />
           <entry key="JSON" value="10" />
           <entry key="Jade" value="1" />
-          <entry key="JavaScript" value="67" />
+          <entry key="JavaScript" value="68" />
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="16" />
           <entry key="SVG" value="2" />
@@ -116,11 +111,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/MyCourses.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="49" column="35" lean-forward="true" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
+            <state relative-caret-position="947">
+              <caret line="47" column="39" lean-forward="true" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="39" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -145,6 +140,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state>
               <caret column="10" selection-start-column="10" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/routes/users.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-411">
+              <caret line="39" column="24" lean-forward="true" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -217,11 +221,11 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1707" />
-    <option name="y" value="-207" />
-    <option name="width" value="1400" />
-    <option name="height" value="785" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1440" />
+    <option name="y" value="-332" />
+    <option name="width" value="1920" />
+    <option name="height" value="1057" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -255,12 +259,6 @@
               <item name="myIllini" type="b2602c69:ProjectViewProjectNode" />
               <item name="myIllini" type="462c0819:PsiDirectoryNode" />
               <item name="client" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="myIllini" type="b2602c69:ProjectViewProjectNode" />
-              <item name="myIllini" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="myIllini" type="b2602c69:ProjectViewProjectNode" />
@@ -355,12 +353,12 @@
       <workItem from="1539750877041" duration="214000" />
       <workItem from="1540857387193" duration="1333000" />
       <workItem from="1540859795709" duration="12324000" />
-      <workItem from="1540918139990" duration="13845000" />
+      <workItem from="1540918139990" duration="15224000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65254000" />
+    <option name="totallyTimeSpent" value="66633000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -388,7 +386,7 @@
       <window_info anchor="bottom" id="Console" order="2" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.32980973" />
-      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.4992722" visible="true" weight="0.22198732" />
+      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.4992722" weight="0.22198732" />
       <window_info anchor="bottom" id="Debug" order="6" weight="0.39852008" />
       <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="8" weight="0.4" />
@@ -396,7 +394,7 @@
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5007278" side_tool="true" weight="0.32937685" />
-      <window_info anchor="bottom" id="Terminal" order="13" sideWeight="0.4992722" weight="0.23361522" />
+      <window_info anchor="bottom" id="Terminal" order="13" sideWeight="0.4992722" visible="true" weight="0.23361522" />
       <window_info anchor="bottom" id="Thumbnails" order="14" weight="0.32937685" />
       <window_info anchor="right" id="Database" order="0" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
@@ -608,13 +606,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/users.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="897">
-          <caret line="39" column="24" lean-forward="true" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/Register.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="443">
@@ -660,13 +651,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/students.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -686,11 +670,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/MyCourses.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="49" column="35" lean-forward="true" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
+        <state relative-caret-position="947">
+          <caret line="47" column="39" lean-forward="true" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="39" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/students.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/users.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-411">
+          <caret line="39" column="24" lean-forward="true" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
         </state>
       </provider>
     </entry>
