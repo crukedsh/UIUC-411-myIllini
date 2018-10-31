@@ -33,21 +33,21 @@ class App extends Component {
 
     handleCoursesClick(){
         console.log("Courses!");
-        var uploadScreen=[];
+        let uploadScreen=[];
         uploadScreen.push(<MyCourses
             appContext={this.props.appContext}
-            role={this.state.role}
-            userID={this.state.username}/>);
-        this.props.appContext.setState({uploadScreen})
+            role={this.props.role}
+            userID={this.props.username}/>);
+        this.props.appContext.setState({uploadScreen:uploadScreen})
     }
     handleAssignmentClick(){
         console.log("Assignments!");
-        var uploadScreen=[];
+        let uploadScreen=[];
         uploadScreen.push(<UploadPage
             appContext={this.props.appContext}
-            role={this.state.role}
-            userID={this.state.username}/>);
-        this.props.appContext.setState({uploadScreen})
+            role={this.props.role}
+            userID={this.props.username}/>);
+        this.props.appContext.setState({uploadScreen:uploadScreen})
 
 
     }

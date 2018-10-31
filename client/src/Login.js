@@ -112,8 +112,8 @@ class Login extends Component {
      console.log(response);
      if(response.status == 200){
        console.log("Login successful!");
-       var uploadScreen=[];
-       uploadScreen.push(<Profile appContext={self.props.appContext} role={self.state.loginRole} userID={self.state.username}/>)
+       let uploadScreen=[];
+       uploadScreen.push(<Profile appContext={self.props.appContext} role={self.state.loginRole} username={self.state.username}/>)
        self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
      }
      else if(response.status == 204){
