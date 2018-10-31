@@ -9,7 +9,20 @@ import UploadScreen from './UploadScreen';
 import Pastfiles from './Pastfiles';
 import LoginScreen from './Loginscreen'
 
-class App extends Component {
+const styles = {
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+    },
+    gridList: {
+        width: 500,
+        height: 450,
+        overflowY: 'auto',
+    },
+};
+
+class UploadPage extends Component {
     constructor(props) {
         super(props);
         this.state = {draweropen: false, currentScreen: []};
@@ -98,4 +111,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default UploadPage;

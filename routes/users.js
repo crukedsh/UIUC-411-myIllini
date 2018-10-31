@@ -22,9 +22,9 @@ users.post('/register', function (req, res) {
         "email": req.body.email,
         "password": req.body.password,
         "created_at": today,
-        "type": req.body.role,
-        "id": req.body.netID
-    }
+        "type":req.body.role,
+        "id":req.body.netID
+    };
 
     database.connection.getConnection(function (err, connection) {
         if (err) {
