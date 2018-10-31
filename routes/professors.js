@@ -37,7 +37,7 @@ professors.post('/create-course', function(req, res) {
                   appData.data = "database operation error!";
                   res.status(400).json(appData);
               } else {
-                  appData.data = "Professor successfully creates a class.";
+                  appData.data = "success";
                   res.status(200).json(appData);
               }
            });
@@ -67,7 +67,7 @@ professors.post('/delete-course', function(req, res) {
                     appData.data = "database operation error!";
                     res.status(400).json(appData);
                 } else {
-                    appData.data = "Professor successfully deletes a class.";
+                    appData.data = "success";
                     res.status(200).json(appData);
                 }
             });
@@ -97,7 +97,7 @@ professors.post('/edit-course', function(req, res) {
                     appData.data = "database operation error!";
                     res.status(400).json(appData);
                 } else {
-                    appData.data = "Professor successfully updates a class.";
+                    appData.data = "success";
                     res.status(200).json(appData);
                 }
             });
@@ -130,7 +130,7 @@ professors.post('/assign-score', function(req, res) {
                     appData.data = "database operation error!";
                     res.status(400).json(appData);
                 } else {
-                    appData.data = "Professor successfully updates a class.";
+                    appData.data = "success";
                     res.status(200).json(appData);
                 }
             });
@@ -140,7 +140,7 @@ professors.post('/assign-score', function(req, res) {
 });
 
 
-// TODO: Professor queries average scores wrt crn he teaches.
+// Professor queries average scores wrt crn he teaches.
 professors.get('/average-score', function(req, res) {
     var appData = { // response
         "error": "",
@@ -155,6 +155,38 @@ professors.get('/average-score', function(req, res) {
             res.status(500).json(appData);
         } else {
             connection.query(sql, (err, rows, fields) => {
+                if(err) {
+                    appData.error = err.toString();
+                    appData.data = "database operation error!";
+                    res.status(400).json(appData);
+                } else {
+                    appData.data = rows;
+                    res.status(200).json(appData);
+                }
+            });
+            connection.release();
+        }
+    });
+});
+
+// Professor queries average scores wrt crn he teaches.
+professors.post('/course-detail', function(req, res) {
+    var appData = { // response
+        "error": "",
+        "data": [],
+    };
+
+    var sqlParams = [req.body.user_id, req.body.crn];
+    var sql = "select c.crn, title, capacity, count(*) as enrolled_num " +
+        "from courses c inner join enrollments e on c.crn = e.crn " +
+        "where c.user_id = ? and c.crn = ?";
+
+    database.connection.getConnection(function (err, connection) {
+        if(err) {
+            appData.error = "internal server error: database";
+            res.status(500).json(appData);
+        } else {
+            connection.query(sql, sqlParams,(err, rows, fields) => {
                 if(err) {
                     appData.error = err.toString();
                     appData.data = "database operation error!";
