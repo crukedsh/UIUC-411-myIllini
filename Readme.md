@@ -91,12 +91,14 @@ npm start
             "title": ""
             "grade": 0.0
             "capacity": 0
+            "enrolled_num":0
             },
         {
             "crn": 0
             "title": ""
             "grade": 0.0
             "capacity": 0
+            "enrolled_num":0
             }]
 }
 ```
