@@ -47,7 +47,10 @@ students.get('/course-unselected/:userId',function (req, res){
             appData["error"] = "internal server error: database";
             res.status(500).json(appData);
         } else {
-            connection.query('SELECT crn, title,capacity FROM courses WHERE crn not in (select crn from enrollments e where e.user_id=?)',
+            connection.query('SELECT count(e.user_id) as enrolled_num, c.crn, title,capacity ' +
+                'FROM courses c left join enrollments e on e.crn=c.crn ' +
+                'WHERE c.crn not in (select crn from enrollments e where e.user_id=?) ' +
+                'group by c.crn ',
                 [req.params.userId], function (err, rows, fields) {
                     if (!err) {
                         appData.error = "";

@@ -63,7 +63,7 @@ class Loginscreen extends Component {
          </div>
          </MuiThemeProvider>
         </div>
-      )
+      );
       this.setState({
                      loginScreen:loginscreen,
                      loginMessage:loginmessage,
