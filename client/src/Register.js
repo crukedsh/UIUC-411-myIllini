@@ -4,7 +4,9 @@ import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
-import Login from './Login';
+import Loginscreen from "./Loginscreen";
+import Drawer from "material-ui/Drawer";
+import MenuItem from "material-ui/MenuItem";
 
 class Register extends Component {
     constructor(props) {
@@ -42,14 +44,15 @@ class Register extends Component {
                 .then(function (response) {
                     console.log(response);
                     if (response.status === 201) {
-                        console.log("registration successfull");
+                        console.log("registration successful");
                         alert("registration successful!");
-                        var loginscreen = [];
-                        loginscreen.push(<Login parentContext={this} appContext={self.props.appContext} role={role}/>);
-                        var loginmessage = "Not Registered yet? Go to registration";
+                        var loginScreen = [];
+                        loginScreen.push(<Loginscreen parentContext={this} appContext={self.props.appContext} role={role}/>);
+                        var loginMessage = "Not Registered yet? Go to registration";
                         self.props.parentContext.setState({
-                            loginscreen: loginscreen,
-                            loginmessage: loginmessage,
+                            loginScreen: loginScreen,
+                            loginButtons: [],
+                            loginMessage: loginMessage,
                             buttonLabel: "Register",
                             isLogin: true
                         });
@@ -77,6 +80,9 @@ class Register extends Component {
             <div>
                 <MuiThemeProvider>
                     <div>
+                        <Drawer open={this.state.open}>
+                            <MenuItem onClick={()=>this.setState({open: !this.state.open})}>About</MenuItem>
+                        </Drawer>
                         <AppBar
                             title="Register"
                         />
