@@ -8,10 +8,10 @@ import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
 import UploadPage from './UploadPage';
 import Drawer from 'material-ui/Drawer';
-import Profile from "./Profile";
-var apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
+import MyCourses from "./MyCourses";
+//var apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
-//var apiBaseUrl = "http://localhost:3001/";
+var apiBaseUrl = "http://localhost:3001/";
 class Login extends Component {
   constructor(props){
     super(props);
@@ -112,8 +112,8 @@ class Login extends Component {
      console.log(response);
      if(response.status == 200){
        console.log("Login successful!");
-       var uploadScreen=[];
-       uploadScreen.push(<Profile appContext={self.props.appContext} role={self.state.loginRole} userID={self.state.username}/>)
+       let uploadScreen=[];
+       uploadScreen.push(<MyCourses appContext={self.props.appContext} role={self.state.loginRole} userID={self.state.username}/>);
        self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
      }
      else if(response.status == 204){
