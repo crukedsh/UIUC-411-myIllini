@@ -189,6 +189,7 @@ class MyCourses extends Component {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Typography>
+                                        {console.log(row)}
                                         Capacity: {row.capacity}
                                     </Typography>
                                 </ExpansionPanelDetails>
