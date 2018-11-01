@@ -17,7 +17,10 @@ class AddEditCourse extends Component {
         super(props);
 
         this.state = {
-            tableData: []
+            tableData: [],
+            crn: "",
+            title: "",
+            capacity: ""
         };
     }
 
@@ -49,6 +52,7 @@ class AddEditCourse extends Component {
         this.props.appContext.setState({uploadScreen:uploadScreen})
     }
 
+
     handleClickBack(){
         console.log("Back to course!");
         let uploadScreen=[];
@@ -58,6 +62,7 @@ class AddEditCourse extends Component {
             userID={this.props.userID}/>);
         this.props.appContext.setState({uploadScreen:uploadScreen})
     }
+
 
     render() {
         const styles =  ({
@@ -75,11 +80,13 @@ class AddEditCourse extends Component {
                 marginLeft: 10,
                 marginRight: 10,
                 width: 230,
+                margin: "normal"
             },
             longTextField: {
                 marginLeft: 10,
                 marginRight: 10,
                 width: 480,
+                margin: "normal"
             },
         });
         console.log(this.state.tableData);
@@ -93,9 +100,9 @@ class AddEditCourse extends Component {
                                 required
                                 id="crn"
                                 label="CRN"
-                                value={this.props.crn}
-                                margin="normal"
+                                defaultValue={this.props.crn}
                                 style={styles.textField}
+                                onChange={(event) => (this.setState({crn: event.target.value}))}
                             />
                             :
                             <TextField
@@ -103,27 +110,25 @@ class AddEditCourse extends Component {
                                 disabled
                                 id="crn"
                                 label="CRN"
-                                value={this.props.crn}
-                                margin="normal"
+                                defaultValue={this.props.crn}
                                 style={styles.textField}
                             />}
 
                     <TextField
                         id="title"
                         label="Title"
-                        value={this.props.title}
-                        margin="normal"
+                        defaultValue={this.props.title}
                         style={styles.longTextField}
+                        onChange={(event) => (this.setState({title: event.target.value}))}
                     />
                     <TextField
                         id="capacity"
                         label="Capacity"
-                        value={this.props.capacity}
+                        defaultValue={this.props.capacity}
                         type="number"
-                        margin="normal"
                         style={styles.textField}
+                        onChange={(event) => (this.setState({capacity: event.target.value}))}
                     />
-
                     <TextField
                         disabled
                         id="detail"
@@ -132,13 +137,12 @@ class AddEditCourse extends Component {
                         rows="5"
                         style={{ margin: 10 }}
                         fullWidth
-                        margin="normal"
                     />
 
                     </form>
                 </div>
                 <div>
-                    <Button color="primary" aria-label="Done">
+                    <Button color="primary" aria-label="Done" onClick={()=>this.handleClickDone()}>
                         <DoneIcon/>
                     </Button>
                     <Button color="primary" aria-label="Back" onClick={()=>this.handleClickBack()}>

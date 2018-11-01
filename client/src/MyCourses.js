@@ -17,6 +17,7 @@ import grey from "@material-ui/core/es/colors/grey";
 import MenuIcon from "@material-ui/icons/Menu";
 import Profile from "./Profile";
 import AddEditCourse from "./AddEditCourse";
+import RegisterCourse from "./RegisterCourse";
 
 const apiBaseUrl = "http://localhost:3001/";
 
@@ -32,7 +33,15 @@ class MyCourses extends Component {
 
     addCourse(){
         if (this.props.role == "student") {
-            console.log("Error!");
+            console.log("Add!");
+            let uploadScreen = [];
+            uploadScreen.push(<RegisterCourse
+                appContext={this.props.appContext}
+                role={this.props.role}
+                userID={this.props.userID}
+                isAdd={true}
+            />);
+            this.props.appContext.setState({uploadScreen: uploadScreen})
         } else {
             console.log("Add!");
             let uploadScreen = [];
@@ -111,11 +120,7 @@ class MyCourses extends Component {
                 fontSize: 18,
                 flexBasis: '100%',
                 color: grey[500]
-            },
-            menuButton: {
-                marginLeft: -12,
-                marginRight: 20,
-            },
+            }
         });
         console.log(this.state.tableData)
         return (
