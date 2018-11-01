@@ -113,8 +113,9 @@ class Login extends Component {
      if(response.status == 200){
        console.log("Login successful!");
        let uploadScreen=[];
-
-       uploadScreen.push(<Profile appContext={self.props.appContext} role={self.state.loginRole} userID={self.state.userID}/>)
+       uploadScreen.push(<Profile appContext={self.props.appContext}
+                                  role={response.data.data[0].type}
+                                  userID={response.data.data[0].id}/>)
        self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
      }
      else if(response.status == 204){
@@ -198,15 +199,6 @@ class Login extends Component {
              title="Login"
              onLeftIconButtonClick={this.handleToggle}
            />
-        </MuiThemeProvider>
-        <MuiThemeProvider>
-        <div>
-        <p>Login as:</p>
-        <DropDownMenu value={this.state.menuValue} onChange={(event,index,value)=>this.handleMenuChange(value)}>
-          <MenuItem value={1} primaryText="Student" />
-          <MenuItem value={2} primaryText="Professor" />
-        </DropDownMenu>
-        </div>
         </MuiThemeProvider>
         {this.state.loginComponent}
       </div>
