@@ -139,7 +139,6 @@ professors.post('/assign-score', function(req, res) {
     });
 });
 
-
 // Professor queries course information wrt crn he teaches.
 professors.post('/course-info', function(req, res) {
     var appData = { // response

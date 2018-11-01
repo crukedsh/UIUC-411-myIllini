@@ -38,6 +38,7 @@ class Loginscreen extends Component {
       isLogin:true
     }
   }
+
   componentWillMount(){
     var loginscreen=[];
     loginscreen.push(<Login parentContext={this} appContext={this.props.appContext}/>);
@@ -47,6 +48,7 @@ class Loginscreen extends Component {
                   loginMessage:loginmessage
                     })
   }
+
   handleClick(event,userRole){
     console.log("event",userRole);
     var loginmessage;

@@ -96,7 +96,7 @@ class MyCourses extends Component {
 
     componentWillMount() {
 
-        if (this.props.role == "teacher") {
+        if (this.props.role == "professor") {
             let payload = {
                 "user_id": this.props.userID
             };
@@ -186,11 +186,13 @@ class MyCourses extends Component {
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                                     <Typography align="left" style={styles.heading}>{row.title}</Typography>
                                     <Typography align="left" style={styles.secondaryHeading}>{row.crn} </Typography>
+                                    {/*<Typography align="right" style={styles.secondaryHeading}>{row.avg_grade}</Typography>*/}
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    <Typography>
-                                        {console.log(row)}
-                                        Capacity: {row.capacity}
+                                    <Typography variant="body1" align="left" gutterBottom>
+                                        Capacity: {row.capacity}<br/>
+                                        Average score: {row.avg_grade}<br/>
+                                        Number of enrolled students: {row.enrolled_num}
                                     </Typography>
                                 </ExpansionPanelDetails>
                                 <Divider/>

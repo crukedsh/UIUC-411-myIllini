@@ -26,15 +26,6 @@ class App extends Component {
         };
     }
 
-    // componentDidMount() {
-    //     var currentScreen = [];
-    //     currentScreen.push(<UploadScreen appContext={this.props.appContext} role={this.props.role} />);
-    //
-    //     this.setState({currentScreen})
-    // }
-
-    // TODO: vacant redirection.
-
     handleCoursesClick(){
         console.log("Courses!");
         let uploadScreen=[];
@@ -44,6 +35,7 @@ class App extends Component {
             userID={this.props.userID}/>);
         this.props.appContext.setState({uploadScreen:uploadScreen})
     }
+
     handleAssignmentClick(){
         console.log("Assignments!");
         let uploadScreen=[];
@@ -52,8 +44,6 @@ class App extends Component {
             role={this.props.role}
             userID={this.props.username}/>);
         this.props.appContext.setState({uploadScreen:uploadScreen})
-
-
     }
     // /**
     //  * Toggle opening and closing of drawer
@@ -86,8 +76,6 @@ class App extends Component {
     //     }
     //     this.setState({draweropen: false})
     // }
-
-
 
 
     handleClose = () => {
