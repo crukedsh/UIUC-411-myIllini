@@ -76,12 +76,14 @@ class MyCourses extends Component {
     }
 
     componentWillMount() {
+
         if (this.props.role=="teacher"){
             let payload={
                 "user_id":this.props.userID
             };
             axios.post(apiBaseUrl + "professors/course-info",payload)
                 .then((response) => {
+                    console.log("here")
                     console.log(response.data)
                     if (response.status == 400) {
                         console.log("Username does not exists");
@@ -136,11 +138,11 @@ class MyCourses extends Component {
             },
             heading: {
                 fontSize: 18,
+                flexBasis: '50%',
                 flexShrink: 0,
             },
             secondaryHeading: {
                 fontSize: 18,
-                flexBasis: '100%',
                 color: grey[500]
             }
         });
@@ -152,10 +154,10 @@ class MyCourses extends Component {
                 <div style={styles.root}>
                     {this.state.tableData.map((row, index) => (
                         <MuiThemeProvider>
-                            <ExpansionPanel>
+                            <ExpansionPanel >
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                                    <Typography style={styles.heading}>{row.title}</Typography>
-                                    <Typography style={styles.secondaryHeading}>{row.crn} </Typography>
+                                    <Typography align="left" style={styles.heading}>{row.title}</Typography>
+                                    <Typography align="left" style={styles.secondaryHeading}>{row.crn} </Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Typography>

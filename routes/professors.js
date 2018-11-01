@@ -149,7 +149,7 @@ professors.post('/course-info', function(req, res) {
 
     var sqlParams = [req.body.user_id];
     var sql = "select c.crn, title, avg(grade) as avg_grade, count(e.user_id) as enrolled_num " +
-        "from enrollments e inner join courses c on c.crn = e.crn " +
+        "from enrollments e right join courses c on c.crn = e.crn " +
         "where c.user_id = ? " +
         "group by c.crn";
 
