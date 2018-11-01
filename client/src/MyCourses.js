@@ -76,6 +76,27 @@ class MyCourses extends Component {
     }
 
     componentWillMount() {
+        if (this.props.role=="teacher"){
+            let payload={
+                "user_id":this.props.userID
+            };
+            axios.post(apiBaseUrl + "professors/course-info",payload)
+                .then((response) => {
+                    console.log(response.data)
+                    if (response.status == 400) {
+                        console.log("Username does not exists");
+                        alert("Username does not exist");
+                    } else if (response.status == 200) {
+                        this.setState({
+                            tableData: response.data.data
+                        });
+                        console.log(this.state)
+                    } else {
+                        alert("unknown error")
+                    }
+                })
+
+        }else{
         axios.get(apiBaseUrl + "students/course-selected/" + this.props.userID)
             .then((response) => {
                 console.log(response.data)
@@ -91,6 +112,7 @@ class MyCourses extends Component {
                     alert("unknown error")
                 }
             })
+        }
     }
 
     handleClickProfile(){

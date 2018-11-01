@@ -9,19 +9,45 @@ import DoneIcon from "@material-ui/icons/Done";
 import Profile from "./Profile";
 import MyCourse from "./MyCourses";
 import TextField from "@material-ui/core/TextField/TextField";
+import axios from "axios";
 
 const apiBaseUrl = "http://localhost:3001/";
 
 class AddEditCourse extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             tableData: [],
             crn: "",
             title: "",
             capacity: ""
         };
+    }
+
+    handleClickDone() {
+        console.log(this.state);
+        if (this.state.crn.length==0){
+            alert("CRN must not be empty!")
+        }else {
+            let payload = {
+                "crn": parseInt(this.state.crn),
+                "title": this.state.title,
+                "capacity": parseInt(this.state.capacity),
+                "user_id": this.props.userID
+            };
+
+            console.log(payload);
+            axios.post(apiBaseUrl + "professors/create-course", payload)
+                .then((response) => {
+                    console.log(response);
+                    if (response.status == 400) {
+                        alert("course already exists!");
+                    } else if (response.status == 200) {
+                        alert("course created successfully!")
+                    }
+                });
+        }
+        return undefined;
     }
 
     componentWillMount() {
@@ -89,7 +115,6 @@ class AddEditCourse extends Component {
                 margin: "normal"
             },
         });
-        console.log(this.state.tableData);
         return (
             <MuiThemeProvider>
                 {this.props.isAdd?<AppBar title="Add Course"/>:<AppBar title="Edit Course"/>}
@@ -101,6 +126,7 @@ class AddEditCourse extends Component {
                                 id="crn"
                                 label="CRN"
                                 defaultValue={this.props.crn}
+                                margin="normal"
                                 style={styles.textField}
                                 onChange={(event) => (this.setState({crn: event.target.value}))}
                             />
@@ -111,6 +137,7 @@ class AddEditCourse extends Component {
                                 id="crn"
                                 label="CRN"
                                 defaultValue={this.props.crn}
+                                margin="normal"
                                 style={styles.textField}
                             />}
 
@@ -137,9 +164,8 @@ class AddEditCourse extends Component {
                         rows="5"
                         style={{ margin: 10 }}
                         fullWidth
-                    />
+                    /></form>
 
-                    </form>
                 </div>
                 <div>
                     <Button color="primary" aria-label="Done" onClick={()=>this.handleClickDone()}>
@@ -157,6 +183,8 @@ class AddEditCourse extends Component {
             </MuiThemeProvider>
         );
     }
+
+
 }
 
 export default (AddEditCourse);
