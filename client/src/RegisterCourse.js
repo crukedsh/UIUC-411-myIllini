@@ -16,9 +16,27 @@ import Typography from "@material-ui/core/Typography/Typography";
 import grey from "@material-ui/core/es/colors/grey";
 import MenuIcon from "@material-ui/icons/Menu";
 import Profile from "./Profile";
-import AddEditCourse from "./AddEditCourse";
 
 const apiBaseUrl = "http://localhost:3001/";
+
+
+const styles = ({
+    root: {
+        width: "100%",
+        maxWidth: 1000,
+        marginLeft: "auto",
+        marginRight: "auto"
+    },
+    heading: {
+        fontSize: 18,
+        flexBasis: '50%',
+        flexShrink: 0,
+    },
+    secondaryHeading: {
+        fontSize: 18,
+        color: grey[500]
+    }
+});
 
 class RegisterCourse extends Component {
     constructor(props) {
@@ -31,21 +49,34 @@ class RegisterCourse extends Component {
         };
     }
 
-    registerCourse(crn){
-        this.state.registered.push(crn);
+    registerCourse(crn) {
         if (this.props.role == "teacher") {
             console.log("Error!");
         } else {
+        let curCrn = this.state.registered;
+        curCrn.push(crn);
+        this.setState({registered: curCrn});
+
             console.log("Add!");
-            let uploadScreen = [];
-            // TODO: register
-            // uploadScreen.push(<AddEditCourse
-            //     appContext={this.props.appContext}
-            //     role={this.props.role}
-            //     userID={this.props.userID}
-            //     isAdd={true}
-            // />);
-            this.props.appContext.setState({uploadScreen: uploadScreen})
+
+                let payload = {
+                    "crn": crn,
+                    "user_id": this.props.userID
+                };
+
+                console.log(payload);
+                axios.post(apiBaseUrl + "students/course-register", payload)
+                    .then((response) => {
+                        console.log(response);
+                        if (response.status == 400) {
+                            alert("fail to add course!");
+                        } else if (response.status == 200) {
+
+                        }
+                    });
+
+            // return undefined;
+
         }
     }
 
@@ -68,49 +99,32 @@ class RegisterCourse extends Component {
             })
     }
 
-    handleClickProfile(){
+    handleClickProfile() {
         console.log("Profile!");
-        let uploadScreen=[];
+        let uploadScreen = [];
         uploadScreen.push(<Profile
             appContext={this.props.appContext}
             role={this.props.role}
             userID={this.props.userID}/>);
-        this.props.appContext.setState({uploadScreen:uploadScreen})
+        this.props.appContext.setState({uploadScreen: uploadScreen})
     }
 
 
     render() {
-        const styles =  ({
-            root: {
-                width: "100%",
-                maxWidth: 1000,
-                marginLeft: "auto",
-                marginRight: "auto"
-            },
-            heading: {
-                fontSize: 18,
-                flexShrink: 0,
-            },
-            secondaryHeading: {
-                fontSize: 18,
-                flexBasis: '100%',
-                color: grey[500]
-            }
-        });
-        console.log(this.state.tableData)
+
+
+        console.log(this.state.registered);
         return (
             <MuiThemeProvider>
                 <AppBar title="My Courses"/>
 
                 <div style={styles.root}>
-                    {this.state.tableData.map((row, index) => {
-                        if (!this.state.registered.includes(row.crn))
-                        return  (
+                    {this.state.tableData.map((row, index) => (
                         <MuiThemeProvider>
                             <ExpansionPanel>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                                    <Typography style={styles.heading}>{row.title}</Typography>
-                                    <Typography style={styles.secondaryHeading}>{row.crn} </Typography>
+                                    <Typography align="left" style={styles.heading}>{row.title}</Typography>
+                                    <Typography align="left" style={styles.secondaryHeading}>{row.crn} </Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Typography>
@@ -119,18 +133,21 @@ class RegisterCourse extends Component {
                                 </ExpansionPanelDetails>
                                 <Divider/>
                                 <ExpansionPanelActions>
-                                    <FlatButton label="add"
-                                                onClick={
-                                                    () => this.registerCourse(row.crn)}/>
+                                    {
+                                        this.state.registered.includes(row.crn) ?
+                                            <FlatButton disabled label="added"/> :
+                                            <FlatButton label="add"
+                                                        onClick={
+                                                            () => this.registerCourse(row.crn)}/>
                                     }
                                 </ExpansionPanelActions>
                             </ExpansionPanel>
                         </MuiThemeProvider>
-                        )   })}
-                    <Button color="primary" aria-label="Add" onClick={()=>this.addCourse()}>
+                    ))}
+                    <Button color="primary" aria-label="Add" onClick={() => this.addCourse()}>
                         <AddIcon/>
                     </Button>
-                    <Button color="primary" aria-label="Profile" onClick={()=>this.handleClickProfile()}>
+                    <Button color="primary" aria-label="Profile" onClick={() => this.handleClickProfile()}>
                         <MenuIcon/>
                     </Button>
                 </div>

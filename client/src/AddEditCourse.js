@@ -18,9 +18,9 @@ class AddEditCourse extends Component {
         super(props);
         this.state = {
             tableData: [],
-            crn: "",
-            title: "",
-            capacity: ""
+            crn: this.props.crn,
+            title: this.props.title,
+            capacity: this.props.capacity
         };
     }
 
@@ -28,7 +28,7 @@ class AddEditCourse extends Component {
         console.log(this.state);
         if (this.state.crn.length==0){
             alert("CRN must not be empty!")
-        }else {
+        } else {
             let payload = {
                 "crn": parseInt(this.state.crn),
                 "title": this.state.title,
@@ -37,35 +37,32 @@ class AddEditCourse extends Component {
             };
 
             console.log(payload);
-            axios.post(apiBaseUrl + "professors/create-course", payload)
-                .then((response) => {
-                    console.log(response);
-                    if (response.status == 400) {
-                        alert("course already exists!");
-                    } else if (response.status == 200) {
-                        alert("course created successfully!")
-                    }
-                });
+            if (this.props.isAdd) {
+                axios.post(apiBaseUrl + "professors/create-course", payload)
+                    .then((response) => {
+                        console.log(response);
+                        if (response.status == 400) {
+                            alert("course already exists!");
+                        } else if (response.status == 200) {
+                            alert("course created successfully!")
+                        }
+                    });
+            } else {
+                axios.post(apiBaseUrl + "professors/edit-course", payload)
+                    .then((response) => {
+                        console.log(response);
+                        if (response.status == 400) {
+                            alert("error!");
+                        } else if (response.status == 200) {
+                            alert("course edited successfully!")
+                        }
+                    });
+            }
+            this.handleClickBack()
         }
-        return undefined;
     }
 
     componentWillMount() {
-        // axios.get(apiBaseUrl + "students/course-selected/" + this.props.userID)
-        //     .then((response) => {
-        //         console.log(response.data)
-        //         if (response.status == 400) {
-        //             console.log("Username does not exists");
-        //             alert("Username does not exist");
-        //         } else if (response.status == 200) {
-        //             this.setState({
-        //                 tableData: response.data.data
-        //             });
-        //             console.log(this.state)
-        //         } else {
-        //             alert("unknown error")
-        //         }
-        //     })
     }
 
     handleClickProfile(){
@@ -115,9 +112,14 @@ class AddEditCourse extends Component {
                 margin: "normal"
             },
         });
+
         return (
             <MuiThemeProvider>
-                {this.props.isAdd?<AppBar title="Add Course"/>:<AppBar title="Edit Course"/>}
+                {this.props.isAdd
+                    ?
+                    <AppBar title="Add Course"/>
+                    :
+                    <AppBar title="Edit Course"/>}
                 <div style={styles.root}>
                     <form style={styles.container} noValidate>
                         {this.props.isAdd ?
