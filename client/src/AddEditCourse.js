@@ -126,7 +126,6 @@ class AddEditCourse extends Component {
                                 id="crn"
                                 label="CRN"
                                 defaultValue={this.props.crn}
-                                margin="normal"
                                 style={styles.textField}
                                 onChange={(event) => (this.setState({crn: event.target.value}))}
                             />
@@ -137,7 +136,6 @@ class AddEditCourse extends Component {
                                 id="crn"
                                 label="CRN"
                                 defaultValue={this.props.crn}
-                                margin="normal"
                                 style={styles.textField}
                             />}
 
