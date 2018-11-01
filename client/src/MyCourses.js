@@ -21,6 +21,24 @@ import RegisterCourse from "./RegisterCourse";
 
 const apiBaseUrl = "http://localhost:3001/";
 
+const styles = ({
+    root: {
+        width: "100%",
+        maxWidth: 1000,
+        marginLeft: "auto",
+        marginRight: "auto"
+    },
+    heading: {
+        fontSize: 18,
+        flexBasis: '50%',
+        flexShrink: 0,
+    },
+    secondaryHeading: {
+        fontSize: 18,
+        color: grey[500]
+    }
+});
+
 class MyCourses extends Component {
     constructor(props) {
         console.log(props);
@@ -28,10 +46,11 @@ class MyCourses extends Component {
 
         this.state = {
             tableData: [],
+            deleted: []
         };
     }
 
-    addCourse(){
+    addCourse() {
         if (this.props.role == "student") {
             console.log("Add!");
             let uploadScreen = [];
@@ -55,7 +74,7 @@ class MyCourses extends Component {
         }
     }
 
-    editCourse(crn, title, capacity){
+    editCourse(crn, title, capacity) {
         if (this.props.role == "student") {
             console.log("Error!");
         } else {
@@ -77,13 +96,12 @@ class MyCourses extends Component {
 
     componentWillMount() {
 
-        if (this.props.role=="teacher"){
-            let payload={
-                "user_id":this.props.userID
+        if (this.props.role == "teacher") {
+            let payload = {
+                "user_id": this.props.userID
             };
-            axios.post(apiBaseUrl + "professors/course-info",payload)
+            axios.post(apiBaseUrl + "professors/course-info", payload)
                 .then((response) => {
-                    console.log("here")
                     console.log(response.data)
                     if (response.status == 400) {
                         console.log("Username does not exists");
@@ -98,54 +116,64 @@ class MyCourses extends Component {
                     }
                 })
 
-        }else{
-        axios.get(apiBaseUrl + "students/course-selected/" + this.props.userID)
-            .then((response) => {
-                console.log(response.data)
-                if (response.status == 400) {
-                    console.log("Username does not exists");
-                    alert("Username does not exist");
-                } else if (response.status == 200) {
-                    this.setState({
-                        tableData: response.data.data
-                    });
-                    console.log(this.state)
-                } else {
-                    alert("unknown error")
-                }
-            })
+        } else {
+            axios.get(apiBaseUrl + "students/course-selected/" + this.props.userID)
+                .then((response) => {
+                    console.log(response.data)
+                    if (response.status == 400) {
+                        console.log("Username does not exists");
+                        alert("Username does not exist");
+                    } else if (response.status == 200) {
+                        this.setState({
+                            tableData: response.data.data
+                        });
+                        console.log(this.state)
+                    } else {
+                        alert("unknown error")
+                    }
+                })
         }
     }
 
-    handleClickProfile(){
+    deleteCourse(crn) {
+        if (this.props.role == "student") {
+            console.log("Error!");
+        } else {
+            let curCrn = this.state.deleted;
+            curCrn.push(crn);
+            this.setState({deleted: curCrn});
+            console.log("Delete!");
+            let payload = {
+                "crn": crn
+            };
+            console.log(payload);
+            axios.post(apiBaseUrl + "professors/delete-course", payload)
+                .then((response) => {
+                    console.log(response);
+                    if (response.status == 400) {
+                        alert("fail to delete course!");
+                    } else if (response.status == 200) {
+
+                    }
+                });
+
+        }
+    }
+
+
+    handleClickProfile() {
         console.log("Profile!");
-        let uploadScreen=[];
+        let uploadScreen = [];
         uploadScreen.push(<Profile
             appContext={this.props.appContext}
             role={this.props.role}
             userID={this.props.userID}/>);
-        this.props.appContext.setState({uploadScreen:uploadScreen})
+        this.props.appContext.setState({uploadScreen: uploadScreen})
     }
 
 
     render() {
-        const styles =  ({
-            root: {
-                width: "100%",
-                maxWidth: 1000,
-                marginLeft: "auto",
-                marginRight: "auto"
-            },
-            heading: {
-                fontSize: 18,
-                flexBasis: '50%',
-                flexShrink: 0,
-            },
-            secondaryHeading: {
-                fontSize: 18,
-                color: grey[500]
-            }
-        });
+
         console.log(this.state.tableData)
         return (
             <MuiThemeProvider>
@@ -154,7 +182,7 @@ class MyCourses extends Component {
                 <div style={styles.root}>
                     {this.state.tableData.map((row, index) => (
                         <MuiThemeProvider>
-                            <ExpansionPanel >
+                            <ExpansionPanel>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                                     <Typography align="left" style={styles.heading}>{row.title}</Typography>
                                     <Typography align="left" style={styles.secondaryHeading}>{row.crn} </Typography>
@@ -167,25 +195,29 @@ class MyCourses extends Component {
                                 <Divider/>
                                 <ExpansionPanelActions>
                                     {this.props.role == "student" ?
-                                        <FlatButton label="drop" />
+                                        <FlatButton label="drop"/>
                                         :
                                         <div>
                                             <FlatButton label="edit"
                                                         onClick={
-                                                            ()=>this.editCourse(row.crn,
+                                                            () => this.editCourse(row.crn,
                                                                 row.title,
                                                                 row.capacity)}/>
-                                            <FlatButton label="delete"/>
+                                            {this.state.deleted.includes(row.crn) ?
+                                                <FlatButton disabled label="deleted"/> :
+                                                <FlatButton label="delete"
+                                                            onClick={
+                                                                () => this.deleteCourse(row.crn)}/>}
                                         </div>
                                     }
                                 </ExpansionPanelActions>
                             </ExpansionPanel>
                         </MuiThemeProvider>
                     ))}
-                    <Button color="primary" aria-label="Add" onClick={()=>this.addCourse()}>
+                    <Button color="primary" aria-label="Add" onClick={() => this.addCourse()}>
                         <AddIcon/>
                     </Button>
-                    <Button color="primary" aria-label="Profile" onClick={()=>this.handleClickProfile()}>
+                    <Button color="primary" aria-label="Profile" onClick={() => this.handleClickProfile()}>
                         <MenuIcon/>
                     </Button>
                 </div>
