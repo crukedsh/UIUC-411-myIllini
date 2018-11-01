@@ -6,6 +6,8 @@ import Divider from "@material-ui/core/Divider/Divider";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import List from "@material-ui/core/List/List";
+import ChatIcon from "@material-ui/icons/Chat";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ClassIcon from "@material-ui/icons/Class";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import AssessmentIcon from "@material-ui/icons/Assessment";
@@ -146,6 +148,25 @@ class App extends Component {
                                 </Avatar>
                                 <ListItemText primary="Grades"/>
                             </ListItem>
+                            <li>
+                                <Divider inset/>
+                            </li>
+                            <ListItem button>
+                                <Avatar style={styles.avatar}>
+                                    <ChatIcon />
+                                </Avatar>
+                                <ListItemText primary="Messages"/>
+                            </ListItem>
+                            <li>
+                                <Divider inset/>
+                            </li>
+                            <ListItem button>
+                                <Avatar style={styles.avatar}>
+                                    <AccountBoxIcon />
+                                </Avatar>
+                                <ListItemText primary="Account"/>
+                            </ListItem>
+
                         </List>
                         <Snackbar
                             anchorOrigin={{ vertical:"bottom", horizontal:"left" }}

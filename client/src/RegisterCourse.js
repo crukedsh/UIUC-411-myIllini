@@ -53,27 +53,25 @@ class RegisterCourse extends Component {
         if (this.props.role == "teacher") {
             console.log("Error!");
         } else {
-        let curCrn = this.state.registered;
-        curCrn.push(crn);
-        this.setState({registered: curCrn});
-
             console.log("Add!");
 
-                let payload = {
-                    "crn": crn,
-                    "user_id": this.props.userID
-                };
+            let payload = {
+                "crn": crn,
+                "user_id": this.props.userID
+            };
 
-                console.log(payload);
-                axios.post(apiBaseUrl + "students/course-register", payload)
-                    .then((response) => {
-                        console.log(response);
-                        if (response.status == 400) {
-                            alert("fail to add course!");
-                        } else if (response.status == 200) {
-
-                        }
-                    });
+            console.log(payload);
+            axios.post(apiBaseUrl + "students/course-register", payload)
+                .then((response) => {
+                    console.log(response);
+                    if (response.status == 400) {
+                        alert("fail to add course!");
+                    } else if (response.status == 200) {
+                        let curCrn = this.state.registered;
+                        curCrn.push(crn);
+                        this.setState({registered: curCrn});
+                    }
+                });
 
             // return undefined;
 

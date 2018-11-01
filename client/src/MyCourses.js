@@ -139,9 +139,7 @@ class MyCourses extends Component {
         if (this.props.role == "student") {
             console.log("Error!");
         } else {
-            let curCrn = this.state.deleted;
-            curCrn.push(crn);
-            this.setState({deleted: curCrn});
+
             console.log("Delete!");
             let payload = {
                 "crn": crn
@@ -153,7 +151,9 @@ class MyCourses extends Component {
                     if (response.status == 400) {
                         alert("fail to delete course!");
                     } else if (response.status == 200) {
-
+                        let curCrn = this.state.deleted;
+                        curCrn.push(crn);
+                        this.setState({deleted: curCrn});
                     }
                 });
 
