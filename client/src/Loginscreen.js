@@ -28,7 +28,7 @@ class Loginscreen extends Component {
       </div>
     )
     this.state={
-      username:'',
+      userID:'',
       password:'',
       loginScreen:[],
       loginMessage:'',

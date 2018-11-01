@@ -35,7 +35,7 @@ class Register extends Component {
         var self = this;
         //To be done:check for empty values before hitting submit
         if (this.state.first_name.length > 0 && this.state.last_name.length > 0 && this.state.email.length > 0 && this.state.password.length > 0) {
-            var payload = {
+            let payload = {
                 "first_name": this.state.first_name,
                 "last_name": this.state.last_name,
                 "email": this.state.email,

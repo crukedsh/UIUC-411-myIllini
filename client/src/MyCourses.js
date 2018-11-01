@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-
 import AddIcon from "@material-ui/icons/Add";
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton'
@@ -15,42 +13,57 @@ import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Divider from "@material-ui/core/Divider/Divider";
 import Button from "@material-ui/core/Button/Button";
 import Typography from "@material-ui/core/Typography/Typography";
-import blue from "@material-ui/core/colors/blue";
-import withStyles from "@material-ui/core/es/styles/withStyles";
 import grey from "@material-ui/core/es/colors/grey";
-import Toolbar from "@material-ui/core/Toolbar/Toolbar";
-import IconButton from "@material-ui/core/IconButton/IconButton";
-
 import MenuIcon from "@material-ui/icons/Menu";
-import Drawer from "material-ui/Drawer";
-import MenuItem from "material-ui/MenuItem";
 import Profile from "./Profile";
+import AddEditCourse from "./AddEditCourse";
 
 const apiBaseUrl = "http://localhost:3001/";
 
 class MyCourses extends Component {
     constructor(props) {
+        console.log(props);
         super(props);
-        let buttonContent = [];
-        if (this.props.role == "student") {
-            buttonContent.push(
-                <div>
-                    <FlatButton label="drop"/>
-                </div>
-            )
-        } else {
-            buttonContent.push(
-                <div>
-                    <FlatButton label="edit"/>
-                    <FlatButton label="delete"/>
-                </div>
-            )
-        }
 
         this.state = {
             tableData: [],
-            buttonContent: buttonContent
         };
+    }
+
+    addCourse(){
+        if (this.props.role == "student") {
+            console.log("Error!");
+        } else {
+            console.log("Add!");
+            let uploadScreen = [];
+            uploadScreen.push(<AddEditCourse
+                appContext={this.props.appContext}
+                role={this.props.role}
+                userID={this.props.userID}
+                isAdd={true}
+            />);
+            this.props.appContext.setState({uploadScreen: uploadScreen})
+        }
+    }
+
+    editCourse(crn, title, capacity){
+        if (this.props.role == "student") {
+            console.log("Error!");
+        } else {
+            console.log("Edit!");
+            let uploadScreen = [];
+            uploadScreen.push(<AddEditCourse
+                appContext={this.props.appContext}
+                role={this.props.role}
+                userID={this.props.userID}
+                isAdd={false}
+                crn={crn}
+                title={title}
+                capacity={capacity}
+
+            />);
+            this.props.appContext.setState({uploadScreen: uploadScreen})
+        }
     }
 
     componentWillMount() {
@@ -115,24 +128,35 @@ class MyCourses extends Component {
                             <ExpansionPanel>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                                     <Typography style={styles.heading}>{row.title}</Typography>
-                                    <Typography style={styles.secondaryHeading}>{row.crn}</Typography>
+                                    <Typography style={styles.secondaryHeading}>{row.crn} </Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Typography>
-                                        Details here!
+                                        Capacity: {row.capacity}
                                     </Typography>
                                 </ExpansionPanelDetails>
                                 <Divider/>
                                 <ExpansionPanelActions>
-                                    {this.state.buttonContent}
+                                    {this.props.role == "student" ?
+                                        <FlatButton label="drop" />
+                                        :
+                                        <div>
+                                            <FlatButton label="edit"
+                                                        onClick={
+                                                            ()=>this.editCourse(row.crn,
+                                                                row.title,
+                                                                row.capacity)}/>
+                                            <FlatButton label="delete"/>
+                                        </div>
+                                    }
                                 </ExpansionPanelActions>
                             </ExpansionPanel>
                         </MuiThemeProvider>
                     ))}
-                    <Button color="primary" aria-label="Add">
+                    <Button color="primary" aria-label="Add" onClick={()=>this.addCourse()}>
                         <AddIcon/>
                     </Button>
-                    <Button color="primary" aria-label="Add" onClick={()=>this.handleClickProfile()}>
+                    <Button color="primary" aria-label="Profile" onClick={()=>this.handleClickProfile()}>
                         <MenuIcon/>
                     </Button>
                 </div>

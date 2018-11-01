@@ -141,7 +141,7 @@ class AddEditCourse extends Component {
                     <Button color="primary" aria-label="Done">
                         <DoneIcon/>
                     </Button>
-                    <Button color="primary" aria-label="Back"  onClick={()=>this.handleClickBack()}>
+                    <Button color="primary" aria-label="Back" onClick={()=>this.handleClickBack()}>
                         <ClearIcon/>
                     </Button>
                     <Button color="primary" aria-label="Profile" onClick={()=>this.handleClickProfile()}>

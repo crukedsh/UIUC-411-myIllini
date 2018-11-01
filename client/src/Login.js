@@ -22,7 +22,7 @@ class Login extends Component {
          <TextField
            hintText="Enter your Illinois netID"
            floatingLabelText="Student Id"
-           onChange = {(event,newValue)=>this.setState({username:newValue})}
+           onChange = {(event,newValue)=>this.setState({userID:newValue})}
            />
          <br/>
            <TextField
@@ -37,7 +37,7 @@ class Login extends Component {
        </MuiThemeProvider>
     )
     this.state={
-      username:'',
+      userID:'',
       password:'',
       menuValue:1,
       loginComponent:localloginComponent,
@@ -57,7 +57,7 @@ class Login extends Component {
            <TextField
              hintText="Enter your netID"
              floatingLabelText="Student Id"
-             onChange = {(event,newValue) => this.setState({username:newValue})}
+             onChange = {(event,newValue) => this.setState({userID:newValue})}
              />
            <br/>
              <TextField
@@ -82,7 +82,7 @@ class Login extends Component {
            <TextField
              hintText="Enter your NetID"
              floatingLabelText="Teacher Id"
-             onChange = {(event,newValue) => this.setState({username:newValue})}
+             onChange = {(event,newValue) => this.setState({userID:newValue})}
              />
            <br/>
              <TextField
@@ -103,7 +103,7 @@ class Login extends Component {
   handleClick(event){
     var self = this;
     var payload={
-        "netID":this.state.username,
+        "netID":this.state.userID,
         "password":this.state.password,
       //"role":this.state.loginRole
     };
@@ -113,16 +113,17 @@ class Login extends Component {
      if(response.status == 200){
        console.log("Login successful!");
        let uploadScreen=[];
-       uploadScreen.push(<Profile appContext={self.props.appContext} role={self.state.loginRole} username={self.state.username}/>)
+
+       uploadScreen.push(<Profile appContext={self.props.appContext} role={self.state.loginRole} userID={self.state.userID}/>)
        self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
      }
      else if(response.status == 204){
-       console.log("Username password do not match");
-       alert("Username password do not match")
+       console.log("userID password do not match");
+       alert("userID password do not match")
      }
      else{
-       console.log("Username does not exists");
-       alert("Username does not exist");
+       console.log("userID does not exists");
+       alert("userID does not exist");
      }
    })
    .catch(function (error) {
@@ -141,7 +142,7 @@ class Login extends Component {
            <TextField
              hintText="Enter your College Rollno"
              floatingLabelText="Student Id"
-             onChange = {(event,newValue) => this.setState({username:newValue})}
+             onChange = {(event,newValue) => this.setState({userID:newValue})}
              />
            <br/>
              <TextField
@@ -165,7 +166,7 @@ class Login extends Component {
            <TextField
              hintText="Enter your netId"
              floatingLabelText="Teacher Id"
-             onChange = {(event,newValue) => this.setState({username:newValue})}
+             onChange = {(event,newValue) => this.setState({userID:newValue})}
              />
            <br/>
              <TextField
