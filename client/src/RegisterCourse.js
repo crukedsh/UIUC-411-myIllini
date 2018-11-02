@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AddIcon from "@material-ui/icons/Add";
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton'
 import axios from "axios";
@@ -16,6 +15,8 @@ import Typography from "@material-ui/core/Typography/Typography";
 import grey from "@material-ui/core/es/colors/grey";
 import MenuIcon from "@material-ui/icons/Menu";
 import Profile from "./Profile";
+import ClearIcon from "@material-ui/icons/Clear";
+import MyCourse from "./MyCourses";
 
 const apiBaseUrl = "http://localhost:3001/";
 
@@ -73,7 +74,6 @@ class RegisterCourse extends Component {
                     }
                 });
 
-            // return undefined;
 
         }
     }
@@ -107,14 +107,22 @@ class RegisterCourse extends Component {
         this.props.appContext.setState({uploadScreen: uploadScreen})
     }
 
+    handleClickBack(){
+        console.log("Back to course!");
+        let uploadScreen=[];
+        uploadScreen.push(<MyCourse
+            appContext={this.props.appContext}
+            role={this.props.role}
+            userID={this.props.userID}/>);
+        this.props.appContext.setState({uploadScreen:uploadScreen})
+    }
+
 
     render() {
-
-
         console.log(this.state.registered);
         return (
             <MuiThemeProvider>
-                <AppBar title="My Courses"/>
+                <AppBar title="Register Courses"/>
 
                 <div style={styles.root}>
                     {this.state.tableData.map((row, index) => (
@@ -142,8 +150,8 @@ class RegisterCourse extends Component {
                             </ExpansionPanel>
                         </MuiThemeProvider>
                     ))}
-                    <Button color="primary" aria-label="Add" onClick={() => this.addCourse()}>
-                        <AddIcon/>
+                    <Button color="primary" aria-label="Back" onClick={()=>this.handleClickBack()}>
+                        <ClearIcon/>
                     </Button>
                     <Button color="primary" aria-label="Profile" onClick={() => this.handleClickProfile()}>
                         <MenuIcon/>

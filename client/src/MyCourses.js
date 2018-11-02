@@ -46,9 +46,11 @@ class MyCourses extends Component {
 
         this.state = {
             tableData: [],
-            deleted: []
+            deleted: [],
+            dropped: []
         };
     }
+
 
     addCourse() {
         if (this.props.role == "student") {
@@ -58,7 +60,6 @@ class MyCourses extends Component {
                 appContext={this.props.appContext}
                 role={this.props.role}
                 userID={this.props.userID}
-                isAdd={true}
             />);
             this.props.appContext.setState({uploadScreen: uploadScreen})
         } else {
@@ -135,6 +136,33 @@ class MyCourses extends Component {
         }
     }
 
+    dropCourse(crn) {
+        if (this.props.role == "teacher") {
+            console.log("Error!");
+        } else {
+
+            console.log("Drop!");
+            let payload = {
+                "crn": crn,
+                "user_id": this.props.userID
+            };
+            console.log(payload);
+            axios.post(apiBaseUrl + "students/course-drop", payload)
+                .then((response) => {
+                    console.log(response);
+                    if (response.status == 400) {
+                        alert("fail to drop course!");
+                    } else if (response.status == 200) {
+                        let curCrn = this.state.dropped;
+                        curCrn.push(crn);
+                        this.setState({dropped: curCrn});
+                    }
+                });
+
+        }
+
+    }
+
     deleteCourse(crn) {
         if (this.props.role == "student") {
             console.log("Error!");
@@ -196,7 +224,11 @@ class MyCourses extends Component {
                                 <Divider/>
                                 <ExpansionPanelActions>
                                     {this.props.role == "student" ?
-                                        <FlatButton label="drop"/>
+                                        this.state.dropped.includes(row.crn) ?
+                                            <FlatButton disabled label="dropped"/> :
+                                            <FlatButton label="drop" onClick={
+                                                () => this.dropCourse(row.crn)}/>
+
                                         :
                                         <div>
                                             <FlatButton label="edit"
