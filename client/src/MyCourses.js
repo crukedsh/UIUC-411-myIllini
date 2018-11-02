@@ -217,9 +217,17 @@ class MyCourses extends Component {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Typography>
-                                        {console.log(row)}
-                                        Capacity: {row.capacity}
+                                        Capacity={row.capacity}
                                     </Typography>
+                                    <Typography>
+                                        , Enrolled student={row.enrolled_num}
+                                    </Typography>
+                                    {row.enrolled_num ?
+                                        <Typography>
+                                            , Average grade={row.avg_grade}
+                                        </Typography> :
+                                        <Typography/>}
+
                                 </ExpansionPanelDetails>
                                 <Divider/>
                                 <ExpansionPanelActions>
