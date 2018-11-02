@@ -18,7 +18,7 @@ import Profile from "./Profile";
 import ClearIcon from "@material-ui/icons/Clear";
 import MyCourse from "./MyCourses";
 
-const apiBaseUrl = "http://localhost:3001/";
+let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
 
 const styles = ({

@@ -19,7 +19,7 @@ import Profile from "./Profile";
 import AddEditCourse from "./AddEditCourse";
 import RegisterCourse from "./RegisterCourse";
 
-const apiBaseUrl = "http://localhost:3001/";
+let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
 const styles = ({
     root: {

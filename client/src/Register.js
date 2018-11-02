@@ -8,9 +8,7 @@ import Loginscreen from "./Loginscreen";
 import Drawer from "material-ui/Drawer";
 import MenuItem from "material-ui/MenuItem";
 
-// var apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
-
-var apiBaseUrl = "http://localhost:3001/";
+let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
 class Register extends Component {
     constructor(props) {

@@ -23,7 +23,7 @@ Dropzone is used for local file selection
 */
 import Dropzone from 'react-dropzone';
 
-var apiBaseUrl = "http://localhost:4000/api/";
+let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 /*
 Module:superagent
 superagent is used to handle post/get requests to server

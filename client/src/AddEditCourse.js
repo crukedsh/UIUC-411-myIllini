@@ -11,7 +11,7 @@ import MyCourse from "./MyCourses";
 import TextField from "@material-ui/core/TextField/TextField";
 import axios from "axios";
 
-const apiBaseUrl = "http://localhost:3001/";
+let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
 class AddEditCourse extends Component {
     constructor(props) {

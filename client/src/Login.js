@@ -9,8 +9,7 @@ import axios from 'axios';
 import Profile from './Profile';
 import Drawer from 'material-ui/Drawer';
 
-// var apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
-var apiBaseUrl = "http://localhost:3001/";
+let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
 class Login extends Component {
     constructor(props) {
