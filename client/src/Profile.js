@@ -1,188 +1,257 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-// import AppBar from 'material-ui/AppBar';
-import ListItem from "@material-ui/core/ListItem/ListItem";
-import Divider from "@material-ui/core/Divider/Divider";
-import ListItemText from "@material-ui/core/ListItemText/ListItemText";
-import Avatar from "@material-ui/core/Avatar/Avatar";
-import List from "@material-ui/core/List/List";
-import ChatIcon from "@material-ui/icons/Chat";
-import AccountBoxIcon from "@material-ui/icons/AccountBox";
-import ClassIcon from "@material-ui/icons/Class";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import AssessmentIcon from "@material-ui/icons/Assessment";
-import blue from '@material-ui/core/colors/blue';
-import MyCourses from "./MyCourses";
-import UploadPage from "./UploadPage";
-import Snackbar from "@material-ui/core/Snackbar/Snackbar";
+import classNames from 'classnames';
+import {createMuiTheme, MuiThemeProvider, withStyles} from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import { about } from './DrawerItems';
+import blue from "@material-ui/core/colors/blue";
+import pink from "@material-ui/core/colors/pink";
+import red from "@material-ui/core/colors/red";
+import Paper from "@material-ui/core/Paper/Paper";
+import FormControl from "@material-ui/core/FormControl/FormControl";
+import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import Input from "@material-ui/core/Input/Input";
+import Button from "@material-ui/core/Button/Button";
+import axios from "axios";
+let apiBaseUrl = "http://localhost:3001/";
 
+const drawerWidth = 240;
 
-const styles = {
+const theme = createMuiTheme({
+    palette: {
+        primary: blue,
+        secondary: pink,
+        error: red,
+        contrastThreshold: 3,
+        tonalOffset: 0.2,
+    },
+});
+
+const styles = theme => ({
     root: {
-        width: "100%",
-        maxWidth: 1000,
-        marginLeft: "auto",
-        marginRight: "auto"
+        display: 'flex',
     },
-    avatar: {
-        margin: 5,
-        color: '#fff',
-        backgroundColor: blue[500],
+    toolbar: {
+        paddingRight: 24,
     },
-};
+    toolbarIcon: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    appBarSpacer: theme.mixins.toolbar,
+    menuButton: {
+        marginLeft: 12,
+        marginRight: 36,
+    },
+    menuButtonHidden: {
+        display: 'none',
+    },
+    title: {
+        flexGrow: 1,
+    },
+    drawerPaper: {
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    drawerPaperClose: {
+        overflowX: 'hidden',
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        width: theme.spacing.unit * 7,
+        [theme.breakpoints.up('sm')]: {
+            width: theme.spacing.unit * 9,
+        },
+    },
+
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing.unit * 3,
+        height: '100vh',
+        overflow: 'auto',
+    },
+    mainPage: {
+        height: '100vh',
+        width: 'auto',
+        display: 'block',
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+            width: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    paper: {
+        marginTop: theme.spacing.unit * 12,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing.unit,
+    },
+    submit: {
+        marginTop: theme.spacing.unit * 3,
+    },
+});
 
 class Profile extends React.Component {
     constructor(props) {
+        console.log(props);
         super(props);
+        console.log(this.props);
+        console.log(this.props.appContext);
         this.state = {
-            // draweropen: false,
-            currentScreen: [],
-            snackOpen: true,
+            open: false,
+            userID: '',
+            password: '',
         };
     }
 
-    // componentDidMount() {
-    //     var currentScreen = [];
-    //     currentScreen.push(<UploadScreen appContext={this.props.appContext} role={this.props.role} />);
-    //
-    //     this.setState({currentScreen})
-    // }
-
-    // TODO: vacant redirection.
-
-    handleCoursesClick(){
-        console.log("Courses!");
-        let uploadScreen=[];
-        uploadScreen.push(<MyCourses
-            appContext={this.props.appContext}
-            role={this.props.role}
-            userID={this.props.userID}/>);
-        this.props.appContext.setState({uploadScreen:uploadScreen})
-    }
-    handleAssignmentClick(){
-        console.log("Assignments!");
-        let uploadScreen=[];
-        uploadScreen.push(<UploadPage
-            appContext={this.props.appContext}
-            role={this.props.role}
-            userID={this.props.username}/>);
-        this.props.appContext.setState({uploadScreen:uploadScreen})
-
-
-    }
-    // /**
-    //  * Toggle opening and closing of drawer
-    //  * @param {*} event
-    //  */
-    // toggleDrawer(event) {
-    //     // console.log("drawer click");
-    //     this.setState({draweropen: !this.state.draweropen})
-    // }
-    //
-    // handleMenuClick(event, page) {
-    //     switch (page) {
-    //         case "openprint":
-    //             // console.log("need to open uploadapge")
-    //             var currentScreen = [];
-    //             currentScreen.push(<UploadScreen appContext={this.props.appContext} role={this.props.role}/>);
-    //             this.setState({currentScreen})
-    //             break;
-    //         case "openpast":
-    //             // console.log("need to open pastfiles")
-    //             var currentScreen = [];
-    //             currentScreen.push(<Pastfiles appContext={this.props.appContext} role={this.props.role}/>);
-    //             this.setState({currentScreen})
-    //             break;
-    //         case "logout":
-    //             var loginPage = [];
-    //             loginPage.push(<LoginScreen appContext={this.props.appContext}/>);
-    //             this.props.appContext.setState({loginPage: loginPage, uploadScreen: []})
-    //             break;
-    //     }
-    //     this.setState({draweropen: false})
-    // }
-
-
-
-
-    handleClose = () => {
-        this.setState({ snackOpen: false });
+    handleDrawerOpen = () => {
+        this.setState({ open: true });
     };
 
+    handleDrawerClose = () => {
+        this.setState({ open: false });
+    };
+
+    handleSubmit = () => {
+        let payload = {
+            "netID": this.state.userID,
+            "password": this.state.password,
+            //"role":this.state.loginRole
+        };
+        let self = this;
+        console.log(self.props.appContext);
+        console.log(payload);
+        axios.post(apiBaseUrl + 'users/login', payload)
+            .then(function (response) {
+                console.log(response);
+                if (response.status == 200) {
+                    console.log(self);
+                    alert("Login successful!")
+                    let page = [];
+                    page.push(<Profile appContext={self.props.appContext}
+                                       role={response.data.data[0].type}
+                                       userID={response.data.data[0].id}/>);
+                    self.props.appContext.setState({page: page})
+                    console.log(self);
+                }
+                else if (response.status == 204) {
+                    console.log("userID password do not match");
+                    alert("userID password do not match")
+                }
+                else {
+                    console.log("userID does not exists");
+                    alert("userID does not exist");
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
     render() {
         const { classes } = this.props;
 
         return (
 
-            <div className="App">
-                {/*<AppBar title="Personal Profile">*/}
+            <div className={classes.root}>
+                <MuiThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <AppBar
+                        position="absolute"
+                        className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+                    >
+                        <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
+                            <IconButton
+                                color="inherit"
+                                aria-label="Open drawer"
+                                onClick={this.handleDrawerOpen}
+                                className={classNames(
+                                    classes.menuButton,
+                                    this.state.open && classes.menuButtonHidden,
+                                )}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography
+                                component="h1"
+                                variant="h6"
+                                color="inherit"
+                                noWrap
+                                className={classes.title}
+                            >
+                                Dashboard
+                            </Typography>
+                            <IconButton color="inherit">
+                                <Badge badgeContent={4} color="secondary">
+                                    <NotificationsIcon />
+                                </Badge>
+                            </IconButton>
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer
+                        variant="permanent"
+                        classes={{
+                            paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+                        }}
+                        open={this.state.open}
+                    >
+                        <div className={classes.toolbarIcon}>
+                            <IconButton onClick={this.handleDrawerClose}>
+                                <ChevronLeftIcon />
+                            </IconButton>
+                        </div>
+                        <Divider />
+                        <List>{about}</List>
+                    </Drawer>
 
-                    {/*onLeftIconButtonClick={(event) => this.toggleDrawer(event)*/}
+                    <CssBaseline/>
+                    <main className={classes.mainPage}>
 
-                {/*</AppBar>*/}
-                    <div style={classes.root}>
-                        <List>
-                            <ListItem button onClick={(event) => this.handleCoursesClick(event)}>
-                                <Avatar style={classes.avatar}>
-                                    <ClassIcon />
-                                </Avatar>
 
-                                <ListItemText
-                                    primary="Courses" />
-                            </ListItem>
-                            <li>
-                                <Divider inset/>
-                            </li>
-                            <ListItem button onClick={(event) => this.handleAssignmentClick(event)}>
-                                <Avatar style={classes.avatar}>
-                                    <AssignmentIcon />
-                                </Avatar>
-                                <ListItemText primary="Assignments"/>
-                            </ListItem>
-                            <li>
-                                <Divider inset/>
-                            </li>
-                            <ListItem button>
-                                <Avatar style={classes.avatar}>
-                                    <AssessmentIcon />
-                                </Avatar>
-                                <ListItemText primary="Grades"/>
-                            </ListItem>
-                            <li>
-                                <Divider inset/>
-                            </li>
-                            <ListItem button>
-                                <Avatar style={classes.avatar}>
-                                    <ChatIcon />
-                                </Avatar>
-                                <ListItemText primary="Messages"/>
-                            </ListItem>
-                            <li>
-                                <Divider inset/>
-                            </li>
-                            <ListItem button>
-                                <Avatar style={classes.avatar}>
-                                    <AccountBoxIcon />
-                                </Avatar>
-                                <ListItemText primary="Account"/>
-                            </ListItem>
-
-                        </List>
-                        <Snackbar
-                            anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
-                            open={this.state.snackOpen}
-                            onClose={this.handleClose}
-                            ContentProps={{
-                                'aria-describedby': 'message-id',
-                            }}
-                            message={
-                                <span id="message-id">Welcome {this.props.role}, {this.props.userID}! </span>
-                            }
-                        />
-                    </div>
+                    </main>
+                </MuiThemeProvider>
             </div>
         );
     }

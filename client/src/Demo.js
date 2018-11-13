@@ -171,11 +171,11 @@ class Demo extends React.Component {
                     if (response.status == 200) {
                         console.log(self);
                         alert("Login successful!")
-                        let uploadScreen = [];
-                        uploadScreen.push(<Profile appContext={self.props.appContext}
+                        let page = [];
+                        page.push(<Profile appContext={self.props.appContext}
                                                    role={response.data.data[0].type}
                                                    userID={response.data.data[0].id}/>);
-                        self.props.appContext.setState({loginPage: uploadScreen, uploadScreen: []})
+                        self.props.appContext.setState({page: page})
                         console.log(self);
                     }
                     else if (response.status == 204) {
@@ -225,11 +225,9 @@ class Demo extends React.Component {
                         >
                             Dashboard
                         </Typography>
-                        <IconButton color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
+                        <Button color="inherit">
+                            Register
+                        </Button>
                     </Toolbar>
                 </AppBar>
                 <Drawer
