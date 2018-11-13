@@ -137,7 +137,10 @@ const styles = theme => ({
 
 class Demo extends React.Component {
     constructor(props) {
+        console.log(props);
         super(props);
+        console.log(this.props);
+        console.log(this.props.appContext);
         this.state = {
             open: false,
             userID: '',
@@ -154,24 +157,26 @@ class Demo extends React.Component {
     };
 
     handleSubmit = () => {
-            let self = this;
             let payload = {
                 "netID": this.state.userID,
                 "password": this.state.password,
                 //"role":this.state.loginRole
             };
+            let self = this;
+            console.log(self.props.appContext);
             console.log(payload);
             axios.post(apiBaseUrl + 'users/login', payload)
                 .then(function (response) {
                     console.log(response);
                     if (response.status == 200) {
-                        console.log(response.data.data[0].type, response.data.data[0].id, "Login successful!");
+                        console.log(self);
                         alert("Login successful!")
                         let uploadScreen = [];
                         uploadScreen.push(<Profile appContext={self.props.appContext}
                                                    role={response.data.data[0].type}
-                                                   userID={response.data.data[0].id}/>)
-                        self.props.appContext.setState({loginPage: [], uploadScreen: uploadScreen})
+                                                   userID={response.data.data[0].id}/>);
+                        self.props.appContext.setState({loginPage: uploadScreen, uploadScreen: []})
+                        console.log(self);
                     }
                     else if (response.status == 204) {
                         console.log("userID password do not match");

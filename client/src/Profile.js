@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+// import AppBar from 'material-ui/AppBar';
 import ListItem from "@material-ui/core/ListItem/ListItem";
 import Divider from "@material-ui/core/Divider/Divider";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
@@ -16,7 +18,22 @@ import MyCourses from "./MyCourses";
 import UploadPage from "./UploadPage";
 import Snackbar from "@material-ui/core/Snackbar/Snackbar";
 
-class App extends Component {
+
+const styles = {
+    root: {
+        width: "100%",
+        maxWidth: 1000,
+        marginLeft: "auto",
+        marginRight: "auto"
+    },
+    avatar: {
+        margin: 5,
+        color: '#fff',
+        backgroundColor: blue[500],
+    },
+};
+
+class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -94,36 +111,22 @@ class App extends Component {
         this.setState({ snackOpen: false });
     };
 
-    render() {
-        const styles = {
-            root: {
 
-                width: "100%",
-                maxWidth: 1000,
-                marginLeft: "auto",
-                marginRight: "auto"
-            },
-            avatar: {
-                margin: 5,
-                color: '#fff',
-                backgroundColor: blue[500],
-            },
-        };
+    render() {
+        const { classes } = this.props;
 
         return (
 
             <div className="App">
-            <MuiThemeProvider>
-                <AppBar title="Personal Profile">
+                {/*<AppBar title="Personal Profile">*/}
 
-                    {/*// onLeftIconButtonClick={(event) => this.toggleDrawer(event)}*/}
+                    {/*onLeftIconButtonClick={(event) => this.toggleDrawer(event)*/}
 
-                </AppBar>
-            </MuiThemeProvider>
-                    <div style={styles.root}>
+                {/*</AppBar>*/}
+                    <div style={classes.root}>
                         <List>
                             <ListItem button onClick={(event) => this.handleCoursesClick(event)}>
-                                <Avatar style={styles.avatar}>
+                                <Avatar style={classes.avatar}>
                                     <ClassIcon />
                                 </Avatar>
 
@@ -134,7 +137,7 @@ class App extends Component {
                                 <Divider inset/>
                             </li>
                             <ListItem button onClick={(event) => this.handleAssignmentClick(event)}>
-                                <Avatar style={styles.avatar}>
+                                <Avatar style={classes.avatar}>
                                     <AssignmentIcon />
                                 </Avatar>
                                 <ListItemText primary="Assignments"/>
@@ -143,7 +146,7 @@ class App extends Component {
                                 <Divider inset/>
                             </li>
                             <ListItem button>
-                                <Avatar style={styles.avatar}>
+                                <Avatar style={classes.avatar}>
                                     <AssessmentIcon />
                                 </Avatar>
                                 <ListItemText primary="Grades"/>
@@ -152,7 +155,7 @@ class App extends Component {
                                 <Divider inset/>
                             </li>
                             <ListItem button>
-                                <Avatar style={styles.avatar}>
+                                <Avatar style={classes.avatar}>
                                     <ChatIcon />
                                 </Avatar>
                                 <ListItemText primary="Messages"/>
@@ -161,7 +164,7 @@ class App extends Component {
                                 <Divider inset/>
                             </li>
                             <ListItem button>
-                                <Avatar style={styles.avatar}>
+                                <Avatar style={classes.avatar}>
                                     <AccountBoxIcon />
                                 </Avatar>
                                 <ListItemText primary="Account"/>
@@ -185,4 +188,8 @@ class App extends Component {
     }
 }
 
-export default App;
+Profile.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Profile);

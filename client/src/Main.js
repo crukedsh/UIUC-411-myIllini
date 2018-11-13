@@ -2,37 +2,33 @@ import React, {Component} from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import './App.css';
-import LoginScreen from './Loginscreen';
+import Demo from './Demo';
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 // injectTapEventPlugin();
-class App extends Component {
+class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loginPage: [],
-            uploadScreen: [],
-            forum: []
+            page: []
         }
     }
 
     componentWillMount() {
-        var loginPage = [];
-        loginPage.push(<LoginScreen appContext={this}/>);
+        let page = [];
+        page.push(<Demo appContext={this}/>);
         this.setState({
-            loginPage: loginPage
+            page: page
         })
     }
 
     render() {
         return (
             <div className="App">
-                {this.state.loginPage}
-                {this.state.uploadScreen}
-                {this.state.forum}
+                {this.state.page}
             </div>
         );
     }
 }
 
-export default App;
+export default Main;
