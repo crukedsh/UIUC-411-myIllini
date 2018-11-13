@@ -23,6 +23,10 @@ import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
 import Button from "@material-ui/core/Button/Button";
+import axios from "axios";
+import Profile from "./Profile"
+
+let apiBaseUrl = "http://localhost:3001/";
 
 const drawerWidth = 240;
 
@@ -41,7 +45,7 @@ const styles = theme => ({
         display: 'flex',
     },
     toolbar: {
-        paddingRight: 24, // keep right padding when drawer closed
+        paddingRight: 24,
     },
     toolbarIcon: {
         display: 'flex',
@@ -96,6 +100,7 @@ const styles = theme => ({
             width: theme.spacing.unit * 9,
         },
     },
+
     content: {
         flexGrow: 1,
         padding: theme.spacing.unit * 3,
@@ -131,9 +136,14 @@ const styles = theme => ({
 });
 
 class Demo extends React.Component {
-    state = {
-        open: false,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            userID: '',
+            password: '',
+        };
+    }
 
     handleDrawerOpen = () => {
         this.setState({ open: true });
@@ -141,6 +151,40 @@ class Demo extends React.Component {
 
     handleDrawerClose = () => {
         this.setState({ open: false });
+    };
+
+    handleSubmit = () => {
+            let self = this;
+            let payload = {
+                "netID": this.state.userID,
+                "password": this.state.password,
+                //"role":this.state.loginRole
+            };
+            console.log(payload);
+            axios.post(apiBaseUrl + 'users/login', payload)
+                .then(function (response) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        console.log(response.data.data[0].type, response.data.data[0].id, "Login successful!");
+                        alert("Login successful!")
+                        let uploadScreen = [];
+                        uploadScreen.push(<Profile appContext={self.props.appContext}
+                                                   role={response.data.data[0].type}
+                                                   userID={response.data.data[0].id}/>)
+                        self.props.appContext.setState({loginPage: [], uploadScreen: uploadScreen})
+                    }
+                    else if (response.status == 204) {
+                        console.log("userID password do not match");
+                        alert("userID password do not match")
+                    }
+                    else {
+                        console.log("userID does not exists");
+                        alert("userID does not exist");
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
     };
 
     render() {
@@ -151,7 +195,6 @@ class Demo extends React.Component {
             <div className={classes.root}>
                 <MuiThemeProvider theme={theme}>
                 <CssBaseline />
-
                 <AppBar
                     position="absolute"
                     className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
@@ -209,19 +252,22 @@ class Demo extends React.Component {
                             </Typography>
                             <form className={classes.form}>
                                 <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="email">Email Address</InputLabel>
-                                    <Input id="email" name="email" autoComplete="email" autoFocus/>
+                                    <InputLabel htmlFor="netid">NetID</InputLabel>
+                                    <Input id="netid" name="netid" autoComplete="id" autoFocus
+                                           onChange={(event) => this.setState({userID: event.target.value})}/>
                                 </FormControl>
                                 <FormControl margin="normal" required fullWidth>
                                     <InputLabel htmlFor="password">Password</InputLabel>
-                                    <Input name="password" type="password" id="password" autoComplete="current-password"/>
+                                    <Input name="password" type="password" id="password" autoComplete="current-password"
+                                           onChange={(event) => this.setState({password: event.target.value})}/>
                                 </FormControl>
                                 <Button
-                                    type="submit"
+                                    // type="submit"
                                     fullWidth
                                     variant="contained"
                                     color="primary"
                                     className={classes.submit}
+                                    onClick = {this.handleSubmit}
                                 >
                                     Login
                                 </Button>
