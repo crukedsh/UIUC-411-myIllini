@@ -168,6 +168,7 @@ class MyCourses extends React.Component {
                 appContext={this.props.appContext}
                 role={this.props.role}
                 userID={this.props.userID}
+                open={this.state.open}
             />);
             this.props.appContext.setState({page: page})
         } else {
@@ -178,6 +179,7 @@ class MyCourses extends React.Component {
                 role={this.props.role}
                 userID={this.props.userID}
                 isAdd={true}
+                open={this.state.open}
             />);
             this.props.appContext.setState({page: page})
         }
@@ -197,7 +199,7 @@ class MyCourses extends React.Component {
                 crn={crn}
                 title={title}
                 capacity={capacity}
-
+                open={this.state.open}
             />);
             this.props.appContext.setState({page: page})
         }

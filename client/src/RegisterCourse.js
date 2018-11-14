@@ -212,7 +212,8 @@ class MyCourses extends React.Component {
         page.push(<MyCourse
             appContext={this.props.appContext}
             role={this.props.role}
-            userID={this.props.userID}/>);
+            userID={this.props.userID}
+        open={this.state.open}/>);
         this.props.appContext.setState({page: page})
     }
 

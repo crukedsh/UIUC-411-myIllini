@@ -156,7 +156,6 @@ class Login extends React.Component {
         let payload = {
             "netID": this.state.userID,
             "password": this.state.password,
-            //"role":this.state.loginRole
         };
         let self = this;
         axios.post(apiBaseUrl + 'users/login', payload)
