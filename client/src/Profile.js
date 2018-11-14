@@ -10,20 +10,19 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import { about } from './DrawerItems';
+import ClassIcon from '@material-ui/icons/Class';
+import { drawerItemLogged } from './DrawerItems';
 import blue from "@material-ui/core/colors/blue";
 import pink from "@material-ui/core/colors/pink";
 import red from "@material-ui/core/colors/red";
-import Paper from "@material-ui/core/Paper/Paper";
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Input from "@material-ui/core/Input/Input";
-import Button from "@material-ui/core/Button/Button";
-import axios from "axios";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle"
+import ListItem from "@material-ui/core/ListItem/ListItem";
+import Avatar from "@material-ui/core/Avatar/Avatar";
+import ListItemText from "@material-ui/core/ListItemText/ListItemText";
+import MyCourses from "./MyCourses";
+
 let apiBaseUrl = "http://localhost:3001/";
 
 const drawerWidth = 240;
@@ -106,43 +105,26 @@ const styles = theme => ({
         overflow: 'auto',
     },
     mainPage: {
-        height: '100vh',
-        width: 'auto',
-        display: 'block',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-            width: 400,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
-    },
-    paper: {
+
         marginTop: theme.spacing.unit * 12,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+        height: '100vh',
+        width: 1000,
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing.unit,
-    },
-    submit: {
-        marginTop: theme.spacing.unit * 3,
+    avatar: {
+        margin: 5,
+        color: '#fff',
+        backgroundColor: blue[500],
     },
 });
 
 class Profile extends React.Component {
     constructor(props) {
-        console.log(props);
         super(props);
-        console.log(this.props);
-        console.log(this.props.appContext);
         this.state = {
-            open: false,
-            userID: '',
-            password: '',
+            open: props.open,
         };
     }
 
@@ -154,40 +136,14 @@ class Profile extends React.Component {
         this.setState({ open: false });
     };
 
-    handleSubmit = () => {
-        let payload = {
-            "netID": this.state.userID,
-            "password": this.state.password,
-            //"role":this.state.loginRole
-        };
+    handleCourses = () => {
         let self = this;
-        console.log(self.props.appContext);
-        console.log(payload);
-        axios.post(apiBaseUrl + 'users/login', payload)
-            .then(function (response) {
-                console.log(response);
-                if (response.status == 200) {
-                    console.log(self);
-                    alert("Login successful!")
-                    let page = [];
-                    page.push(<Profile appContext={self.props.appContext}
-                                       role={response.data.data[0].type}
-                                       userID={response.data.data[0].id}/>);
-                    self.props.appContext.setState({page: page})
-                    console.log(self);
-                }
-                else if (response.status == 204) {
-                    console.log("userID password do not match");
-                    alert("userID password do not match")
-                }
-                else {
-                    console.log("userID does not exists");
-                    alert("userID does not exist");
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        let page = [];
+        page.push(<MyCourses appContext={self.props.appContext}
+                             open={self.state.open}
+                             userID={self.props.userID}
+                             role={self.props.role}/>);
+        self.props.appContext.setState({page: page});
     };
 
     render() {
@@ -220,13 +176,12 @@ class Profile extends React.Component {
                                 color="inherit"
                                 noWrap
                                 className={classes.title}
+                                align="left"
                             >
-                                Dashboard
+                                Profile
                             </Typography>
                             <IconButton color="inherit">
-                                <Badge badgeContent={4} color="secondary">
-                                    <NotificationsIcon />
-                                </Badge>
+                                    <AccountCircleIcon />
                             </IconButton>
                         </Toolbar>
                     </AppBar>
@@ -243,13 +198,26 @@ class Profile extends React.Component {
                             </IconButton>
                         </div>
                         <Divider />
-                        <List>{about}</List>
+                        {drawerItemLogged(this.props.appContext, this.props.userID,
+                        this.props.role, this.state.open)}
                     </Drawer>
 
                     <CssBaseline/>
                     <main className={classes.mainPage}>
 
+                        <List>
+                            <ListItem button onClick={this.handleCourses}>
+                                <Avatar className={classes.avatar}>
+                                    <ClassIcon />
+                                </Avatar>
 
+                                <ListItemText
+                                    primary="Courses" />
+                            </ListItem>
+                            <li>
+                                <Divider inset/>
+                            </li>
+                        </List>
                     </main>
                 </MuiThemeProvider>
             </div>

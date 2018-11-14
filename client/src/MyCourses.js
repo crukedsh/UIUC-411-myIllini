@@ -1,32 +1,126 @@
-import React, {Component} from 'react';
-import './App.css';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AddIcon from "@material-ui/icons/Add";
-import AppBar from 'material-ui/AppBar';
-import FlatButton from 'material-ui/FlatButton'
-import axios from "axios";
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import Divider from "@material-ui/core/Divider/Divider";
+import React from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import {createMuiTheme, MuiThemeProvider, withStyles} from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import {drawerItemLogged} from './DrawerItems';
+import blue from "@material-ui/core/colors/blue";
+import pink from "@material-ui/core/colors/pink";
+import red from "@material-ui/core/colors/red";
 import Button from "@material-ui/core/Button/Button";
-import Typography from "@material-ui/core/Typography/Typography";
+import axios from "axios";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle"
+import ExpansionPanel from "@material-ui/core/ExpansionPanel/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails";
+import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions/ExpansionPanelActions";
 import grey from "@material-ui/core/es/colors/grey";
-import MenuIcon from "@material-ui/icons/Menu";
-import Profile from "./Profile";
-import AddEditCourse from "./AddEditCourse";
 import RegisterCourse from "./RegisterCourse";
+import AddEditCourse from "./AddEditCourse";
+import AddIcon from "@material-ui/icons/Add";
 
-const apiBaseUrl = "http://localhost:3001/";
+let apiBaseUrl = "http://localhost:3001/";
 
-const styles = ({
+const drawerWidth = 240;
+
+const theme = createMuiTheme({
+    palette: {
+        primary: blue,
+        secondary: pink,
+        error: red,
+        contrastThreshold: 3,
+        tonalOffset: 0.2,
+    },
+});
+
+const styles = theme => ({
     root: {
-        width: "100%",
-        maxWidth: 1000,
-        marginLeft: "auto",
-        marginRight: "auto"
+        display: 'flex',
+    },
+    toolbar: {
+        paddingRight: 24,
+    },
+    toolbarIcon: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    appBarSpacer: theme.mixins.toolbar,
+    menuButton: {
+        marginLeft: 12,
+        marginRight: 36,
+    },
+    menuButtonHidden: {
+        display: 'none',
+    },
+    title: {
+        flexGrow: 1,
+    },
+    drawerPaper: {
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    drawerPaperClose: {
+        overflowX: 'hidden',
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        width: theme.spacing.unit * 7,
+        [theme.breakpoints.up('sm')]: {
+            width: theme.spacing.unit * 9,
+        },
+    },
+
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing.unit * 3,
+        height: '100vh',
+        overflow: 'auto',
+    },
+    mainPage: {
+        marginTop: theme.spacing.unit * 12,
+        height: '100vh',
+        width: 1000,
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+    avatar: {
+        margin: 5,
+        color: '#fff',
+        backgroundColor: blue[500],
     },
     heading: {
         fontSize: 18,
@@ -36,10 +130,16 @@ const styles = ({
     secondaryHeading: {
         fontSize: 18,
         color: grey[500]
+    },
+    buttonArea: {
+        width: "100%",
+        maxWidth: 1000,
+        marginLeft: "auto",
+        marginRight: "auto"
     }
 });
 
-class MyCourses extends Component {
+class MyCourses extends React.Component {
     constructor(props) {
         console.log(props);
         super(props);
@@ -47,31 +147,39 @@ class MyCourses extends Component {
         this.state = {
             tableData: [],
             deleted: [],
-            dropped: []
+            dropped: [],
+            open: props.open
         };
     }
 
+    handleDrawerOpen = () => {
+        this.setState({ open: true });
+    };
+
+    handleDrawerClose = () => {
+        this.setState({ open: false });
+    };
 
     addCourse() {
         if (this.props.role == "student") {
             console.log("Add!");
-            let uploadScreen = [];
-            uploadScreen.push(<RegisterCourse
+            let page = [];
+            page.push(<RegisterCourse
                 appContext={this.props.appContext}
                 role={this.props.role}
                 userID={this.props.userID}
             />);
-            this.props.appContext.setState({uploadScreen: uploadScreen})
+            this.props.appContext.setState({page: page})
         } else {
             console.log("Add!");
-            let uploadScreen = [];
-            uploadScreen.push(<AddEditCourse
+            let page = [];
+            page.push(<AddEditCourse
                 appContext={this.props.appContext}
                 role={this.props.role}
                 userID={this.props.userID}
                 isAdd={true}
             />);
-            this.props.appContext.setState({uploadScreen: uploadScreen})
+            this.props.appContext.setState({page: page})
         }
     }
 
@@ -80,8 +188,8 @@ class MyCourses extends Component {
             console.log("Error!");
         } else {
             console.log("Edit!");
-            let uploadScreen = [];
-            uploadScreen.push(<AddEditCourse
+            let page = [];
+            page.push(<AddEditCourse
                 appContext={this.props.appContext}
                 role={this.props.role}
                 userID={this.props.userID}
@@ -91,12 +199,13 @@ class MyCourses extends Component {
                 capacity={capacity}
 
             />);
-            this.props.appContext.setState({uploadScreen: uploadScreen})
+            this.props.appContext.setState({page: page})
         }
     }
 
     componentWillMount() {
-
+        console.log(this.state)
+        console.log("wtf")
         if (this.props.role == "teacher") {
             let payload = {
                 "user_id": this.props.userID
@@ -108,6 +217,7 @@ class MyCourses extends Component {
                         console.log("Username does not exists");
                         alert("Username does not exist");
                     } else if (response.status == 200) {
+                        console.log(response.data.data);
                         this.setState({
                             tableData: response.data.data
                         });
@@ -189,82 +299,119 @@ class MyCourses extends Component {
     }
 
 
-    handleClickProfile() {
-        console.log("Profile!");
-        let uploadScreen = [];
-        uploadScreen.push(<Profile
-            appContext={this.props.appContext}
-            role={this.props.role}
-            userID={this.props.userID}/>);
-        this.props.appContext.setState({uploadScreen: uploadScreen})
-    }
-
-
     render() {
+        const { classes } = this.props;
 
-        console.log(this.state.tableData)
         return (
-            <MuiThemeProvider>
-                <AppBar title="My Courses"/>
 
-                <div style={styles.root}>
-                    {this.state.tableData.map((row, index) => (
-                        <MuiThemeProvider>
-                            <ExpansionPanel>
-                                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                                    <Typography align="left" style={styles.heading}>{row.title}</Typography>
-                                    <Typography align="left" style={styles.secondaryHeading}>{row.crn} </Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-                                    <Typography>
-                                        Capacity={row.capacity}
-                                    </Typography>
-                                    <Typography>
-                                        , Enrolled student={row.enrolled_num}
-                                    </Typography>
-                                    {row.enrolled_num ?
-                                        <Typography>
-                                            , Average grade={row.avg_grade}
-                                        </Typography> :
-                                        <Typography/>}
+            <div className={classes.root}>
+                <MuiThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <AppBar
+                        position="absolute"
+                        className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+                    >
+                        <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
+                            <IconButton
+                                color="inherit"
+                                aria-label="Open drawer"
+                                onClick={this.handleDrawerOpen}
+                                className={classNames(
+                                    classes.menuButton,
+                                    this.state.open && classes.menuButtonHidden,
+                                )}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography
+                                component="h1"
+                                variant="h6"
+                                color="inherit"
+                                noWrap
+                                className={classes.title}
+                                align="left"
+                            >
+                                My Courses
+                            </Typography>
+                            <IconButton color="inherit">
+                                <AccountCircleIcon />
+                            </IconButton>
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer
+                        variant="permanent"
+                        classes={{
+                            paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+                        }}
+                        open={this.state.open}
+                    >
+                        <div className={classes.toolbarIcon}>
+                            <IconButton onClick={this.handleDrawerClose}>
+                                <ChevronLeftIcon />
+                            </IconButton>
+                        </div>
+                        <Divider />
+                        {drawerItemLogged(this.props.appContext, this.props.userID,
+                            this.props.role, this.state.open)}
+                    </Drawer>
 
-                                </ExpansionPanelDetails>
-                                <Divider/>
-                                <ExpansionPanelActions>
-                                    {this.props.role == "student" ?
-                                        this.state.dropped.includes(row.crn) ?
-                                            <FlatButton disabled label="dropped"/> :
-                                            <FlatButton label="drop" onClick={
-                                                () => this.dropCourse(row.crn)}/>
+                    <CssBaseline/>
+                    <div className={classes.mainPage}>
+                            {this.state.tableData.map((row, index) => (
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                                            <Typography align="left" className={classes.heading}>{row.title}</Typography>
+                                            <Typography align="left" className={classes.secondaryHeading}>{row.crn} </Typography>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <Typography>
+                                                Capacity={row.capacity}
+                                            </Typography>
+                                            <Typography>
+                                                , Enrolled student={row.enrolled_num}
+                                            </Typography>
+                                            {row.enrolled_num ?
+                                                <Typography>
+                                                    , Average grade={row.avg_grade}
+                                                </Typography> :
+                                                <Typography/>}
 
-                                        :
-                                        <div>
-                                            <FlatButton label="edit"
-                                                        onClick={
-                                                            () => this.editCourse(row.crn,
-                                                                row.title,
-                                                                row.capacity)}/>
-                                            {this.state.deleted.includes(row.crn) ?
-                                                <FlatButton disabled label="deleted"/> :
-                                                <FlatButton label="delete"
-                                                            onClick={
-                                                                () => this.deleteCourse(row.crn)}/>}
-                                        </div>
-                                    }
-                                </ExpansionPanelActions>
-                            </ExpansionPanel>
-                        </MuiThemeProvider>
-                    ))}
-                    <Button color="primary" aria-label="Add" onClick={() => this.addCourse()}>
-                        <AddIcon/>
-                    </Button>
-                    <Button color="primary" aria-label="Profile" onClick={() => this.handleClickProfile()}>
-                        <MenuIcon/>
-                    </Button>
-                </div>
-            </MuiThemeProvider>
+                                        </ExpansionPanelDetails>
+                                        <Divider/>
+                                        <ExpansionPanelActions>
+                                            {this.props.role == "student" ?
+                                                this.state.dropped.includes(row.crn) ?
+                                                    <Button disabled> dropped </Button> :
+                                                    <Button onClick={
+                                                        () => this.dropCourse(row.crn)}>drop</Button>
+
+                                                :
+                                                <div>
+                                                    {this.state.deleted.includes(row.crn) ? <Typography/>: <Button onClick={
+                                                                    () => this.editCourse(row.crn,
+                                                                        row.title,
+                                                                        row.capacity)}>edit</Button> }
+                                                    {this.state.deleted.includes(row.crn) ?
+                                                        <Button disabled >deleted</Button> :
+                                                        <Button onClick={() => this.deleteCourse(row.crn)}>
+                                                            delete</Button>}
+                                                </div>
+                                            }
+                                        </ExpansionPanelActions>
+                                    </ExpansionPanel>
+                            ))}
+                            <Button color="primary" aria-label="Add" onClick={() => this.addCourse()} className={classes.button}>
+                                <AddIcon/>
+                            </Button>
+                    </div>
+                </MuiThemeProvider>
+            </div>
         );
     }
 }
 
-export default (MyCourses);
+MyCourses.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(MyCourses);
