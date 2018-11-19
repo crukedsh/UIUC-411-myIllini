@@ -13,7 +13,7 @@ import Divider from "@material-ui/core/Divider/Divider";
 import Profile from "./Profile";
 
 const handleAbout = () => {
-    alert("True fact: chen zhu is wonderfully handsome!");
+    alert("True fact: Zhengyang Feng is wonderfully handsome!");
 };
 
 export class about {
