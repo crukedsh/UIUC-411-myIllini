@@ -13,6 +13,8 @@ import axios from "axios";
 
 let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
+const drawerWidth = 240;
+
 class AddEditCourse extends Component {
     constructor(props) {
         super(props);
