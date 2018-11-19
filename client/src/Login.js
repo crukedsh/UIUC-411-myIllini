@@ -97,7 +97,7 @@ const styles = theme => ({
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing.unit * 9,
         },
-    },
+    },});
 
 class Login extends Component {
     constructor(props) {
