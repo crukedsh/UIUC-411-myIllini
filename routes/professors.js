@@ -219,7 +219,7 @@ professors.post('/course-info', function(req, res) {
     };
 
     var sqlParams = [req.body.user_id];
-    var sql = "select c.crn, title, enrolled_num, c.capacity, date_format(start_time, '%H:%i'), date_format(end_time, '%H:%i'), weekday, location " +
+    var sql = "select c.crn, title, enrolled_num, c.capacity, start_time, end_time, weekday, location " +
         "from enrollments e right join courses c on c.crn = e.crn, schedules s " +
         "where c.user_id = ? and c.crn = s.crn ";
 

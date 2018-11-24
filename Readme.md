@@ -245,8 +245,8 @@ Each course has two schedule_id
             "title": "Computer Network Lab",
             "enrolled_num": 1,
             "capacity": 50,
-            "date_format(start_time, '%H:%i')": "11:15",
-            "date_format(end_time, '%H:%i')": "12:30",
+            "start_time": "11:15:00",
+            "end_time": "12:30:00",
             "weekday": "W",
             "location": "siebel"
         },
@@ -255,8 +255,8 @@ Each course has two schedule_id
             "title": "Computer Network Lab",
             "enrolled_num": 1,
             "capacity": 50,
-            "date_format(start_time, '%H:%i')": "13:15",
-            "date_format(end_time, '%H:%i')": "14:30",
+            "start_time": "13:15:00",
+            "end_time": "14:30:00",
             "weekday": "M",
             "location": "siebel"
         },
@@ -265,8 +265,8 @@ Each course has two schedule_id
             "title": "Computer Network",
             "enrolled_num": 0,
             "capacity": 30,
-            "date_format(start_time, '%H:%i')": "11:15",
-            "date_format(end_time, '%H:%i')": "12:30",
+            "start_time": "11:15:00",
+            "end_time": "12:30:00",
             "weekday": "W",
             "location": "siebel"
         },
@@ -275,8 +275,8 @@ Each course has two schedule_id
             "title": "Computer Network",
             "enrolled_num": 0,
             "capacity": 30,
-            "date_format(start_time, '%H:%i')": "11:15",
-            "date_format(end_time, '%H:%i')": "12:30",
+            "start_time": "11:15:00",
+            "end_time": "12:30:00",
             "weekday": "M",
             "location": "siebel"
         }
