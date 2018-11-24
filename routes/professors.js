@@ -18,32 +18,65 @@ professors.post('/create-course', function(req, res) {
        "data": "",
    };
 
-   var userData = { // request
-       "crn": req.body.crn,
-       "user_id": req.body.user_id,
-       "title": req.body.title,
-       "capacity": req.body.capacity,
-   };
+    var course = [req.body.crn, req.body.user_id, req.body.title, req.body.description, req.body.capacity];
+    var course_sql = "insert into courses values  (?, ?, ?, ?, ?, 0)";
 
-   database.connection.getConnection(function (err, connection) {
-       if(err) {
-           appData.error = "internal server error: database";
-           res.status(500).json(appData);
-       } else {
-           var sql = "insert into courses set ?";
-           connection.query(sql, userData, (err, rows, fields) => {
-              if(err) {
-                  appData.error = err.toString();
-                  appData.data = "database operation error!";
-                  res.status(400).json(appData);
-              } else {
-                  appData.data = "success";
-                  res.status(200).json(appData);
-              }
-           });
-           connection.release();
-       }
-   });
+    var schedule1 = [req.body.schedule_id_1, req.body.crn, req.body.start_time_1, req.body.end_time_1, req.body.weekday_1, req.body.location_1];
+    var schedule1_sql = "insert into schedules values (?, ?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
+
+    var schedule2 = [req.body.schedule_id_2, req.body.crn, req.body.start_time_2, req.body.end_time_2, req.body.weekday_2, req.body.location_2];
+    var schedule2_sql = "insert into schedules values (?, ?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
+
+
+    database.connection.getConnection(function (err, connection) {
+
+        connection.beginTransaction(function (err) {
+            if (err) {
+                throw err;
+            }
+            connection.query(course_sql, course, (err, rows, fields) => {
+                if (err) {
+                    connection.rollback(function () {
+                        appData.error = err.toString();
+                        appData.data = "database operation error!";
+                        res.status(400).json(appData);
+                    });
+                } else {
+                    connection.query(schedule1_sql, schedule1, (err, rows, fields) => {
+                        if (err) {
+                            connection.rollback(function () {
+                                appData.error = err.toString();
+                                appData.data = "database operation error!";
+                                res.status(400).json(appData);
+                            });
+                        } else {
+                            connection.query(schedule2_sql, schedule2, (err, rows, fields) => {
+                                if (err) {
+                                    connection.rollback(function () {
+                                        appData.error = err.toString();
+                                        appData.data = "database operation error!";
+                                        res.status(400).json(appData);
+                                    });
+                                } else {
+
+                                    connection.commit(function (err) {
+                                        if (err) {
+                                            connection.rollback(function () {
+                                                return;
+                                            })
+                                        }
+                                    });
+                                    appData.data = "success";
+                                    res.status(200).json(appData);
+                                }
+                            })
+                        }
+                    })
+                }
+            });
+        });
+        connection.release();
+    });
 });
 
 // Professors delete courses in "courses" table.
@@ -83,27 +116,66 @@ professors.post('/edit-course', function(req, res) {
         "data": "",
     };
 
-    var sqlParams = [req.body.user_id, req.body.title, req.body.capacity, req.body.crn];
-    var sql = "update courses set user_id = ?, title = ?, capacity = ? where crn = ?";
+    var course = [req.body.user_id, req.body.title, req.body.capacity, req.body.description, req.body.crn];
+    var course_sql = "update courses set user_id = ?, title = ?, capacity = ?, description = ? where crn = ?";
+
+    var schedule1 = [req.body.start_time_1, req.body.end_time_1, req.body.weekday_1, req.body.location_1, req.body.schedule_id_1];
+    var schedule1_sql = "update schedules set start_time = time_format(?, '%H:%i'), end_time = time_format(?, '%H:%i'), weekday = ?, location = ? where schedule_id = ?";
+
+    var schedule2 = [req.body.start_time_2, req.body.end_time_2, req.body.weekday_2, req.body.location_2, req.body.schedule_id_2];
+    var schedule2_sql = "update schedules set start_time = time_format(?, '%H:%i'), end_time = time_format(?, '%H:%i'), weekday = ?, location = ? where schedule_id = ?";
+
 
     database.connection.getConnection(function (err, connection) {
-        if(err) {
-            appData.error = "internal server error: database";
-            res.status(500).json(appData);
-        } else {
-            connection.query(sql, sqlParams, (err, rows, fields) => {
-                if(err) {
-                    appData.error = err.toString();
-                    appData.data = "database operation error!";
-                    res.status(400).json(appData);
+
+        connection.beginTransaction(function (err) {
+            if (err) {
+                throw err;
+            }
+            connection.query(course_sql, course, (err, rows, fields) => {
+                if (err) {
+                    connection.rollback(function () {
+                        appData.error = err.toString();
+                        appData.data = "database operation error!";
+                        res.status(400).json(appData);
+                    });
                 } else {
-                    appData.data = "success";
-                    res.status(200).json(appData);
+                    connection.query(schedule1_sql, schedule1, (err, rows, fields) => {
+                        if (err) {
+                            connection.rollback(function () {
+                                appData.error = err.toString();
+                                appData.data = "database operation error!";
+                                res.status(400).json(appData);
+                            });
+                        } else {
+                            connection.query(schedule2_sql, schedule2, (err, rows, fields) => {
+                                if (err) {
+                                    connection.rollback(function () {
+                                        appData.error = err.toString();
+                                        appData.data = "database operation error!";
+                                        res.status(400).json(appData);
+                                    });
+                                } else {
+
+                                    connection.commit(function (err) {
+                                        if (err) {
+                                            connection.rollback(function () {
+                                                return;
+                                            })
+                                        }
+                                    });
+                                    appData.data = "success";
+                                    res.status(200).json(appData);
+                                }
+                            })
+                        }
+                    })
                 }
             });
-            connection.release();
-        }
+        });
+        connection.release();
     });
+
 });
 
 // Professor assign score. POST
@@ -147,10 +219,9 @@ professors.post('/course-info', function(req, res) {
     };
 
     var sqlParams = [req.body.user_id];
-    var sql = "select c.crn, title, avg(grade) as avg_grade, count(e.user_id) as enrolled_num, c.capacity " +
-        "from enrollments e right join courses c on c.crn = e.crn " +
-        "where c.user_id = ? " +
-        "group by c.crn";
+    var sql = "select c.crn, title, enrolled_num, c.capacity, date_format(start_time, '%H:%i'), date_format(end_time, '%H:%i'), weekday, location " +
+        "from enrollments e right join courses c on c.crn = e.crn, schedules s " +
+        "where c.user_id = ? and c.crn = s.crn ";
 
     database.connection.getConnection(function (err, connection) {
         if(err) {
