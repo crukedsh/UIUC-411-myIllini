@@ -156,12 +156,10 @@ Request:
 "title":"",  
 "capacity": [integer],
 "description": "",
-"schedule_id_1": [integer],
 "start_time_1": "xx:yy" (24 hour format)
 "end_time_1": "xx:yy"
 "weekday_1": "W",
-"location_1": ""
-"schedule_id_2": [integer],
+"location_1": ""s
 "start_time_2": "xx:yy"
 "end_time_2": "xx:yy"
 "weekday_2": "W",
