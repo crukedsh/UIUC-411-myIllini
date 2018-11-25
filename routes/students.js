@@ -5,10 +5,13 @@ var cors = require('cors');
 var jwt = require('jsonwebtoken');
 const req = require("express");
 var token;
+let middleware=require("./authentication")
 
 students.use(cors());
 
 process.env.SECRET_KEY = "cs411fall2018";
+
+students.use(middleware.authentication);
 
 students.get('/course-selected/:userId',function (req, res){
     var appData = {
