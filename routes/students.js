@@ -18,16 +18,17 @@ students.get('/course-selected/:userId',function (req, res){
         "error": "",
         "data": []
     };
+
+    var sql = 'SELECT enrolled_num, c.crn, title, capacity, description, start_time, end_time, weekday, location, schedule_id ' +
+        'FROM courses c left join enrollments e on e.crn=c.crn, schedules s ' +
+        'WHERE c.crn in (select crn from enrollments e where e.user_id=?) and s.crn = c.crn';
+
     database.connection.getConnection(function (err, connection) {
         if (err) {
             appData["error"] = "internal server error: database";
             res.status(500).json(appData);
         } else {
-            connection.query('SELECT count(e.user_id) as enrolled_num, c.crn, title,capacity ' +
-            'FROM courses c left join enrollments e on e.crn=c.crn ' +
-            'WHERE c.crn in (select crn from enrollments e where e.user_id=?) ' +
-            'group by c.crn ',
-                [req.params.userId], function (err, rows, fields) {
+            connection.query(sql, [req.params.userId], function (err, rows, fields) {
                 if (!err) {
                     appData.error = "";
                     appData.data = rows;
@@ -48,16 +49,17 @@ students.get('/course-unselected/:userId',function (req, res){
         "error": "",
         "data": []
     };
+
+    sql = 'SELECT enrolled_num, c.crn, title, capacity, description, start_time, end_time, weekday, location, schedule_id ' +
+        'FROM courses c left join enrollments e on e.crn=c.crn, schedules s ' +
+        'WHERE c.crn not in (select crn from enrollments e where e.user_id=?) and s.crn=c.crn';
+
     database.connection.getConnection(function (err, connection) {
         if (err) {
             appData["error"] = "internal server error: database";
             res.status(500).json(appData);
         } else {
-            connection.query('SELECT count(e.user_id) as enrolled_num, c.crn, title,capacity ' +
-                'FROM courses c left join enrollments e on e.crn=c.crn ' +
-                'WHERE c.crn not in (select crn from enrollments e where e.user_id=?) ' +
-                'group by c.crn ',
-                [req.params.userId], function (err, rows, fields) {
+            connection.query(sql, [req.params.userId], function (err, rows, fields) {
                     if (!err) {
                         appData.error = "";
                         appData.data = rows;
@@ -78,31 +80,51 @@ students.post('/course-register',function (req, res){
         "error": "",
         "data": ""
     };
-    var userData = {
-        "crn": req.body.crn,
-        "user_id": req.body.user_id,
-        "type":"student"
-    };
-    database.connection.getConnection(function (err, connection) {
-        if (err) {
-            appData["error"] = "internal server error: database";
-            res.status(500).json(appData);
-        } else {
-            connection.query("Insert into enrollments set ?",userData,
-                 function (err, rows, fields) {
-                    if (!err) {
-                        appData.error = "";
-                        appData.data = "success";
-                        res.status(200).json(appData);
-                    } else {
+
+    var userData = [req.body.user_id, req.body.crn, "student", 0];
+    var enrollmentSQL = 'Insert into enrollments values (?, ?, ?, ?)';
+
+    var updateParam = [req.body.crn];
+    var updateSQL = 'update courses set enrolled_num = enrolled_num + 1 where crn = ?';
+
+    database.connection.getConnection(function (err, conn) {
+        conn.beginTransaction(function (err) {
+            if (err) {
+                throw err;
+            }
+            conn.query(enrollmentSQL, userData, (err, rows, fields) => {
+                if (err) {
+                    conn.rollback(function () {
                         appData.error = err.toString();
-                        appData["data"] = "Error Occured!";
+                        appData.data = "database operation error!";
                         res.status(400).json(appData);
-                    }
-                });
-            connection.release();
-        }
+                    });
+                } else {
+                    conn.query(updateSQL, updateParam, (err, rows, fields) => {
+                        if (err) {
+                            conn.rollback(function () {
+                                appData.error = err.toString();
+                                appData.data = "database operation error!";
+                                res.status(400).json(appData);
+                            });
+                        } else {
+                            conn.commit(function (err) {
+                                if (err) {
+                                    conn.rollback(function () {
+                                        return;
+                                    })
+                                }
+                            });
+                            appData.data = "success";
+                            res.status(200).json(appData);
+                        }
+                    });
+                }
+            });
+            conn.release();
+        });
     });
+
 });
 
 students.post('/course-drop', function (req,res) {
@@ -110,30 +132,50 @@ students.post('/course-drop', function (req,res) {
         "error": "",
         "data": ""
     };
-    var userData = {
-        "crn": req.body.crn,
-        "user_id": req.body.user_id,
-        "type":"student" //TODO: delete this attribute
-    };
-    database.connection.getConnection(function (err, connection) {
-        if (err) {
-            appData["error"] = "internal server error: database";
-            res.status(500).json(appData);
-        } else {
-            connection.query("Delete from enrollments where crn=? and user_id=?;",[userData.crn,userData.user_id],
-                function (err, rows, fields) {
-                    if (!err) {
-                        appData.error = "";
-                        appData.data = "success";
-                        res.status(200).json(appData);
-                    } else {
+    var userData = [req.body.crn, req.body.user_id];
+
+    var enrollmentSQL = 'Delete from enrollments where crn=? and user_id=?;';
+
+    var updateParam = [req.body.crn];
+    var updateSQL = 'update courses set enrolled_num = enrolled_num - 1 where crn = ?';
+
+    database.connection.getConnection(function (err, conn) {
+        conn.beginTransaction(function (err) {
+            if (err) {
+                throw err;
+            }
+
+            conn.query(enrollmentSQL, userData, (err, rows, fields) => {
+                if (err) {
+                    conn.rollback(function () {
                         appData.error = err.toString();
-                        appData["data"] = "Error Occured!";
+                        appData.data = "database operation error!";
                         res.status(400).json(appData);
-                    }
-                });
-            connection.release();
-        }
+                    });
+                } else {
+                    conn.query(updateSQL, updateParam, (err, rows, fields) => {
+                        if (err) {
+                            conn.rollback(function () {
+                                appData.error = err.toString();
+                                appData.data = "database operation error!";
+                                res.status(400).json(appData);
+                            });
+                        } else {
+                            conn.commit(function (err) {
+                                if (err) {
+                                    conn.rollback(function () {
+                                        return;
+                                    })
+                                }
+                            });
+                            appData.data = "success";
+                            res.status(200).json(appData);
+                        }
+                    });
+                }
+            });
+            conn.release();
+        });
     });
 
 });
