@@ -17,7 +17,8 @@ CREATE TABLE `courses` (
   `capacity` int COLLATE utf8_unicode_ci NOT NULL DEFAULT 0,
   `enrolled_num` int COLLATE utf8_unicode_ci NOT NULL DEFAULT 0,
   PRIMARY KEY (`crn`),
-  FOREIGN KEY (`user_id`) REFERENCES users( `id`)
+  FOREIGN KEY (`user_id`) REFERENCES users( `id`),
+  CHECK ( `enrolled_num`<= `capacity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `enrollments` (
@@ -51,6 +52,21 @@ CREATE TABLE `time_conflicts`(
   FOREIGN KEY (`crn1`) REFERENCES courses(`crn`)
     On delete Cascade,
   FOREIGN KEY (`crn2`) REFERENCES courses(`crn`)
+    On delete Cascade
+);
+
+CREATE TABLE `posts`(
+  `post_id` int NOT NULL auto_increment,
+  `created_at` datetime NOT NULL DEFAULT NOW(),
+  `title` varchar(50) NOT NULL DEFAULT '',
+  `content` varchar(300),
+  `is_top` tinyint DEFAULT 0,
+  `creator` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  `crn` int NOT NULL,
+  PRIMARY KEY (`post_id`),
+  FOREIGN KEY (`creator`) REFERENCES users(`id`)
+    On delete Cascade,
+  FOREIGN KEY (`crn`) REFERENCES courses(`crn`)
     On delete Cascade
 );
 

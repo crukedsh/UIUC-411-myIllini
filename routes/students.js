@@ -2,10 +2,7 @@ var express = require('express');
 var students = express.Router();
 var database = require('../db/db');
 var cors = require('cors');
-var jwt = require('jsonwebtoken');
-const req = require("express");
-var token;
-let middleware=require("./authentication")
+let middleware=require("./authentication");
 
 students.use(cors());
 

@@ -160,12 +160,14 @@ class Login extends React.Component {
         let self = this;
         axios.post(apiBaseUrl + 'users/login', payload)
             .then(function (response) {
+                let token=response.data.token;
                 if (response.status == 200) {
                     let page = [];
                     page.push(<Profile appContext={self.props.appContext}
                                        role={response.data.data[0].type}
                                        userID={response.data.data[0].id}
-                                       open={self.state.open}/>);
+                                       open={self.state.open}
+                                        token = {token}/>);
                     self.props.appContext.setState({page: page});
                 }
                 else if (response.status == 204) {

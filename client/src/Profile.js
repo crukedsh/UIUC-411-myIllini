@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
 import { drawerItemLogged } from './DrawerItems';
 import blue from "@material-ui/core/colors/blue";
 import pink from "@material-ui/core/colors/pink";
@@ -22,6 +23,7 @@ import ListItem from "@material-ui/core/ListItem/ListItem";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import MyCourses from "./MyCourses";
+import Forum from "./Forum"
 
 let apiBaseUrl = "http://localhost:3001/";
 
@@ -142,7 +144,18 @@ class Profile extends React.Component {
         page.push(<MyCourses appContext={self.props.appContext}
                              open={self.state.open}
                              userID={self.props.userID}
-                             role={self.props.role}/>);
+                             role={self.props.role}
+                            token={self.props.token}/>);
+        self.props.appContext.setState({page: page});
+    };
+    handleForum = () => {
+        let self = this;
+        let page = [];
+        page.push(<Forum appContext={self.props.appContext}
+                             open={self.state.open}
+                             userID={self.props.userID}
+                             role={self.props.role}
+                            token={self.props.token}/>);
         self.props.appContext.setState({page: page});
     };
 
@@ -199,7 +212,7 @@ class Profile extends React.Component {
                         </div>
                         <Divider />
                         {drawerItemLogged(this.props.appContext, this.props.userID,
-                        this.props.role, this.state.open)}
+                        this.props.role, this.state.open, this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>
@@ -213,6 +226,17 @@ class Profile extends React.Component {
 
                                 <ListItemText
                                     primary="Courses" />
+                            </ListItem>
+                            <li>
+                                <Divider inset/>
+                            </li>
+                            <ListItem button onClick={this.handleForum}>
+                                <Avatar className={classes.avatar}>
+                                    <QuestionAnswerIcon />
+                                </Avatar>
+
+                                <ListItemText
+                                    primary="Forum" />
                             </ListItem>
                             <li>
                                 <Divider inset/>
