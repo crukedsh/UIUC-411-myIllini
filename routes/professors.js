@@ -21,10 +21,11 @@ professors.post('/create-course', function(req, res) {
     var course = [req.body.crn, req.body.user_id, req.body.title, req.body.description, req.body.capacity];
     var course_sql = "insert into courses values  (?, ?, ?, ?, ?, 0)";
 
-    var schedule1 = [req.body.crn, req.body.start_time_1, req.body.end_time_1, req.body.weekday_1, req.body.location_1];
+
+    var schedule1 = [req.body.crn, req.body.start_time[0], req.body.end_time[0], req.body.weekday[0], req.body.location[0]];
     var schedule1_sql = "insert into schedules (crn, start_time, end_time, weekday, location) values (?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
 
-    var schedule2 = [req.body.crn, req.body.start_time_2, req.body.end_time_2, req.body.weekday_2, req.body.location_2];
+    var schedule2 = [req.body.crn, req.body.start_time[1], req.body.end_time[1], req.body.weekday[1], req.body.location[1]];
     var schedule2_sql = "insert into schedules (crn, start_time, end_time, weekday, location) values (?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
 
 
@@ -123,10 +124,10 @@ professors.post('/edit-course', function(req, res) {
     var delete_sql = "delete from schedules where crn = ?";
 
 
-    var schedule1 = [req.body.crn, req.body.start_time_1, req.body.end_time_1, req.body.weekday_1, req.body.location_1];
+    var schedule1 = [req.body.crn, req.body.start_time[0], req.body.end_time[0], req.body.weekday[0], req.body.location[0]];
     var schedule1_sql = "insert into schedules (crn, start_time, end_time, weekday, location) values (?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
 
-    var schedule2 = [req.body.crn, req.body.start_time_2, req.body.end_time_2, req.body.weekday_2, req.body.location_2];
+    var schedule2 = [req.body.crn, req.body.start_time[1], req.body.end_time[1], req.body.weekday[1], req.body.location[1]];
     var schedule2_sql = "insert into schedules (crn, start_time, end_time, weekday, location) values (?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
 
 
@@ -233,7 +234,7 @@ professors.post('/course-info', function(req, res) {
     };
 
     var sqlParams = [req.body.user_id];
-    var sql = "select c.crn, title, enrolled_num, c.capacity, start_time, end_time, weekday, location " +
+    var sql = "select c.crn, title, enrolled_num, c.capacity, time_format(start_time, '%H:%i') as start_time, time_format(end_time, '%H:%i') as end_time, weekday, location " +
         "from enrollments e right join courses c on c.crn = e.crn, schedules s " +
         "where c.user_id = ? and c.crn = s.crn ";
 
@@ -248,7 +249,16 @@ professors.post('/course-info', function(req, res) {
                     appData.data = "database operation error!";
                     res.status(400).json(appData);
                 } else {
-                    appData.data = rows;
+                    appData.data[0] = {};
+                    appData.data[0].crn = rows[0].crn;
+                    appData.data[0].title = rows[0].title;
+                    appData.data[0].enrolled_num = rows[0].enrolled_num;
+                    appData.data[0].capacity = rows[0].capacity;
+                    appData.data[0].description = rows[0].description;
+                    appData.data[0].start_time = [rows[0].start_time, rows[1].start_time];
+                    appData.data[0].end_time = [rows[0].end_time, rows[1].end_time];
+                    appData.data[0].weekday = [rows[0].weekday, rows[1].weekday];
+                    appData.data[0].location = [rows[0].location, rows[1].location];
                     res.status(200).json(appData);
                 }
             });

@@ -28,7 +28,22 @@ students.get('/course-selected/:userId',function (req, res){
             connection.query(sql, [req.params.userId], function (err, rows, fields) {
                 if (!err) {
                     appData.error = "";
-                    appData.data = rows;
+                    // appData
+                    rows.sort((row1, row2) => row1.crn - row2.crn);
+                    for(var i = 0; i < rows.length; i += 2) {
+                        appData.data.push({});
+                        var len = appData.data.length-1;
+                        appData.data[len].crn = rows[i].crn;
+                        appData.data[len].title = rows[i].title;
+                        appData.data[len].enrolled_num = rows[i].enrolled_num;
+                        appData.data[len].capacity = rows[i].capacity;
+                        appData.data[len].description = rows[i].description;
+                        appData.data[len].start_time  = [rows[i].start_time, rows[i+1].start_time];
+                        appData.data[len].end_time = [rows[i].end_time, rows[i+1].end_time];
+                        appData.data[len].weekday = [rows[i].weekday, rows[i+1].weekday];
+                        appData.data[len].location = [rows[i].location, rows[i+1].location];
+                    }
+                    // appData.data = (typeof rows);
                     res.status(200).json(appData);
                 } else {
                     appData.error = "Error Occured";
@@ -59,7 +74,22 @@ students.get('/course-unselected/:userId',function (req, res){
             connection.query(sql, [req.params.userId], function (err, rows, fields) {
                     if (!err) {
                         appData.error = "";
-                        appData.data = rows;
+                        // appData
+                        rows.sort((row1, row2) => row1.crn - row2.crn);
+                        for(var i = 0; i < rows.length; i += 2) {
+                            appData.data.push({});
+                            var len = appData.data.length-1;
+                            appData.data[len].crn = rows[i].crn;
+                            appData.data[len].title = rows[i].title;
+                            appData.data[len].enrolled_num = rows[i].enrolled_num;
+                            appData.data[len].capacity = rows[i].capacity;
+                            appData.data[len].description = rows[i].description;
+                            appData.data[len].start_time  = [rows[i].start_time, rows[i+1].start_time];
+                            appData.data[len].end_time = [rows[i].end_time, rows[i+1].end_time];
+                            appData.data[len].weekday = [rows[i].weekday, rows[i+1].weekday];
+                            appData.data[len].location = [rows[i].location, rows[i+1].location];
+                        }
+                        // appData.data = (typeof rows);
                         res.status(200).json(appData);
                     } else {
                         appData.error = "Error Occured";
@@ -81,6 +111,8 @@ students.post('/course-register',function (req, res){
     var userData = [req.body.user_id, req.body.crn, "student", 0];
     var enrollmentSQL = 'Insert into enrollments values (?, ?, ?, ?)';
 
+    var selectSQL = 'select enrolled_num, capacity from courses where crn = ? '
+
     var updateParam = [req.body.crn];
     var updateSQL = 'update courses set enrolled_num = enrolled_num + 1 where crn = ?';
 
@@ -97,24 +129,35 @@ students.post('/course-register',function (req, res){
                         res.status(400).json(appData);
                     });
                 } else {
-                    conn.query(updateSQL, updateParam, (err, rows, fields) => {
-                        if (err) {
-                            conn.rollback(function () {
-                                appData.error = err.toString();
-                                appData.data = "database operation error!";
-                                res.status(400).json(appData);
-                            });
-                        } else {
-                            conn.commit(function (err) {
-                                if (err) {
-                                    conn.rollback(function () {
-                                        return;
-                                    })
-                                }
-                            });
-                            appData.data = "success";
-                            res.status(200).json(appData);
-                        }
+                    conn.query(selectSQL, updateParam, (err, rows, fields) => {
+                       if(rows[0].enrolled_num >= rows[0].capacity) {
+                           conn.rollback(function () {
+                               appData.error = "full";
+                               appData.data = "";
+                               res.status(400).json(appData);
+                               // throw "course full";
+                           })
+                       } else {
+                           conn.query(updateSQL, updateParam, (err, rows, fields) => {
+                               if (err) {
+                                   conn.rollback(function () {
+                                       appData.error = err.toString();
+                                       appData.data = "database operation error!";
+                                       res.status(400).json(appData);
+                                   });
+                               } else {
+                                   conn.commit(function (err) {
+                                       if (err) {
+                                           conn.rollback(function () {
+                                               return;
+                                           })
+                                       }
+                                   });
+                                   appData.data = "success";
+                                   res.status(200).json(appData);
+                               }
+                           });
+                       }
                     });
                 }
             });
