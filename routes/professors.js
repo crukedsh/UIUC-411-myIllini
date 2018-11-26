@@ -20,11 +20,11 @@ professors.post('/create-course', function(req, res) {
     var course = [req.body.crn, req.body.user_id, req.body.title, req.body.description, req.body.capacity];
     var course_sql = "insert into courses values  (?, ?, ?, ?, ?, 0)";
 
-    var schedule1 = [req.body.schedule_id_1, req.body.crn, req.body.start_time_1, req.body.end_time_1, req.body.weekday_1, req.body.location_1];
-    var schedule1_sql = "insert into schedules values (?, ?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
+    var schedule1 = [req.body.crn, req.body.start_time_1, req.body.end_time_1, req.body.weekday_1, req.body.location_1];
+    var schedule1_sql = "insert into schedules (crn, start_time, end_time, weekday, location) values (?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
 
-    var schedule2 = [req.body.schedule_id_2, req.body.crn, req.body.start_time_2, req.body.end_time_2, req.body.weekday_2, req.body.location_2];
-    var schedule2_sql = "insert into schedules values (?, ?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
+    var schedule2 = [req.body.crn, req.body.start_time_2, req.body.end_time_2, req.body.weekday_2, req.body.location_2];
+    var schedule2_sql = "insert into schedules (crn, start_time, end_time, weekday, location) values (?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
 
 
     database.connection.getConnection(function (err, connection) {
@@ -118,11 +118,15 @@ professors.post('/edit-course', function(req, res) {
     var course = [req.body.user_id, req.body.title, req.body.capacity, req.body.description, req.body.crn];
     var course_sql = "update courses set user_id = ?, title = ?, capacity = ?, description = ? where crn = ?";
 
-    var schedule1 = [req.body.start_time_1, req.body.end_time_1, req.body.weekday_1, req.body.location_1, req.body.schedule_id_1];
-    var schedule1_sql = "update schedules set start_time = time_format(?, '%H:%i'), end_time = time_format(?, '%H:%i'), weekday = ?, location = ? where schedule_id = ?";
+    var delete_param = [req.body.crn];
+    var delete_sql = "delete from schedules where crn = ?";
 
-    var schedule2 = [req.body.start_time_2, req.body.end_time_2, req.body.weekday_2, req.body.location_2, req.body.schedule_id_2];
-    var schedule2_sql = "update schedules set start_time = time_format(?, '%H:%i'), end_time = time_format(?, '%H:%i'), weekday = ?, location = ? where schedule_id = ?";
+
+    var schedule1 = [req.body.crn, req.body.start_time_1, req.body.end_time_1, req.body.weekday_1, req.body.location_1];
+    var schedule1_sql = "insert into schedules (crn, start_time, end_time, weekday, location) values (?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
+
+    var schedule2 = [req.body.crn, req.body.start_time_2, req.body.end_time_2, req.body.weekday_2, req.body.location_2];
+    var schedule2_sql = "insert into schedules (crn, start_time, end_time, weekday, location) values (?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
 
 
     database.connection.getConnection(function (err, connection) {
@@ -139,15 +143,15 @@ professors.post('/edit-course', function(req, res) {
                         res.status(400).json(appData);
                     });
                 } else {
-                    connection.query(schedule1_sql, schedule1, (err, rows, fields) => {
-                        if (err) {
+                    connection.query(delete_sql, delete_param, (err, rows, fields) => {
+                        if(err) {
                             connection.rollback(function () {
                                 appData.error = err.toString();
                                 appData.data = "database operation error!";
                                 res.status(400).json(appData);
                             });
                         } else {
-                            connection.query(schedule2_sql, schedule2, (err, rows, fields) => {
+                            connection.query(schedule1_sql, schedule1, (err, rows, fields) => {
                                 if (err) {
                                     connection.rollback(function () {
                                         appData.error = err.toString();
@@ -155,20 +159,30 @@ professors.post('/edit-course', function(req, res) {
                                         res.status(400).json(appData);
                                     });
                                 } else {
-
-                                    connection.commit(function (err) {
+                                    connection.query(schedule2_sql, schedule2, (err, rows, fields) => {
                                         if (err) {
                                             connection.rollback(function () {
-                                                return;
-                                            })
+                                                appData.error = err.toString();
+                                                appData.data = "database operation error!";
+                                                res.status(400).json(appData);
+                                            });
+                                        } else {
+
+                                            connection.commit(function (err) {
+                                                if (err) {
+                                                    connection.rollback(function () {
+                                                        return;
+                                                    })
+                                                }
+                                            });
+                                            appData.data = "success";
+                                            res.status(200).json(appData);
                                         }
-                                    });
-                                    appData.data = "success";
-                                    res.status(200).json(appData);
+                                    })
                                 }
                             })
                         }
-                    })
+                    });
                 }
             });
         });
