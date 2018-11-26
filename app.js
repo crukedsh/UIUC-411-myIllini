@@ -8,9 +8,10 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 
 var usersRouter = require('./routes/users');
-var studentsRouter = require('./routes/students')
-var professorsRouter = require('./routes/professors')
-var coursesRouter = require('./routes/courses')
+var studentsRouter = require('./routes/students');
+var professorsRouter = require('./routes/professors');
+var coursesRouter = require('./routes/courses');
+var forumRouter = require('./routes/forum');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use('/users', usersRouter);
 app.use('/students',studentsRouter);
 app.use('/professors', professorsRouter);
 app.use('/courses', coursesRouter);
+app.use('/forum', forumRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

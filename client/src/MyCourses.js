@@ -143,6 +143,10 @@ class MyCourses extends React.Component {
     constructor(props) {
         console.log(props);
         super(props);
+        this.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': this.props.token
+        };
 
         this.state = {
             tableData: [],
@@ -169,6 +173,7 @@ class MyCourses extends React.Component {
                 role={this.props.role}
                 userID={this.props.userID}
                 open={this.state.open}
+                token={this.props.token}
             />);
             this.props.appContext.setState({page: page})
         } else {
@@ -180,6 +185,7 @@ class MyCourses extends React.Component {
                 userID={this.props.userID}
                 isAdd={true}
                 open={this.state.open}
+                token={this.props.token}
             />);
             this.props.appContext.setState({page: page})
         }
@@ -200,19 +206,20 @@ class MyCourses extends React.Component {
                 title={title}
                 capacity={capacity}
                 open={this.state.open}
+                token={this.props.token}
             />);
             this.props.appContext.setState({page: page})
         }
     }
 
     componentWillMount() {
-        console.log(this.state)
-        console.log("wtf")
+        console.log(this.state);
+        console.log("wtf");
         if (this.props.role == "teacher") {
             let payload = {
                 "user_id": this.props.userID
             };
-            axios.post(apiBaseUrl + "professors/course-info", payload)
+            axios.post(apiBaseUrl + "professors/course-info", payload,{headers:this.headers})
                 .then((response) => {
                     console.log(response.data)
                     if (response.status == 400) {
@@ -230,7 +237,8 @@ class MyCourses extends React.Component {
                 })
 
         } else {
-            axios.get(apiBaseUrl + "students/course-selected/" + this.props.userID)
+
+            axios.get(apiBaseUrl + "students/course-selected/" + this.props.userID,{headers:this.headers})
                 .then((response) => {
                     console.log(response.data)
                     if (response.status == 400) {
@@ -259,7 +267,8 @@ class MyCourses extends React.Component {
                 "user_id": this.props.userID
             };
             console.log(payload);
-            axios.post(apiBaseUrl + "students/course-drop", payload)
+
+            axios.post(apiBaseUrl + "students/course-drop", payload,{headers:this.headers})
                 .then((response) => {
                     console.log(response);
                     if (response.status == 400) {
@@ -285,9 +294,8 @@ class MyCourses extends React.Component {
                 "crn": crn
             };
             console.log(payload);
-            axios.post(apiBaseUrl + "professors/delete-course", payload)
+            axios.post(apiBaseUrl + "professors/delete-course", payload,{headers:this.headers})
                 .then((response) => {
-                    console.log(response);
                     if (response.status == 400) {
                         alert("fail to delete course!");
                     } else if (response.status == 200) {
@@ -354,7 +362,7 @@ class MyCourses extends React.Component {
                         </div>
                         <Divider />
                         {drawerItemLogged(this.props.appContext, this.props.userID,
-                            this.props.role, this.state.open)}
+                            this.props.role, this.state.open,this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>
@@ -408,7 +416,7 @@ class MyCourses extends React.Component {
                     </div>
                 </MuiThemeProvider>
             </div>
-        );
+    );
     }
 }
 

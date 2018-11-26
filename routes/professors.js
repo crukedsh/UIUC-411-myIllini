@@ -2,13 +2,12 @@ var express = require('express');
 var professors = express.Router();
 var database = require('../db/db');
 var cors = require('cors');
-var jwt = require('jsonwebtoken');
-const req = require('express');
-var token;
+let middleware=require("./authentication");
 
 professors.use(cors());
 
 process.env.SECRET_KEY = "cs411fall2018";
+professors.use(middleware.authentication);
 
 // Professors create courses to "courses" table.
 // POST
