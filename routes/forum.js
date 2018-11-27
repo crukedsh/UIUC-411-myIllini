@@ -65,6 +65,33 @@ forum.put('/post',function (req, res) {
     });
 });
 
+forum.delete('/post/:post_id',function (req, res) {
+    let appData = {
+        error:"",
+        data:"",
+    };
+
+    database.connection.getConnection(function (err, connection) {
+        if (err) {
+            appData.error = err.toString();
+            appData.data = "Internal Server Error";
+            res.status(500).json(appData);
+        } else {
+            connection.query('delete from posts where post_id= ? ', req.params.post_id, function (err, rows, fields) {
+                if (!err) {
+                    appData.error = "";
+                    appData.data = "Post Edited";
+                    res.status(201).json(appData);
+                } else {
+                    appData.error=err.toString();
+                    res.status(400).json(appData);
+                }
+            });
+            connection.release();
+        }
+    });
+});
+
 
 forum.get('/post/:crn', function (req, res) {
     let appData = {

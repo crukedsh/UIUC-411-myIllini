@@ -187,6 +187,9 @@ class AddEditCourse extends React.Component {
                         } else if (response.status == 200) {
                             alert("course created successfully!")
                         }
+                    })
+                    .catch(function(err){
+                        alert(err.toString());
                     });
             } else {
                 axios.post(apiBaseUrl + "professors/edit-course", payload,{headers:this.headers})
