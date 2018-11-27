@@ -71,5 +71,17 @@ CREATE TABLE `posts`(
     On delete Cascade
 );
 
+CREATE TABLE `reviews`(
+  `review_id` int NOT NULL auto_increment,
+  `created_at` datetime NOT NULL DEFAULT NOW(),
+  `content` varchar(300),
+  `endorsed` tinyint DEFAULT 0,
+  `creator` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  `post_id` int NOT NULL,
+  PRIMARY KEY (`review_id`),
+  FOREIGN KEY (`post_id`) REFERENCES posts(`post_id`)
+    On delete Cascade
+);
+
 
 
