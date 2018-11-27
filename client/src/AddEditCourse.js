@@ -22,6 +22,11 @@ import DoneIcon from "@material-ui/icons/Done";
 import ClearIcon from "@material-ui/icons/Clear";
 import MyCourse from "./MyCourses";
 import axios from "axios";
+import Select from "@material-ui/core/Select/Select";
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import Input from "@material-ui/core/Input/Input";
+import FormControl from "@material-ui/core/FormControl/FormControl";
 
 let apiBaseUrl = "http://localhost:3001/";
 
@@ -129,15 +134,24 @@ const styles = theme => ({
         flexWrap: 'wrap',
     },
     textField: {
+        marginTop: theme.spacing.unit * 3,
         marginLeft: 10,
         marginRight: 10,
         width: 230,
         margin: "normal"
     },
     longTextField: {
+        marginTop: theme.spacing.unit * 3,
         marginLeft: 10,
         marginRight: 10,
         width: 480,
+        margin: "normal"
+    },
+    select: {
+        marginTop: theme.spacing.unit * 3,
+        marginLeft: 10,
+        marginRight: 10,
+        width: 230,
         margin: "normal"
     },
 });
@@ -145,12 +159,36 @@ const styles = theme => ({
 class AddEditCourse extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            open: props.open,
-            crn: this.props.crn,
-            title: this.props.title,
-            capacity: this.props.capacity
-        };
+        if (this.props.isAdd) {
+            this.state = {
+                open: props.open,
+                start_time_1: "11:00",
+                start_time_2: "11:00",
+                end_time_1: "12:15",
+                end_time_2: "12:15",
+                weekday_1: "M",
+                weekday_2: "W",
+                location_1: "Siebel 1404",
+                location_2: "Siebel 1404"
+            };
+        } else {
+            this.state = {
+                open: props.open,
+                crn: this.props.crn,
+                title: this.props.title,
+                capacity: this.props.capacity,
+                description: this.props.description,
+                start_time_1: this.props.start_time[0],
+                start_time_2: this.props.start_time[1],
+                end_time_1: this.props.end_time[0],
+                end_time_2: this.props.end_time[1],
+                weekday_1: this.props.weekday[0],
+                weekday_2: this.props.weekday[1],
+                location_1: this.props.location[0],
+                location_2: this.props.location[1]
+            };
+        }
+
     }
 
     handleDrawerOpen = () => {
@@ -166,11 +204,20 @@ class AddEditCourse extends React.Component {
         if (this.state.crn.length == 0) {
             alert("CRN must not be empty!")
         } else {
+            let weekday = [this.state.weekday_1, this.state.weekday_2];
+            let start_time = [this.state.start_time_1, this.state.start_time_2];
+            let end_time = [this.state.end_time_1, this.state.end_time_2];
+            let location = [this.state.location_1, this.state.location_2];
             let payload = {
                 "crn": parseInt(this.state.crn),
                 "title": this.state.title,
                 "capacity": parseInt(this.state.capacity),
-                "user_id": this.props.userID
+                "user_id": this.props.userID,
+                "description": this.state.description,
+                "start_time": start_time,
+                "end_time": end_time,
+                "weekday": weekday,
+                "location": location
             };
 
             console.log(payload);
@@ -277,7 +324,7 @@ class AddEditCourse extends React.Component {
                                         required
                                         id="crn"
                                         label="CRN"
-                                        defaultValue={this.props.crn}
+                                        value={this.state.crn}
                                         className={classes.textField}
                                         onChange={(event) => (this.setState({crn: event.target.value}))}
                                     />
@@ -287,34 +334,129 @@ class AddEditCourse extends React.Component {
                                         disabled
                                         id="crn"
                                         label="CRN"
-                                        defaultValue={this.props.crn}
+                                        value={this.state.crn}
                                         className={classes.textField}
                                     />}
 
                                 <TextField
                                     id="title"
                                     label="Title"
-                                    defaultValue={this.props.title}
+                                    value={this.state.title}
                                     className={classes.longTextField}
                                     onChange={(event) => (this.setState({title: event.target.value}))}
                                 />
                                 <TextField
                                     id="capacity"
                                     label="Capacity"
-                                    defaultValue={this.props.capacity}
+                                    value={this.state.capacity}
                                     type="number"
                                     className={classes.textField}
                                     onChange={(event) => (this.setState({capacity: event.target.value}))}
                                 />
                                 <TextField
-                                    disabled
-                                    id="detail"
-                                    label="Detail"
+                                    id="start_time_1"
+                                    label="Start time"
+                                    type="time"
+                                    value={this.state.start_time_1}
+                                    className={classes.textField}
+                                    onChange={(event) => (this.setState({start_time_1: event.target.value}))}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300,
+                                    }}
+                                />
+                                <TextField
+                                    id="end_time_1"
+                                    label="End time"
+                                    type="time"
+                                    value={this.state.end_time_1}
+                                    className={classes.textField}
+                                    onChange={(event) => (this.setState({end_time_1: event.target.value}))}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300,
+                                    }}
+                                />
+                                <Select
+                                    value={this.state.weekday_1}
+                                    onChange={(event) => (this.setState({weekday_1: event.target.value}))}
+                                    id="weekday_1"
+                                    className={classes.select}
+                                >
+                                    <MenuItem value="M">Monday</MenuItem>
+                                    <MenuItem value="T">Tuesday</MenuItem>
+                                    <MenuItem value="W">Wednesday</MenuItem>
+                                    <MenuItem value="R">Thursday</MenuItem>
+                                    <MenuItem value="F">Friday</MenuItem>
+                                </Select>
+                                <TextField
+                                    id="location_1"
+                                    label="Location"
+                                    value={this.state.location_1}
+                                    className={classes.textField}
+                                    onChange={(event) => (this.setState({location_1: event.target.value}))}
+                                />
+                                <TextField
+                                    id="start_time_2"
+                                    label="Start time"
+                                    type="time"
+                                    value={this.state.start_time_2}
+                                    className={classes.textField}
+                                    onChange={(event) => (this.setState({start_time_2: event.target.value}))}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300,
+                                    }}
+                                />
+                                <TextField
+                                    id="end_time_2"
+                                    label="End time"
+                                    type="time"
+                                    value={this.state.end_time_2}
+                                    className={classes.textField}
+                                    onChange={(event) => (this.setState({end_time_2: event.target.value}))}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300,
+                                    }}
+                                />
+                                <Select
+                                    value={this.state.weekday_2}
+                                    onChange={(event) => (this.setState({weekday_2: event.target.value}))}
+                                    id="weekday_2"
+                                    className={classes.select}
+                                >
+                                    <MenuItem value="M">Monday</MenuItem>
+                                    <MenuItem value="T">Tuesday</MenuItem>
+                                    <MenuItem value="W">Wednesday</MenuItem>
+                                    <MenuItem value="R">Thursday</MenuItem>
+                                    <MenuItem value="F">Friday</MenuItem>
+                                </Select>
+                                <TextField
+                                    id="location_2"
+                                    label="Location"
+                                    value={this.state.location_2}
+                                    className={classes.textField}
+                                    onChange={(event) => (this.setState({location_2: event.target.value}))}
+                                />
+                                <TextField
+                                    id="description"
+                                    label="Description"
                                     multiline
                                     rows="5"
+                                    onChange={(event) => (this.setState({description: event.target.value}))}
                                     style={{margin: 10}}
                                     fullWidth
-                                /></form>
+                                />
+                            </form>
 
                         </div>
                         <div>
