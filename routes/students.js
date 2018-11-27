@@ -8,7 +8,7 @@ students.use(cors());
 
 process.env.SECRET_KEY = "cs411fall2018";
 
-students.use(middleware.authentication);
+// students.use(middleware.authentication);
 
 students.get('/course-selected/:userId',function (req, res){
     var appData = {
@@ -16,7 +16,7 @@ students.get('/course-selected/:userId',function (req, res){
         "data": []
     };
 
-    var sql = 'SELECT enrolled_num, c.crn, title, capacity, description, start_time, end_time, weekday, location, schedule_id ' +
+    var sql = 'SELECT enrolled_num, c.crn, title, capacity, description, time_format(start_time, \'%H:%i\') as start_time, time_format(end_time, \'%H:%i\') as end_time, weekday, location, schedule_id ' +
         'FROM courses c left join enrollments e on e.crn=c.crn, schedules s ' +
         'WHERE c.crn in (select crn from enrollments e where e.user_id=?) and s.crn = c.crn';
 
@@ -62,7 +62,7 @@ students.get('/course-unselected/:userId',function (req, res){
         "data": []
     };
 
-    sql = 'SELECT enrolled_num, c.crn, title, capacity, description, start_time, end_time, weekday, location, schedule_id ' +
+    sql = 'SELECT enrolled_num, c.crn, title, capacity, description, time_format(start_time, \'%H:%i\') as start_time, time_format(end_time, \'%H:%i\') as end_time, weekday, location, schedule_id ' +
         'FROM courses c left join enrollments e on e.crn=c.crn, schedules s ' +
         'WHERE c.crn not in (select crn from enrollments e where e.user_id=?) and s.crn=c.crn';
 
