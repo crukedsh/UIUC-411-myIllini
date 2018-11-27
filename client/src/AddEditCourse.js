@@ -188,6 +188,10 @@ class AddEditCourse extends React.Component {
                 location_2: this.props.location[1]
             };
         }
+        this.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': this.props.token
+        };
 
     }
 
@@ -222,7 +226,7 @@ class AddEditCourse extends React.Component {
 
             console.log(payload);
             if (this.props.isAdd) {
-                axios.post(apiBaseUrl + "professors/create-course", payload)
+                axios.post(apiBaseUrl + "professors/create-course", payload,{headers:this.headers})
                     .then((response) => {
                         console.log(response);
                         if (response.status == 400) {
@@ -230,9 +234,12 @@ class AddEditCourse extends React.Component {
                         } else if (response.status == 200) {
                             alert("course created successfully!")
                         }
+                    })
+                    .catch(function(err){
+                        alert(err.toString());
                     });
             } else {
-                axios.post(apiBaseUrl + "professors/edit-course", payload)
+                axios.post(apiBaseUrl + "professors/edit-course", payload,{headers:this.headers})
                     .then((response) => {
                         console.log(response);
                         if (response.status == 400) {
@@ -253,7 +260,8 @@ class AddEditCourse extends React.Component {
             appContext={this.props.appContext}
             role={this.props.role}
             userID={this.props.userID}
-            open={this.state.open}/>);
+            open={this.state.open}
+            token={this.props.token}/>);
         this.props.appContext.setState({page: page})
     }
 
@@ -310,7 +318,7 @@ class AddEditCourse extends React.Component {
                         </div>
                         <Divider/>
                         {drawerItemLogged(this.props.appContext, this.props.userID,
-                            this.props.role, this.state.open)}
+                            this.props.role, this.state.open,this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>

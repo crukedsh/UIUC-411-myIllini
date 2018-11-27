@@ -21,7 +21,6 @@ users.post('/register', function (req, res) {
         "last_name": req.body.last_name,
         "email": req.body.email,
         "password": req.body.password,
-        "created_at": today,
         "type":req.body.role,
         "id":req.body.netID
     };

@@ -142,7 +142,7 @@ const styles = theme => ({
     }
 });
 
-class MyCourses extends React.Component {
+class RegisterCourse extends React.Component {
     constructor(props) {
         console.log(props);
         super(props);
@@ -152,6 +152,10 @@ class MyCourses extends React.Component {
             registered: [],
             open: props.open
         };
+        this.headers={
+            'Content-Type': 'application/json',
+            'Authorization': this.props.token
+        }
     }
 
     handleDrawerOpen = () => {
@@ -174,7 +178,7 @@ class MyCourses extends React.Component {
             };
 
             console.log(payload);
-            axios.post(apiBaseUrl + "students/course-register", payload)
+            axios.post(apiBaseUrl + "students/course-register", payload,{headers:this.headers})
                 .then((response) => {
                     console.log(response);
                     if (response.status == 400) {
@@ -193,7 +197,7 @@ class MyCourses extends React.Component {
 
     componentWillMount() {
 
-        axios.get(apiBaseUrl + "students/course-unselected/" + this.props.userID)
+        axios.get(apiBaseUrl + "students/course-unselected/" + this.props.userID,{headers:this.headers})
             .then((response) => {
                 console.log(response.data)
                 if (response.status == 400) {
@@ -217,7 +221,8 @@ class MyCourses extends React.Component {
             appContext={this.props.appContext}
             role={this.props.role}
             userID={this.props.userID}
-        open={this.state.open}/>);
+        open={this.state.open}
+        token={this.props.token}/>);
         this.props.appContext.setState({page: page})
     }
 
@@ -275,7 +280,7 @@ class MyCourses extends React.Component {
                         </div>
                         <Divider/>
                         {drawerItemLogged(this.props.appContext, this.props.userID,
-                            this.props.role, this.state.open)}
+                            this.props.role, this.state.open,this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>
@@ -343,8 +348,8 @@ class MyCourses extends React.Component {
     }
 }
 
-MyCourses.propTypes = {
+RegisterCourse.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MyCourses);
+export default withStyles(styles)(RegisterCourse);

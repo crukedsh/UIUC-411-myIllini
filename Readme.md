@@ -84,28 +84,48 @@ Each course has two shedule_id.
     "error": "",
     "data": [
         {
+            "crn": 411,
+            "title": "Database Systems",
             "enrolled_num": 1,
-            "crn": 436,
-            "title": "Computer Network Lab",
-            "capacity": 50,
-            "description": "Useful course",
-            "start_time": "11:15:00",
-            "end_time": "12:30:00",
-            "weekday": "W",
-            "location": "siebel",
-            "schedule_id": 1
+            "capacity": 1,
+            "start_time": [
+                "13:15:00",
+                "13:15:00"
+            ],
+            "end_time": [
+                "15:30:00",
+                "15:00:00"
+            ],
+            "weekday": [
+                "W",
+                "M"
+            ],
+            "location": [
+                "siebel",
+                "siebel"
+            ]
         },
         {
-            "enrolled_num": 1,
             "crn": 436,
-            "title": "Computer Network Lab",
-            "capacity": 50,
-            "description": "Useful course",
-            "start_time": "13:15:00",
-            "end_time": "14:30:00",
-            "weekday": "M",
-            "location": "siebel",
-            "schedule_id": 2
+            "title": "Computer Network",
+            "enrolled_num": 1,
+            "capacity": 1,
+            "start_time": [
+                "11:15:00",
+                "11:15:00"
+            ],
+            "end_time": [
+                "12:30:00",
+                "12:30:00"
+            ],
+            "weekday": [
+                "W",
+                "M"
+            ],
+            "location": [
+                "siebel",
+                "siebel"
+            ]
         }
     ]
 }
@@ -150,23 +170,17 @@ Response:
 Transaction created.
 Request:  
 ```  
-{  
-"crn": [integer],  
-"user_id":""  
-"title":"",  
-"capacity": [integer],
-"description": "",
-"schedule_id_1": [integer],
-"start_time_1": "xx:yy" (24 hour format)
-"end_time_1": "xx:yy"
-"weekday_1": "W",
-"location_1": ""
-"schedule_id_2": [integer],
-"start_time_2": "xx:yy"
-"end_time_2": "xx:yy"
-"weekday_2": "W",
-"location_2": ""
-}  
+{
+	"crn": 436,
+	"user_id": "Matt",
+	"title": "Computer Network Lab",
+	"capacity": 1,
+	"description": "Useful course",
+	"start_time": ["14:15", "14:15"],
+	"end_time": ["15:30", "15:30"],
+	"weekday": ["W", "M"],
+	"location": ["siebel", "siebel"]
+}
 ```  
   
 Response:  
@@ -195,9 +209,17 @@ Response:
  The same as create-course
 Request:  
 ```  
-{  
-15 attributes
-}  
+{
+	"crn": 436,
+	"user_id": "Matt",
+	"title": "Computer Network Lab",
+	"capacity": 1,
+	"description": "Useful course",
+	"start_time": ["14:15", "14:15"],
+	"end_time": ["15:30", "15:30"],
+	"weekday": ["W", "M"],
+	"location": ["siebel", "siebel"]
+}
 ```  
   
 Response:  
@@ -243,42 +265,24 @@ Each course has two schedule_id
         {
             "crn": 436,
             "title": "Computer Network Lab",
-            "enrolled_num": 1,
-            "capacity": 50,
-            "start_time": "11:15:00",
-            "end_time": "12:30:00",
-            "weekday": "W",
-            "location": "siebel"
-        },
-        {
-            "crn": 436,
-            "title": "Computer Network Lab",
-            "enrolled_num": 1,
-            "capacity": 50,
-            "start_time": "13:15:00",
-            "end_time": "14:30:00",
-            "weekday": "M",
-            "location": "siebel"
-        },
-        {
-            "crn": 438,
-            "title": "Computer Network",
             "enrolled_num": 0,
-            "capacity": 30,
-            "start_time": "11:15:00",
-            "end_time": "12:30:00",
-            "weekday": "W",
-            "location": "siebel"
-        },
-        {
-            "crn": 438,
-            "title": "Computer Network",
-            "enrolled_num": 0,
-            "capacity": 30,
-            "start_time": "11:15:00",
-            "end_time": "12:30:00",
-            "weekday": "M",
-            "location": "siebel"
+            "capacity": 1,
+            "start_time": [
+                "14:15",
+                "14:15"
+            ],
+            "end_time": [
+                "15:30",
+                "15:30"
+            ],
+            "weekday": [
+                "W",
+                "M"
+            ],
+            "location": [
+                "siebel",
+                "siebel"
+            ]
         }
     ]
 }
