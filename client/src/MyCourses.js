@@ -377,7 +377,7 @@ class MyCourses extends React.Component {
                         </div>
                         <Divider />
                         {drawerItemLogged(this.props.appContext, this.props.userID,
-                            this.props.role, this.state.open,this.props.token)}
+                            this.props.role, this.state.open, this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>
@@ -389,8 +389,8 @@ class MyCourses extends React.Component {
                                             <Typography align="left" className={classes.secondaryHeading}>{row.crn} </Typography>
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
-                                            <Table className={classes.table}>
-
+                                            <Table className={
+                                                classes.table}>
                                                 <TableBody>
                                                     <TableRow>
                                                         <TableCell>Capacity</TableCell>
@@ -419,7 +419,7 @@ class MyCourses extends React.Component {
                                                 </TableBody>
                                                 <TableBody>
                                                     <TableRow>
-                                                        <TableCell>{row.detail}</TableCell>
+                                                        <TableCell>{row.description}</TableCell>
                                                     </TableRow>
                                                 </TableBody>
                                             </Table>

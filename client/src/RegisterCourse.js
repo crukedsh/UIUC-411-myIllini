@@ -322,7 +322,7 @@ class RegisterCourse extends React.Component {
                                         </TableBody>
                                         <TableBody>
                                             <TableRow>
-                                                <TableCell>{row.detail}</TableCell>
+                                                <TableCell>{row.description}</TableCell>
                                             </TableRow>
                                         </TableBody>
                                     </Table>

@@ -169,7 +169,11 @@ class AddEditCourse extends React.Component {
                 weekday_1: "M",
                 weekday_2: "W",
                 location_1: "Siebel 1404",
-                location_2: "Siebel 1404"
+                location_2: "Siebel 1404",
+                capacity:"",
+                description: "",
+                crn: "",
+                title: "",
             };
         } else {
             this.state = {
@@ -233,6 +237,8 @@ class AddEditCourse extends React.Component {
                             alert("course already exists!");
                         } else if (response.status == 200) {
                             alert("course created successfully!")
+                        } else {
+                            alert("bad response "+response.status)
                         }
                     })
                     .catch(function(err){
@@ -458,6 +464,7 @@ class AddEditCourse extends React.Component {
                                 <TextField
                                     id="description"
                                     label="Description"
+                                    value={this.state.description}
                                     multiline
                                     rows="5"
                                     onChange={(event) => (this.setState({description: event.target.value}))}
