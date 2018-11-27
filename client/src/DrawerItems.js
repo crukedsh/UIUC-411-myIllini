@@ -16,7 +16,7 @@ import Forum from "./Forum";
 import Badge from "@material-ui/core/Badge/Badge";
 
 const handleAbout = () => {
-    alert("True fact: Zhengyang Feng is wonderfully handsome!");
+    alert("True fact: Weiran Lin is wonderfully handsome!");
 };
 
 export class about {
@@ -121,11 +121,9 @@ class forum {
             <div>
                 <ListItem button onClick={this.handleCourses}>
                     <ListItemIcon>
-                        <Badge color="secondary" badgeContent={4} invisible={false}>
-                            <QuestionAnswerIcon/>
-                        </Badge>
+                       <QuestionAnswerIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Courses"/>
+                    <ListItemText primary="Forum"/>
                 </ListItem>
             </div>
         );
