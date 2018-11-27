@@ -197,7 +197,7 @@ class MyCourses extends React.Component {
         }
     }
 
-    editCourse(crn, title, capacity) {
+    editCourse(crn, title, capacity, weekday, start_time, end_time, location) {
         if (this.props.role == "student") {
             console.log("Error!");
         } else {
@@ -211,6 +211,10 @@ class MyCourses extends React.Component {
                 crn={crn}
                 title={title}
                 capacity={capacity}
+                weekday={weekday}
+                start_time={start_time}
+                end_time={end_time}
+                location={location}
                 open={this.state.open}
             />);
             this.props.appContext.setState({page: page})
@@ -219,7 +223,6 @@ class MyCourses extends React.Component {
 
     componentWillMount() {
         console.log(this.state)
-        console.log("wtf")
         if (this.props.role == "teacher") {
             let payload = {
                 "user_id": this.props.userID
@@ -390,8 +393,20 @@ class MyCourses extends React.Component {
                                                         <TableCell numeric>{row.enrolled_num}</TableCell>
                                                     </TableRow>
                                                     <TableRow>
-                                                        <TableCell>Average grade</TableCell>
-                                                        <TableCell numeric>{row.avg_grade}</TableCell>
+                                                        <TableCell>Time Slot 1</TableCell>
+                                                        <TableCell numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>Location 1</TableCell>
+                                                        <TableCell numeric>{row.location[0]}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>Time Slot 2</TableCell>
+                                                        <TableCell numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>Location 2</TableCell>
+                                                        <TableCell numeric>{row.location[1]}</TableCell>
                                                     </TableRow>
                                                 </TableBody>
                                                 <TableBody>
@@ -413,7 +428,11 @@ class MyCourses extends React.Component {
                                                     {this.state.deleted.includes(row.crn) ? <Typography/>: <Button onClick={
                                                                     () => this.editCourse(row.crn,
                                                                         row.title,
-                                                                        row.capacity)}>edit</Button> }
+                                                                        row.capacity,
+                                                                    row.weekday,
+                                                                    row.start_time,
+                                                                    row.end_time,
+                                                                    row.location)}>edit</Button> }
                                                     {this.state.deleted.includes(row.crn) ?
                                                         <Button disabled >deleted</Button> :
                                                         <Button onClick={() => this.deleteCourse(row.crn)}>

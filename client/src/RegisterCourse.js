@@ -26,6 +26,10 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions/Expan
 import grey from "@material-ui/core/es/colors/grey";
 import ClearIcon from "@material-ui/icons/Clear";
 import MyCourse from "./MyCourses";
+import TableBody from "@material-ui/core/TableBody/TableBody";
+import TableRow from "@material-ui/core/TableRow/TableRow";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import Table from "@material-ui/core/Table/Table";
 
 let apiBaseUrl = "http://localhost:3001/";
 
@@ -284,9 +288,39 @@ class MyCourses extends React.Component {
                                                 className={classes.secondaryHeading}>{row.crn} </Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    <Typography>
-                                        Capacity: {row.capacity}
-                                    </Typography>
+                                    <Table className={classes.table}>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>Capacity</TableCell>
+                                                <TableCell numeric>{row.capacity}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Enrolled student</TableCell>
+                                                <TableCell numeric>{row.enrolled_num}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Time Slot 1</TableCell>
+                                                <TableCell numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Location 1</TableCell>
+                                                <TableCell numeric>{row.location[0]}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Time Slot 2</TableCell>
+                                                <TableCell numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Location 2</TableCell>
+                                                <TableCell numeric>{row.location[1]}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>{row.detail}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
                                 </ExpansionPanelDetails>
                                 <Divider/>
                                 <ExpansionPanelActions>
