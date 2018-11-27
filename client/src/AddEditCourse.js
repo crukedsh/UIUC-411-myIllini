@@ -170,7 +170,7 @@ class AddEditCourse extends React.Component {
                 weekday_2: "W",
                 location_1: "Siebel 1404",
                 location_2: "Siebel 1404",
-                capacity:"",
+                capacity: "",
                 description: "",
                 crn: "",
                 title: "",
@@ -230,32 +230,38 @@ class AddEditCourse extends React.Component {
 
             console.log(payload);
             if (this.props.isAdd) {
-                axios.post(apiBaseUrl + "professors/create-course", payload,{headers:this.headers})
+                axios.post(apiBaseUrl + "professors/create-course", payload, {headers: this.headers})
                     .then((response) => {
-                        console.log(response);
-                        if (response.status == 400) {
-                            alert("course already exists!");
-                        } else if (response.status == 200) {
-                            alert("course created successfully!")
-                        } else {
-                            alert("bad response "+response.status)
+                            console.log(response);
+                            if (response.status == 400) {
+                                alert("course already exists!");
+                            } else if (response.status == 200) {
+                                alert("course created successfully!")
+                            } else {
+                                alert("bad response " + response.status)
+                            }
+                            this.handleClickBack();
                         }
-                    })
-                    .catch(function(err){
+                    )
+                    .catch(function (err) {
                         alert(err.toString());
                     });
+
             } else {
-                axios.post(apiBaseUrl + "professors/edit-course", payload,{headers:this.headers})
+                axios.post(apiBaseUrl + "professors/edit-course", payload, {headers: this.headers})
                     .then((response) => {
-                        console.log(response);
-                        if (response.status == 400) {
-                            alert("error!");
-                        } else if (response.status == 200) {
-                            alert("course edited successfully!")
+                            console.log(response);
+                            if (response.status == 400) {
+                                alert("error!");
+                            } else if (response.status == 200) {
+                                alert("course edited successfully!")
+                            }
+
+                            this.handleClickBack();
                         }
-                    });
+                    );
+
             }
-            this.handleClickBack()
         }
     }
 
@@ -324,7 +330,7 @@ class AddEditCourse extends React.Component {
                         </div>
                         <Divider/>
                         {drawerItemLogged(this.props.appContext, this.props.userID,
-                            this.props.role, this.state.open,this.props.token)}
+                            this.props.role, this.state.open, this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>

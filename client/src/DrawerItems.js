@@ -63,12 +63,12 @@ class logout {
 }
 
 class courses {
-    constructor(appContext, userID, role, open,token) {
+    constructor(appContext, userID, role, open, token) {
         this.appContext = appContext;
         this.open = open;
         this.userID = userID;
         this.role = role;
-        this.token=token;
+        this.token = token;
     }
 
     handleCourses = () => {
@@ -78,7 +78,7 @@ class courses {
                              open={self.open}
                              userID={self.userID}
                              role={self.role}
-                            token={self.token}/>);
+                             token={self.token}/>);
         self.appContext.setState({page: page});
     };
 
@@ -97,22 +97,22 @@ class courses {
 }
 
 class forum {
-    constructor(appContext, userID, role, open,token) {
+    constructor(appContext, userID, role, open, token) {
         this.appContext = appContext;
         this.open = open;
         this.userID = userID;
         this.role = role;
-        this.token=token;
+        this.token = token;
     }
 
     handleCourses = () => {
         let self = this;
         let page = [];
         page.push(<Forum appContext={self.appContext}
-                             open={self.open}
-                             userID={self.userID}
-                             role={self.role}
-                            token={self.token}/>);
+                         open={self.open}
+                         userID={self.userID}
+                         role={self.role}
+                         token={self.token}/>);
         self.appContext.setState({page: page});
     };
 
@@ -133,12 +133,12 @@ class forum {
 }
 
 class home {
-    constructor(appContext, userID, role, open,token) {
+    constructor(appContext, userID, role, open, token) {
         this.appContext = appContext;
         this.open = open;
         this.userID = userID;
         this.role = role;
-        this.token=token;
+        this.token = token;
     }
 
     handleHome = () => {
@@ -148,7 +148,7 @@ class home {
                            open={self.open}
                            userID={self.userID}
                            role={self.role}
-                            token={self.token}/>);
+                           token={self.token}/>);
         self.appContext.setState({page: page});
     };
 
@@ -166,7 +166,7 @@ class home {
     }
 }
 
-export function drawerItemLogged(appContext, userID, role, open,token) {
+export function drawerItemLogged(appContext, userID, role, open, token) {
     return (
         <div>
             <List>{

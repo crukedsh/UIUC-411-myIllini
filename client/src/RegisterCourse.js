@@ -152,7 +152,7 @@ class RegisterCourse extends React.Component {
             registered: [],
             open: props.open
         };
-        this.headers={
+        this.headers = {
             'Content-Type': 'application/json',
             'Authorization': this.props.token
         }
@@ -178,7 +178,7 @@ class RegisterCourse extends React.Component {
             };
 
             console.log(payload);
-            axios.post(apiBaseUrl + "students/course-register", payload,{headers:this.headers})
+            axios.post(apiBaseUrl + "students/course-register", payload, {headers: this.headers})
                 .then((response) => {
                     console.log(response);
                     if (response.status == 400) {
@@ -197,7 +197,7 @@ class RegisterCourse extends React.Component {
 
     componentWillMount() {
 
-        axios.get(apiBaseUrl + "students/course-unselected/" + this.props.userID,{headers:this.headers})
+        axios.get(apiBaseUrl + "students/course-unselected/" + this.props.userID, {headers: this.headers})
             .then((response) => {
                 console.log(response.data)
                 if (response.status == 400) {
@@ -221,8 +221,8 @@ class RegisterCourse extends React.Component {
             appContext={this.props.appContext}
             role={this.props.role}
             userID={this.props.userID}
-        open={this.state.open}
-        token={this.props.token}/>);
+            open={this.state.open}
+            token={this.props.token}/>);
         this.props.appContext.setState({page: page})
     }
 
@@ -280,7 +280,7 @@ class RegisterCourse extends React.Component {
                         </div>
                         <Divider/>
                         {drawerItemLogged(this.props.appContext, this.props.userID,
-                            this.props.role, this.state.open,this.props.token)}
+                            this.props.role, this.state.open, this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>
@@ -305,7 +305,8 @@ class RegisterCourse extends React.Component {
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell>Time Slot 1</TableCell>
-                                                <TableCell numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]}</TableCell>
+                                                <TableCell
+                                                    numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]}</TableCell>
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell>Location 1</TableCell>
@@ -313,7 +314,8 @@ class RegisterCourse extends React.Component {
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell>Time Slot 2</TableCell>
-                                                <TableCell numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]}</TableCell>
+                                                <TableCell
+                                                    numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]}</TableCell>
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell>Location 2</TableCell>

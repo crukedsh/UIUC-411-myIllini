@@ -169,11 +169,11 @@ class MyCourses extends React.Component {
     }
 
     handleDrawerOpen = () => {
-        this.setState({ open: true });
+        this.setState({open: true});
     };
 
     handleDrawerClose = () => {
-        this.setState({ open: false });
+        this.setState({open: false});
     };
 
     addCourse() {
@@ -234,7 +234,7 @@ class MyCourses extends React.Component {
             let payload = {
                 "user_id": this.props.userID
             };
-            axios.post(apiBaseUrl + "professors/course-info", payload,{headers:this.headers})
+            axios.post(apiBaseUrl + "professors/course-info", payload, {headers: this.headers})
                 .then((response) => {
                     console.log(response.data)
                     if (response.status == 400) {
@@ -253,7 +253,7 @@ class MyCourses extends React.Component {
 
         } else {
 
-            axios.get(apiBaseUrl + "students/course-selected/" + this.props.userID,{headers:this.headers})
+            axios.get(apiBaseUrl + "students/course-selected/" + this.props.userID, {headers: this.headers})
                 .then((response) => {
                     console.log(response.data)
                     if (response.status == 400) {
@@ -283,7 +283,7 @@ class MyCourses extends React.Component {
             };
             console.log(payload);
 
-            axios.post(apiBaseUrl + "students/course-drop", payload,{headers:this.headers})
+            axios.post(apiBaseUrl + "students/course-drop", payload, {headers: this.headers})
                 .then((response) => {
                     console.log(response);
                     if (response.status == 400) {
@@ -309,7 +309,7 @@ class MyCourses extends React.Component {
                 "crn": crn
             };
             console.log(payload);
-            axios.post(apiBaseUrl + "professors/delete-course", payload,{headers:this.headers})
+            axios.post(apiBaseUrl + "professors/delete-course", payload, {headers: this.headers})
                 .then((response) => {
                     if (response.status == 400) {
                         alert("fail to delete course!");
@@ -325,13 +325,13 @@ class MyCourses extends React.Component {
 
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
 
         return (
 
             <div className={classes.root}>
                 <MuiThemeProvider theme={theme}>
-                    <CssBaseline />
+                    <CssBaseline/>
                     <AppBar
                         position="absolute"
                         className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
@@ -346,7 +346,7 @@ class MyCourses extends React.Component {
                                     this.state.open && classes.menuButtonHidden,
                                 )}
                             >
-                                <MenuIcon />
+                                <MenuIcon/>
                             </IconButton>
                             <Typography
                                 component="h1"
@@ -359,7 +359,7 @@ class MyCourses extends React.Component {
                                 My Courses
                             </Typography>
                             <IconButton color="inherit">
-                                <AccountCircleIcon />
+                                <AccountCircleIcon/>
                             </IconButton>
                         </Toolbar>
                     </AppBar>
@@ -372,91 +372,95 @@ class MyCourses extends React.Component {
                     >
                         <div className={classes.toolbarIcon}>
                             <IconButton onClick={this.handleDrawerClose}>
-                                <ChevronLeftIcon />
+                                <ChevronLeftIcon/>
                             </IconButton>
                         </div>
-                        <Divider />
+                        <Divider/>
                         {drawerItemLogged(this.props.appContext, this.props.userID,
                             this.props.role, this.state.open, this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>
                     <div className={classes.mainPage}>
-                            {this.state.tableData.map((row, index) => (
-                                    <ExpansionPanel>
-                                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                                            <Typography align="left" className={classes.heading}>{row.title}</Typography>
-                                            <Typography align="left" className={classes.secondaryHeading}>{row.crn} </Typography>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-                                            <Table className={
-                                                classes.table}>
-                                                <TableBody>
-                                                    <TableRow>
-                                                        <TableCell>Capacity</TableCell>
-                                                        <TableCell numeric>{row.capacity}</TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell>Enrolled student</TableCell>
-                                                        <TableCell numeric>{row.enrolled_num}</TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell>Time Slot 1</TableCell>
-                                                        <TableCell numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]}</TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell>Location 1</TableCell>
-                                                        <TableCell numeric>{row.location[0]}</TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell>Time Slot 2</TableCell>
-                                                        <TableCell numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]}</TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell>Location 2</TableCell>
-                                                        <TableCell numeric>{row.location[1]}</TableCell>
-                                                    </TableRow>
-                                                </TableBody>
-                                                <TableBody>
-                                                    <TableRow>
-                                                        <TableCell>{row.description}</TableCell>
-                                                    </TableRow>
-                                                </TableBody>
-                                            </Table>
-                                        </ExpansionPanelDetails>
-                                        <ExpansionPanelActions>
-                                            {this.props.role == "student" ?
-                                                this.state.dropped.includes(row.crn) ?
-                                                    <Button disabled> dropped </Button> :
-                                                    <Button onClick={
-                                                        () => this.dropCourse(row.crn)}>drop</Button>
+                        {this.state.tableData.map((row, index) => (
+                            <ExpansionPanel>
+                                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                                    <Typography align="left" className={classes.heading}>{row.title}</Typography>
+                                    <Typography align="left"
+                                                className={classes.secondaryHeading}>{row.crn} </Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Table className={
+                                        classes.table}>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>Capacity</TableCell>
+                                                <TableCell numeric>{row.capacity}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Enrolled student</TableCell>
+                                                <TableCell numeric>{row.enrolled_num}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Time Slot 1</TableCell>
+                                                <TableCell
+                                                    numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Location 1</TableCell>
+                                                <TableCell numeric>{row.location[0]}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Time Slot 2</TableCell>
+                                                <TableCell
+                                                    numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Location 2</TableCell>
+                                                <TableCell numeric>{row.location[1]}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>{row.description}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </ExpansionPanelDetails>
+                                <ExpansionPanelActions>
+                                    {this.props.role == "student" ?
+                                        this.state.dropped.includes(row.crn) ?
+                                            <Button disabled> dropped </Button> :
+                                            <Button onClick={
+                                                () => this.dropCourse(row.crn)}>drop</Button>
 
-                                                :
-                                                <div>
-                                                    {this.state.deleted.includes(row.crn) ? <Typography/>: <Button onClick={
-                                                                    () => this.editCourse(row.crn,
-                                                                        row.title,
-                                                                        row.capacity,
-                                                                    row.weekday,
-                                                                    row.start_time,
-                                                                    row.end_time,
-                                                                    row.location)}>edit</Button> }
-                                                    {this.state.deleted.includes(row.crn) ?
-                                                        <Button disabled >deleted</Button> :
-                                                        <Button onClick={() => this.deleteCourse(row.crn)}>
-                                                            delete</Button>}
-                                                </div>
-                                            }
-                                        </ExpansionPanelActions>
-                                    </ExpansionPanel>
-                            ))}
-                            <Button color="primary" aria-label="Add" onClick={() => this.addCourse()} className={classes.button}>
-                                <AddIcon/>
-                            </Button>
+                                        :
+                                        <div>
+                                            {this.state.deleted.includes(row.crn) ? <Typography/> : <Button onClick={
+                                                () => this.editCourse(row.crn,
+                                                    row.title,
+                                                    row.capacity,
+                                                    row.weekday,
+                                                    row.start_time,
+                                                    row.end_time,
+                                                    row.location)}>edit</Button>}
+                                            {this.state.deleted.includes(row.crn) ?
+                                                <Button disabled>deleted</Button> :
+                                                <Button onClick={() => this.deleteCourse(row.crn)}>
+                                                    delete</Button>}
+                                        </div>
+                                    }
+                                </ExpansionPanelActions>
+                            </ExpansionPanel>
+                        ))}
+                        <Button color="primary" aria-label="Add" onClick={() => this.addCourse()}
+                                className={classes.button}>
+                            <AddIcon/>
+                        </Button>
                     </div>
                 </MuiThemeProvider>
             </div>
-    );
+        );
     }
 }
 
