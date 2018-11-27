@@ -64,6 +64,7 @@ CREATE TABLE `posts`(
   `creator` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
   `crn` int NOT NULL,
   PRIMARY KEY (`post_id`),
+  FULLTEXT (title,content),
   FOREIGN KEY (`creator`) REFERENCES users(`id`)
     On delete Cascade,
   FOREIGN KEY (`crn`) REFERENCES courses(`crn`)

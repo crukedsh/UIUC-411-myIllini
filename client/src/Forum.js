@@ -45,6 +45,10 @@ import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import DialogContentText from "@material-ui/core/DialogContentText/DialogContentText";
+import List from "@material-ui/core/List/List";
+import ListItem from "@material-ui/core/ListItem/ListItem";
+import Avatar from "@material-ui/core/Avatar/Avatar";
+import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 
 let apiBaseUrl = "http://localhost:3001/";
 
@@ -188,6 +192,16 @@ const styles = theme => ({
         alignItems: 'center',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
     },
+    searchpaper: {
+        position: 'absolute',
+        height: 'auto',
+        width: 'auto',
+        marginLeft: '1100px',
+        marginTop: '80px',
+        align:'right',
+        alignItems: 'center',
+        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    },
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing.unit,
@@ -240,8 +254,9 @@ class Forum extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dialog:false,
+            dialog: false,
             open: props.open,
+            openSearch: false,
             page: [],
             loading: false,
             success: false,
@@ -250,7 +265,9 @@ class Forum extends React.Component {
             content: "",
             newPost: false,
             postData: [],
-            post_id:0,
+            post_id: 0,
+            keyword:"",
+            searchResult:[]
         };
         this.headers = {
             'Content-Type': 'application/json',
@@ -258,8 +275,8 @@ class Forum extends React.Component {
         };
         this.crn = [
             {
-                value:0,
-                label:"Select a course:"
+                value: 0,
+                label: "Select a course:"
             }
         ]
     }
@@ -277,37 +294,37 @@ class Forum extends React.Component {
                         alert("Username does not exist");
                     } else if (response.status == 200) {
                         console.log(response.data.data);
-                        response.data.data.forEach((row)=>{
+                        response.data.data.forEach((row) => {
                             this.crn.push({
-                                value:row.crn,
-                                label:row.title,
+                                value: row.crn,
+                                label: row.title,
                             });
                         });
-                        this.setState({newPost:false});
+                        this.setState({newPost: false});
                         console.log(this.crn);
                     } else {
                         alert("unknown error")
                     }
                 });
         }
-        else{
+        else {
             let payload = {
                 "user_id": this.props.userID
             };
-            axios.get(apiBaseUrl + "students/course-selected/"+this.props.userID, {headers: this.headers})
+            axios.get(apiBaseUrl + "students/course-selected/" + this.props.userID, {headers: this.headers})
                 .then((response) => {
                     if (response.status == 400) {
                         console.log("Username does not exists");
                         alert("Username does not exist");
                     } else if (response.status == 200) {
                         console.log(response.data.data);
-                        response.data.data.forEach((row)=>{
+                        response.data.data.forEach((row) => {
                             this.crn.push({
-                                value:row.crn,
-                                label:row.title,
+                                value: row.crn,
+                                label: row.title,
                             });
                         });
-                        this.setState({newPost:false});
+                        this.setState({newPost: false});
                         console.log(this.crn);
                     } else {
                         alert("unknown error")
@@ -331,7 +348,7 @@ class Forum extends React.Component {
     };
 
 
-    refreshPosts = ()=>{
+    refreshPosts = () => {
         axios.get(apiBaseUrl + "forum/post/" + this.state.crn, {headers: this.headers})
             .then((response) => {
                 this.setState({postData: response.data.data}
@@ -347,15 +364,35 @@ class Forum extends React.Component {
         this.setState({crn: event.target.value}, this.refreshPosts);
     };
 
-    handleDelete = (post_id)=>{
-        axios.delete(apiBaseUrl + "forum/post/"+post_id.toString(),{headers: this.headers})
+    handleKeywordChange = (event) =>{
+        if (event.target.value.length==0){
+            this.setState({openSearch:false});
+            return;
+        }
+        axios.get(apiBaseUrl + "forum/search/" + event.target.value, {headers: this.headers})
+            .then((response) => {
+                if (response.data.data.length==0) {
+                    this.setState({openSearch:false});
+                    return;
+                }
+                this.setState({searchResult: response.data.data}
+                    , () => this.setState({openSearch: true,
+                    newPost:false}));
+            })
+            .catch(function (err) {
+                alert(err.toString())
+            });
+    };
+
+    handleDelete = (post_id) => {
+        axios.delete(apiBaseUrl + "forum/post/" + post_id.toString(), {headers: this.headers})
             .then((response) => {
                 this.refreshPosts();
             })
             .catch(function (err) {
                 alert(err.toString())
             });
-        this.setState({dialog:false});
+        this.setState({dialog: false});
     };
 
     handleSubmit = () => {
@@ -425,13 +462,13 @@ class Forum extends React.Component {
 
         page.push(
             <div>
-                {this.state.postData.map((row,index)=>(
+                {this.state.postData.map((row, index) => (
                     <ExpansionPanel>
-                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                             <div className={classes.column}>
                                 <Typography className={classes.heading}>{row.title}</Typography>
                             </div>
-                            <div >
+                            <div>
                                 <Typography className={classes.secondaryHeading}>
                                     Create at: {row.created_at} by {row.creator}
                                 </Typography>
@@ -442,15 +479,15 @@ class Forum extends React.Component {
                                 {row.content}
                             </Typography>
                         </ExpansionPanelDetails>
-                        <Divider />
+                        <Divider/>
                         <ExpansionPanelActions>
                             <Button
                                 // type="submit"
                                 variant="contained"
                                 color="secondary"
                                 className={classes.submit}
-                                disabled={row.creator!=this.props.userID}
-                                onClick={()=>this.setState({
+                                disabled={row.creator != this.props.userID}
+                                onClick={() => this.setState({
                                     dialog: true,
                                     post_id: row.post_id
                                 })}
@@ -465,10 +502,10 @@ class Forum extends React.Component {
                                 variant="contained"
                                 color="primary"
                                 className={classes.submit}
-                                onClick={()=>{
-                                    let page=[];//TODO: add a new page (PostDetail)
-                                    this.props.appContext.setState({page:page})
-                                } }
+                                onClick={() => {
+                                    let page = [];//TODO: add a new page (PostDetail)
+                                    this.props.appContext.setState({page: page})
+                                }}
                             >
                                 <VisibilityIcon className={classNames(classes.leftIcon)}/>
                                 Details
@@ -538,7 +575,7 @@ class Forum extends React.Component {
                         variant="contained"
                         color="secondary"
                         className={classes.submit}
-                        onClick={()=>this.setState({newPost:false})}
+                        onClick={() => this.setState({newPost: false})}
                     >
                         <BackspaceIcon className={classNames(classes.leftIcon)}/>
                         Back
@@ -594,10 +631,21 @@ class Forum extends React.Component {
                                         root: classes.inputRoot,
                                         input: classes.inputInput,
                                     }}
+                                    onChange={(event)=>this.handleKeywordChange(event)}
                                 />
                             </div>
                         </Toolbar>
                     </AppBar>
+                    {this.state.openSearch &&
+                    <Paper className={classes.searchpaper}>
+                        <List>
+                            {this.state.searchResult.map((row, index) =>(
+                            <ListItem button>
+                                <ListItemText primary={row.title} secondary={row.created_at}/>
+                            </ListItem>
+                            ))}
+                        </List>
+                    </Paper>}
                     <Drawer
                         variant="permanent"
                         classes={{
@@ -630,10 +678,10 @@ class Forum extends React.Component {
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={()=>this.setState({dialog:false})} color="secondary">
+                                <Button onClick={() => this.setState({dialog: false})} color="secondary">
                                     No
                                 </Button>
-                                <Button onClick={()=>this.handleDelete(this.state.post_id)} color="primary" autoFocus>
+                                <Button onClick={() => this.handleDelete(this.state.post_id)} color="primary" autoFocus>
                                     Yes
                                 </Button>
                             </DialogActions>
