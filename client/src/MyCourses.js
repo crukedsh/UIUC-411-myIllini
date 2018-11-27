@@ -27,6 +27,11 @@ import grey from "@material-ui/core/es/colors/grey";
 import RegisterCourse from "./RegisterCourse";
 import AddEditCourse from "./AddEditCourse";
 import AddIcon from "@material-ui/icons/Add";
+import Table from "@material-ui/core/Table/Table";
+import TableBody from "@material-ui/core/TableBody/TableBody";
+import TableRow from "@material-ui/core/TableRow/TableRow";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import Paper from "@material-ui/core/Paper/Paper";
 
 let apiBaseUrl = "http://localhost:3001/";
 
@@ -136,6 +141,13 @@ const styles = theme => ({
         maxWidth: 1000,
         marginLeft: "auto",
         marginRight: "auto"
+    },
+
+    table: {
+        minWidth: 700,
+    },
+    tablePaper: {
+        width: 1000
     }
 });
 
@@ -366,20 +378,29 @@ class MyCourses extends React.Component {
                                             <Typography align="left" className={classes.secondaryHeading}>{row.crn} </Typography>
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
-                                            <Typography>
-                                                Capacity={row.capacity}
-                                            </Typography>
-                                            <Typography>
-                                                , Enrolled student={row.enrolled_num}
-                                            </Typography>
-                                            {row.enrolled_num ?
-                                                <Typography>
-                                                    , Average grade={row.avg_grade}
-                                                </Typography> :
-                                                <Typography/>}
+                                            <Table className={classes.table}>
 
+                                                <TableBody>
+                                                    <TableRow>
+                                                        <TableCell>Capacity</TableCell>
+                                                        <TableCell numeric>{row.capacity}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>Enrolled student</TableCell>
+                                                        <TableCell numeric>{row.enrolled_num}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>Average grade</TableCell>
+                                                        <TableCell numeric>{row.avg_grade}</TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                                <TableBody>
+                                                    <TableRow>
+                                                        <TableCell>{row.detail}</TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table>
                                         </ExpansionPanelDetails>
-                                        <Divider/>
                                         <ExpansionPanelActions>
                                             {this.props.role == "student" ?
                                                 this.state.dropped.includes(row.crn) ?
