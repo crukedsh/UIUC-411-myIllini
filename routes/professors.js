@@ -14,7 +14,7 @@ professors.use(middleware.authentication);
 professors.post('/create-course', function(req, res) {
    var appData = { // response
        "error": "",
-       "data": "",
+       "data": ""
    };
 
     var course = [req.body.crn, req.body.user_id, req.body.title, req.body.description, req.body.capacity];
@@ -248,16 +248,23 @@ professors.post('/course-info', function(req, res) {
                     appData.data = "database operation error!";
                     res.status(400).json(appData);
                 } else {
-                    appData.data[0] = {};
-                    appData.data[0].crn = rows[0].crn;
-                    appData.data[0].title = rows[0].title;
-                    appData.data[0].enrolled_num = rows[0].enrolled_num;
-                    appData.data[0].capacity = rows[0].capacity;
-                    appData.data[0].description = rows[0].description;
-                    appData.data[0].start_time = [rows[0].start_time, rows[1].start_time];
-                    appData.data[0].end_time = [rows[0].end_time, rows[1].end_time];
-                    appData.data[0].weekday = [rows[0].weekday, rows[1].weekday];
-                    appData.data[0].location = [rows[0].location, rows[1].location];
+                    appData.error = "";
+                    // appData
+                    rows.sort((row1, row2) => row1.crn - row2.crn);
+                    for(var i = 0; i < rows.length; i += 2) {
+                        appData.data.push({});
+                        var len = appData.data.length-1;
+                        appData.data[len].crn = rows[i].crn;
+                        appData.data[len].title = rows[i].title;
+                        appData.data[len].enrolled_num = rows[i].enrolled_num;
+                        appData.data[len].capacity = rows[i].capacity;
+                        appData.data[len].description = rows[i].description;
+                        appData.data[len].start_time  = [rows[i].start_time, rows[i+1].start_time];
+                        appData.data[len].end_time = [rows[i].end_time, rows[i+1].end_time];
+                        appData.data[len].weekday = [rows[i].weekday, rows[i+1].weekday];
+                        appData.data[len].location = [rows[i].location, rows[i+1].location];
+                    }
+                    // appData.data = (typeof rows);
                     res.status(200).json(appData);
                 }
             });
