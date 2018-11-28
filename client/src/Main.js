@@ -7,7 +7,8 @@ class Main extends Component {
         super(props);
         this.state = {
             page: []
-        }
+        };
+        document.title="MyIllini"
     }
 
     componentWillMount() {

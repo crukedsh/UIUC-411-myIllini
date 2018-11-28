@@ -6,14 +6,17 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import InfoIcon from '@material-ui/icons/Info';
 import ClassIcon from '@material-ui/icons/Class';
 import HomeIcon from '@material-ui/icons/Home';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import Login from "./Login";
 import MyCourses from "./MyCourses"
 import List from "@material-ui/core/List/List";
 import Divider from "@material-ui/core/Divider/Divider";
 import Profile from "./Profile";
+import Forum from "./Forum";
+import Badge from "@material-ui/core/Badge/Badge";
 
 const handleAbout = () => {
-    alert("True fact: Zhengyang Feng is wonderfully handsome!");
+    alert("True fact: Weiran Lin is wonderfully handsome!");
 };
 
 export class about {
@@ -60,11 +63,12 @@ class logout {
 }
 
 class courses {
-    constructor(appContext, userID, role, open) {
+    constructor(appContext, userID, role, open, token) {
         this.appContext = appContext;
         this.open = open;
         this.userID = userID;
         this.role = role;
+        this.token = token;
     }
 
     handleCourses = () => {
@@ -73,7 +77,8 @@ class courses {
         page.push(<MyCourses appContext={self.appContext}
                              open={self.open}
                              userID={self.userID}
-                             role={self.role}/>);
+                             role={self.role}
+                             token={self.token}/>);
         self.appContext.setState({page: page});
     };
 
@@ -91,12 +96,47 @@ class courses {
     }
 }
 
-class home {
-    constructor(appContext, userID, role, open) {
+class forum {
+    constructor(appContext, userID, role, open, token) {
         this.appContext = appContext;
         this.open = open;
         this.userID = userID;
         this.role = role;
+        this.token = token;
+    }
+
+    handleCourses = () => {
+        let self = this;
+        let page = [];
+        page.push(<Forum appContext={self.appContext}
+                         open={self.open}
+                         userID={self.userID}
+                         role={self.role}
+                         token={self.token}/>);
+        self.appContext.setState({page: page});
+    };
+
+    render() {
+        return (
+            <div>
+                <ListItem button onClick={this.handleCourses}>
+                    <ListItemIcon>
+                       <QuestionAnswerIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Forum"/>
+                </ListItem>
+            </div>
+        );
+    }
+}
+
+class home {
+    constructor(appContext, userID, role, open, token) {
+        this.appContext = appContext;
+        this.open = open;
+        this.userID = userID;
+        this.role = role;
+        this.token = token;
     }
 
     handleHome = () => {
@@ -105,7 +145,8 @@ class home {
         page.push(<Profile appContext={self.appContext}
                            open={self.open}
                            userID={self.userID}
-                           role={self.role}/>);
+                           role={self.role}
+                           token={self.token}/>);
         self.appContext.setState({page: page});
     };
 
@@ -123,20 +164,28 @@ class home {
     }
 }
 
-export function drawerItemLogged(appContext, userID, role, open) {
+export function drawerItemLogged(appContext, userID, role, open, token) {
     return (
         <div>
             <List>{
                 new home(appContext,
                     userID,
                     role,
-                    open).render()
+                    open,
+                    token).render()
             }{
                 new courses(appContext,
                     userID,
                     role,
-                    open).render()
-            } </List>
+                    open,
+                    token).render()
+            } {
+                new forum(appContext,
+                    userID,
+                    role,
+                    open,
+                    token).render()
+            }</List>
             <Divider/>
             <List>{new logout(appContext, open).render()} {new about().render()}</List>
         </div>

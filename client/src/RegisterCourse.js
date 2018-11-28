@@ -26,6 +26,10 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions/Expan
 import grey from "@material-ui/core/es/colors/grey";
 import ClearIcon from "@material-ui/icons/Clear";
 import MyCourse from "./MyCourses";
+import TableBody from "@material-ui/core/TableBody/TableBody";
+import TableRow from "@material-ui/core/TableRow/TableRow";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import Table from "@material-ui/core/Table/Table";
 
 let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
@@ -138,7 +142,7 @@ const styles = theme => ({
     }
 });
 
-class MyCourses extends React.Component {
+class RegisterCourse extends React.Component {
     constructor(props) {
         console.log(props);
         super(props);
@@ -148,6 +152,10 @@ class MyCourses extends React.Component {
             registered: [],
             open: props.open
         };
+        this.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': this.props.token
+        }
     }
 
     handleDrawerOpen = () => {
@@ -170,7 +178,7 @@ class MyCourses extends React.Component {
             };
 
             console.log(payload);
-            axios.post(apiBaseUrl + "students/course-register", payload)
+            axios.post(apiBaseUrl + "students/course-register", payload, {headers: this.headers})
                 .then((response) => {
                     console.log(response);
                     if (response.status == 400) {
@@ -189,7 +197,7 @@ class MyCourses extends React.Component {
 
     componentWillMount() {
 
-        axios.get(apiBaseUrl + "students/course-unselected/" + this.props.userID)
+        axios.get(apiBaseUrl + "students/course-unselected/" + this.props.userID, {headers: this.headers})
             .then((response) => {
                 console.log(response.data)
                 if (response.status == 400) {
@@ -213,7 +221,8 @@ class MyCourses extends React.Component {
             appContext={this.props.appContext}
             role={this.props.role}
             userID={this.props.userID}
-        open={this.state.open}/>);
+            open={this.state.open}
+            token={this.props.token}/>);
         this.props.appContext.setState({page: page})
     }
 
@@ -271,7 +280,7 @@ class MyCourses extends React.Component {
                         </div>
                         <Divider/>
                         {drawerItemLogged(this.props.appContext, this.props.userID,
-                            this.props.role, this.state.open)}
+                            this.props.role, this.state.open, this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>
@@ -284,9 +293,41 @@ class MyCourses extends React.Component {
                                                 className={classes.secondaryHeading}>{row.crn} </Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    <Typography>
-                                        Capacity: {row.capacity}
-                                    </Typography>
+                                    <Table className={classes.table}>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>Capacity</TableCell>
+                                                <TableCell numeric>{row.capacity}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Enrolled student</TableCell>
+                                                <TableCell numeric>{row.enrolled_num}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Time Slot 1</TableCell>
+                                                <TableCell
+                                                    numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Location 1</TableCell>
+                                                <TableCell numeric>{row.location[0]}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Time Slot 2</TableCell>
+                                                <TableCell
+                                                    numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Location 2</TableCell>
+                                                <TableCell numeric>{row.location[1]}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>{row.description}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
                                 </ExpansionPanelDetails>
                                 <Divider/>
                                 <ExpansionPanelActions>
@@ -309,8 +350,8 @@ class MyCourses extends React.Component {
     }
 }
 
-MyCourses.propTypes = {
+RegisterCourse.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MyCourses);
+export default withStyles(styles)(RegisterCourse);

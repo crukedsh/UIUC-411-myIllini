@@ -17,9 +17,9 @@ courses.post('/course-detail', function(req, res) {
     };
 
     var sqlParams = [req.body.crn];
-    var sql = "select c.crn, title, capacity, count(*) as enrolled_num " +
-        "from courses c inner join enrollments e on c.crn = e.crn " +
-        "where c.crn = ?";
+    var sql = "select c.crn, c.user_id, title, description, capacity, enrolled_num, schedule_id, start_time, end_time, weekday, location " +
+        "from courses c inner join enrollments e on c.crn = e.crn, schedules s " +
+        "where c.crn = ? and c.crn = s.crn" ;
 
     database.connection.getConnection(function (err, connection) {
         if(err) {

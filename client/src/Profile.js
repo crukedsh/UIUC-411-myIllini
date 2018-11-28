@@ -13,7 +13,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
-import { drawerItemLogged } from './DrawerItems';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
+import {drawerItemLogged} from './DrawerItems';
 import blue from "@material-ui/core/colors/blue";
 import pink from "@material-ui/core/colors/pink";
 import red from "@material-ui/core/colors/red";
@@ -22,6 +23,7 @@ import ListItem from "@material-ui/core/ListItem/ListItem";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import MyCourses from "./MyCourses";
+import Forum from "./Forum"
 
 let apiBaseUrl = "http://localhost:3001/";
 
@@ -129,11 +131,11 @@ class Profile extends React.Component {
     }
 
     handleDrawerOpen = () => {
-        this.setState({ open: true });
+        this.setState({open: true});
     };
 
     handleDrawerClose = () => {
-        this.setState({ open: false });
+        this.setState({open: false});
     };
 
     handleCourses = () => {
@@ -142,18 +144,29 @@ class Profile extends React.Component {
         page.push(<MyCourses appContext={self.props.appContext}
                              open={self.state.open}
                              userID={self.props.userID}
-                             role={self.props.role}/>);
+                             role={self.props.role}
+                             token={self.props.token}/>);
+        self.props.appContext.setState({page: page});
+    };
+    handleForum = () => {
+        let self = this;
+        let page = [];
+        page.push(<Forum appContext={self.props.appContext}
+                         open={self.state.open}
+                         userID={self.props.userID}
+                         role={self.props.role}
+                         token={self.props.token}/>);
         self.props.appContext.setState({page: page});
     };
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
 
         return (
 
             <div className={classes.root}>
                 <MuiThemeProvider theme={theme}>
-                    <CssBaseline />
+                    <CssBaseline/>
                     <AppBar
                         position="absolute"
                         className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
@@ -168,7 +181,7 @@ class Profile extends React.Component {
                                     this.state.open && classes.menuButtonHidden,
                                 )}
                             >
-                                <MenuIcon />
+                                <MenuIcon/>
                             </IconButton>
                             <Typography
                                 component="h1"
@@ -181,7 +194,7 @@ class Profile extends React.Component {
                                 Profile
                             </Typography>
                             <IconButton color="inherit">
-                                    <AccountCircleIcon />
+                                <AccountCircleIcon/>
                             </IconButton>
                         </Toolbar>
                     </AppBar>
@@ -194,12 +207,12 @@ class Profile extends React.Component {
                     >
                         <div className={classes.toolbarIcon}>
                             <IconButton onClick={this.handleDrawerClose}>
-                                <ChevronLeftIcon />
+                                <ChevronLeftIcon/>
                             </IconButton>
                         </div>
-                        <Divider />
+                        <Divider/>
                         {drawerItemLogged(this.props.appContext, this.props.userID,
-                        this.props.role, this.state.open)}
+                            this.props.role, this.state.open, this.props.token)}
                     </Drawer>
 
                     <CssBaseline/>
@@ -208,11 +221,22 @@ class Profile extends React.Component {
                         <List>
                             <ListItem button onClick={this.handleCourses}>
                                 <Avatar className={classes.avatar}>
-                                    <ClassIcon />
+                                    <ClassIcon/>
                                 </Avatar>
 
                                 <ListItemText
-                                    primary="Courses" />
+                                    primary="Courses"/>
+                            </ListItem>
+                            <li>
+                                <Divider inset/>
+                            </li>
+                            <ListItem button onClick={this.handleForum}>
+                                <Avatar className={classes.avatar}>
+                                    <QuestionAnswerIcon/>
+                                </Avatar>
+
+                                <ListItemText
+                                    primary="Forum"/>
                             </ListItem>
                             <li>
                                 <Divider inset/>
