@@ -31,7 +31,7 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import Table from "@material-ui/core/Table/Table";
 
-let apiBaseUrl = "http://localhost:3001/";
+let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
 const drawerWidth = 240;
 
