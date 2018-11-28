@@ -34,7 +34,6 @@ import TableCell from "@material-ui/core/TableCell/TableCell";
 import Paper from "@material-ui/core/Paper/Paper";
 
 let apiBaseUrl = "http://localhost:3001/";
-
 const drawerWidth = 240;
 
 const theme = createMuiTheme({

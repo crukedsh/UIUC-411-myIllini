@@ -27,7 +27,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabe
 import Radio from "@material-ui/core/Radio/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup/RadioGroup";
 
-let apiBaseUrl = "http://localhost:3001/";
 
 const drawerWidth = 240;
 
@@ -41,6 +40,7 @@ const theme = createMuiTheme({
     },
 });
 
+let apiBaseUrl = "http://localhost:3001/";
 const styles = theme => ({
     root: {
         display: 'flex',
