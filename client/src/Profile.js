@@ -25,7 +25,7 @@ import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import MyCourses from "./MyCourses";
 import Forum from "./Forum"
 
-let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
+let apiBaseUrl = "http://localhost:3001/";
 
 const drawerWidth = 240;
 

@@ -28,7 +28,7 @@ import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 
-let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
+let apiBaseUrl = "http://localhost:3001/";
 
 const drawerWidth = 240;
 

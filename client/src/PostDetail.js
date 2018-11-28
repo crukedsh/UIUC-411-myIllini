@@ -49,7 +49,7 @@ import Forum from "./Forum";
 import Grid from "@material-ui/core/Grid/Grid";
 
 
-let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
+let apiBaseUrl = "http://localhost:3001/";
 
 const drawerWidth = 240;
 

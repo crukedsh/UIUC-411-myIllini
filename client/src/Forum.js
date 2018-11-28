@@ -53,7 +53,7 @@ import Switch from "@material-ui/core/Switch/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import PostDetail from "./PostDetail";
 
-let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
+let apiBaseUrl = "http://localhost:3001/";
 
 const drawerWidth = 240;
 

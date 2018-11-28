@@ -37,7 +37,7 @@ const theme = createMuiTheme({
     },
 });
 
-let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
+let apiBaseUrl = "http://localhost:3001/";
 const styles = theme => ({
     root: {
         display: 'flex',
