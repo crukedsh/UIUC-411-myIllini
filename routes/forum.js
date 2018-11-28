@@ -105,7 +105,7 @@ forum.get('/post/:crn', function (req, res) {
             res.status(500).json(appData);
             return;
         }
-        connection.query('SELECT * FROM posts WHERE crn= ? order by created_at desc ', req.params.crn, function (err, rows, fields) {
+        connection.query('SELECT * FROM posts WHERE crn= ? order by is_top desc, created_at desc ', req.params.crn, function (err, rows, fields) {
             if (err) {
                 appData.error = err.toString();
                 appData.data = "Error occurred!";

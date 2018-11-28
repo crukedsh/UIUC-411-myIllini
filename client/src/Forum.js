@@ -49,6 +49,9 @@ import List from "@material-ui/core/List/List";
 import ListItem from "@material-ui/core/ListItem/ListItem";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
+import Switch from "@material-ui/core/Switch/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
+import PostDetail from "./PostDetail";
 
 let apiBaseUrl = "http://localhost:3001/";
 
@@ -198,7 +201,7 @@ const styles = theme => ({
         width: 'auto',
         marginLeft: '1100px',
         marginTop: '80px',
-        align:'right',
+        align: 'right',
         alignItems: 'center',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
     },
@@ -266,8 +269,9 @@ class Forum extends React.Component {
             newPost: false,
             postData: [],
             post_id: 0,
-            keyword:"",
-            searchResult:[]
+            keyword: "",
+            searchResult: [],
+            isTop: 0
         };
         this.headers = {
             'Content-Type': 'application/json',
@@ -364,20 +368,22 @@ class Forum extends React.Component {
         this.setState({crn: event.target.value}, this.refreshPosts);
     };
 
-    handleKeywordChange = (event) =>{
-        if (event.target.value.length==0){
-            this.setState({openSearch:false});
+    handleKeywordChange = (event) => {
+        if (event.target.value.length == 0) {
+            this.setState({openSearch: false});
             return;
         }
         axios.get(apiBaseUrl + "forum/search/" + event.target.value, {headers: this.headers})
             .then((response) => {
-                if (response.data.data.length==0) {
-                    this.setState({openSearch:false});
+                if (response.data.data.length == 0) {
+                    this.setState({openSearch: false});
                     return;
                 }
                 this.setState({searchResult: response.data.data}
-                    , () => this.setState({openSearch: true,
-                    newPost:false}));
+                    , () => this.setState({
+                        openSearch: true,
+                        newPost: false
+                    }));
             })
             .catch(function (err) {
                 alert(err.toString())
@@ -400,7 +406,8 @@ class Forum extends React.Component {
             crn: parseInt(this.state.crn),
             title: this.state.title,
             content: this.state.content,
-            creator: this.props.userID
+            creator: this.props.userID,
+            is_top: this.state.isTop
 
         };
         axios.post(apiBaseUrl + "forum/post", payload, {headers: this.headers})
@@ -503,7 +510,16 @@ class Forum extends React.Component {
                                 color="primary"
                                 className={classes.submit}
                                 onClick={() => {
-                                    let page = [];//TODO: add a new page (PostDetail)
+                                    let page = (<PostDetail appContext={this.props.appContext}
+                                                       open={this.state.open}
+                                                       userID={this.props.userID}
+                                                       role={this.props.role}
+                                                       token={this.props.token}
+                                                        post_id={row.post_id}
+                                                        title={row.title}
+                                                        content={row.content}
+                                                            creator={row.creator}
+                                                            created_at={row.created_at}/>);
                                     this.props.appContext.setState({page: page})
                                 }}
                             >
@@ -558,6 +574,20 @@ class Forum extends React.Component {
                         <Input multiline id="content" name="content" autoComplete="Content (less than 5000 words)"
                                onChange={(event) => this.setState({content: event.target.value})}/>
                     </FormControl>
+                    {this.props.role == "teacher" &&
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={this.state.isTop}
+                                onChange={(event) => this.setState({isTop: event.target.checked ? 1 : 0})}
+                                value="checkedA"
+                            />
+                        }
+                        label="Put the post on the top"
+                    />
+                    }
+                    <Divider/>
+
 
                     <Button
                         // type="submit"
@@ -631,7 +661,7 @@ class Forum extends React.Component {
                                         root: classes.inputRoot,
                                         input: classes.inputInput,
                                     }}
-                                    onChange={(event)=>this.handleKeywordChange(event)}
+                                    onChange={(event) => this.handleKeywordChange(event)}
                                 />
                             </div>
                         </Toolbar>
@@ -639,10 +669,21 @@ class Forum extends React.Component {
                     {this.state.openSearch &&
                     <Paper className={classes.searchpaper}>
                         <List>
-                            {this.state.searchResult.map((row, index) =>(
-                            <ListItem button>
-                                <ListItemText primary={row.title} secondary={row.created_at}/>
-                            </ListItem>
+                            {this.state.searchResult.map((row, index) => (
+                                <ListItem button onClick={() => {
+                                    let page = (<PostDetail appContext={this.props.appContext}
+                                                            open={this.state.open}
+                                                            userID={this.props.userID}
+                                                            role={this.props.role}
+                                                            token={this.props.token}
+                                                            post_id={row.post_id}
+                                                            title={row.title}
+                                                            content={row.content} creator={row.creator}
+                                                            created_at={row.created_at}/>);
+                                    this.props.appContext.setState({page: page})
+                                }}>
+                                    <ListItemText primary={row.title} secondary={row.created_at}/>
+                                </ListItem>
                             ))}
                         </List>
                     </Paper>}
