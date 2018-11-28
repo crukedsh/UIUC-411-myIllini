@@ -7,7 +7,7 @@ let middleware=require("./authentication");
 professors.use(cors());
 
 process.env.SECRET_KEY = "cs411fall2018";
-// professors.use(middleware.authentication);
+professors.use(middleware.authentication);
 
 // Professors create courses to "courses" table.
 // POST

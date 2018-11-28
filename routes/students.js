@@ -8,7 +8,7 @@ students.use(cors());
 
 process.env.SECRET_KEY = "cs411fall2018";
 
-// students.use(middleware.authentication);
+students.use(middleware.authentication);
 
 students.get('/course-selected/:userId',function (req, res){
     var appData = {
