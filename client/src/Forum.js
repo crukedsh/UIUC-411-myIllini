@@ -671,6 +671,17 @@ class Forum extends React.Component {
                         <List>
                             {this.state.searchResult.map((row, index) => (
                                 <ListItem button onClick={() => {
+                                    let found=false;
+                                    for (var i=0;i<this.crn.length;i++){
+                                        if (this.crn[i].value==row.crn){
+                                            found=true;
+                                            break;
+                                        }
+                                    }
+                                    if (!found){
+                                        alert("You are not in this course!");
+                                        return;
+                                    }
                                     let page = (<PostDetail appContext={this.props.appContext}
                                                             open={this.state.open}
                                                             userID={this.props.userID}
