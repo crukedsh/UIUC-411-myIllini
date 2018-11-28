@@ -417,42 +417,21 @@ class PostDetail extends React.Component {
                             >
                                 Post Detail
                             </Typography>
-                            <div className={classes.search}>
-                                <div className={classes.searchIcon}>
-                                    <SearchIcon/>
-                                </div>
-                                <InputBase
-                                    placeholder="Search…"
-                                    classes={{
-                                        root: classes.inputRoot,
-                                        input: classes.inputInput,
-                                    }}
-                                    onChange={(event) => this.handleKeywordChange(event)}
-                                />
-                            </div>
+                            {/*<div className={classes.search}>*/}
+                                {/*<div className={classes.searchIcon}>*/}
+                                    {/*<SearchIcon/>*/}
+                                {/*</div>*/}
+                                {/*<InputBase*/}
+                                    {/*placeholder="Search…"*/}
+                                    {/*classes={{*/}
+                                        {/*root: classes.inputRoot,*/}
+                                        {/*input: classes.inputInput,*/}
+                                    {/*}}*/}
+                                    {/*onChange={(event) => this.handleKeywordChange(event)}*/}
+                                {/*/>*/}
+                            {/*</div>*/}
                         </Toolbar>
                     </AppBar>
-                    {this.state.openSearch &&
-                    <Paper className={classes.searchpaper}>
-                        <List>
-                            {this.state.searchResult.map((row, index) => (
-                                <ListItem button onClick={() => {
-                                    let page = (<PostDetail appContext={this.props.appContext}
-                                                            open={this.state.open}
-                                                            userID={this.props.userID}
-                                                            role={this.props.role}
-                                                            token={this.props.token}
-                                                            post_id={row.post_id}
-                                                            title={row.title}
-                                                            content={row.content} creator={row.creator}
-                                                            created_at={row.created_at}/>);
-                                    this.props.appContext.setState({page: page})
-                                }}>
-                                    <ListItemText primary={row.title} secondary={row.created_at}/>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Paper>}
                     <Drawer
                         variant="permanent"
                         classes={{
