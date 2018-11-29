@@ -154,6 +154,10 @@ const styles = theme => ({
         width: 230,
         margin: "normal"
     },
+    warning: {
+        color: 'red',
+        fontStyle: "italic"
+    }
 });
 
 class AddEditCourse extends React.Component {
@@ -480,6 +484,11 @@ class AddEditCourse extends React.Component {
                             </form>
 
                         </div>
+                        {this.props.isAdd ? <Typography/> :
+                            <div>
+                                <Typography className={classes.warning}> * Warning: Editing schedules may cause time conflicts for registered students</Typography>
+                            </div>
+                        }
                         <div>
                             <Button color="primary" aria-label="Done" onClick={() => this.handleClickDone()}>
                                 <DoneIcon/>
