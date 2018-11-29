@@ -32,6 +32,7 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import Paper from "@material-ui/core/Paper/Paper";
+import Roster from "./Roster";
 
 let apiBaseUrl = "http://localhost:3001/";
 const drawerWidth = 240;
@@ -273,6 +274,21 @@ class MyCourses extends React.Component {
         }
     }
 
+    rosterCourse(crn) {
+        console.log("Roster!");
+        let page = [];
+        page.push(<Roster
+            appContext={this.props.appContext}
+            role={this.props.role}
+            userID={this.props.userID}
+            crn={crn}
+            open={this.state.open}
+            token={this.props.token}
+        />);
+        this.props.appContext.setState({page: page})
+    }
+
+
     dropCourse(crn) {
         if (this.props.role == "teacher") {
             console.log("Error!");
@@ -437,6 +453,7 @@ class MyCourses extends React.Component {
                                                 <Button disabled>deleted</Button> :
                                                 <Button onClick={() => this.deleteCourse(row.crn)}>
                                                     delete</Button>}
+                                            <Button onClick={() => this.rosterCourse(row.crn)}>roster</Button>
                                         </div>
                                     }
                                 </ExpansionPanelActions>

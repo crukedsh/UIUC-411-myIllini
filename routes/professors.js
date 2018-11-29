@@ -273,4 +273,36 @@ professors.post('/course-info', function(req, res) {
     });
 });
 
+// Professor queries course roster of specific course
+professors.post('/course-info', function(req, res) {
+    var appData = { // response
+        "error": "",
+        "data": [],
+    };
+
+    var sqlParams = [req.body.crn];
+    var sql = "select e.user_id, first_name, last_name"  +
+        "from enrollments e right join users u on e.user_id = u.id" +
+        "where e.crn = ? ordered by last_name";
+
+    database.connection.getConnection(function (err, connection) {
+        if(err) {
+            appData.error = "internal server error: database";
+            res.status(500).json(appData);
+        } else {
+            connection.query(sql, sqlParams, (err, rows, fields) => {
+                if(err) {
+                    appData.error = err.toString();
+                    appData.data = "database operation error!";
+                    res.status(400).json(appData);
+                } else {
+                    appData.data = rows;
+                    res.status(200).json(appData);
+                }
+            });
+            connection.release();
+        }
+    });
+});
+
 module.exports = professors;
