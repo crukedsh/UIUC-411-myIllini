@@ -16,7 +16,7 @@ students.get('/course-selected/:userId',function (req, res){
         "data": []
     };
 
-    var sql = 'SELECT enrolled_num, c.crn, title, capacity, description, time_format(start_time, \'%H:%i\') as start_time, time_format(end_time, \'%H:%i\') as end_time, weekday, location, schedule_id ' +
+    var sql = 'SELECT DISTINCT enrolled_num, c.crn, title, capacity, description, time_format(start_time, \'%H:%i\') as start_time, time_format(end_time, \'%H:%i\') as end_time, weekday, location, schedule_id ' +
         'FROM courses c left join enrollments e on e.crn=c.crn, schedules s ' +
         'WHERE c.crn in (select crn from enrollments e where e.user_id=?) and s.crn = c.crn';
 
@@ -62,7 +62,7 @@ students.get('/course-unselected/:userId',function (req, res){
         "data": []
     };
 
-    sql = 'SELECT enrolled_num, c.crn, title, capacity, description, time_format(start_time, \'%H:%i\') as start_time, time_format(end_time, \'%H:%i\') as end_time, weekday, location, schedule_id ' +
+    sql = 'SELECT DISTINCT enrolled_num, c.crn, title, capacity, description, time_format(start_time, \'%H:%i\') as start_time, time_format(end_time, \'%H:%i\') as end_time, weekday, location, schedule_id ' +
         'FROM courses c left join enrollments e on e.crn=c.crn, schedules s ' +
         'WHERE c.crn not in (select crn from enrollments e where e.user_id=?) and s.crn=c.crn';
 
@@ -116,53 +116,68 @@ students.post('/course-register',function (req, res){
     var updateParam = [req.body.crn];
     var updateSQL = 'update courses set enrolled_num = enrolled_num + 1 where crn = ?';
 
+    var isolationLevel = 'set autocommit = 0; set global transaction isolation level serializable; set session transaction isolation level serializable;';
+
     database.connection.getConnection(function (err, conn) {
         conn.beginTransaction(function (err) {
             if (err) {
                 throw err;
             }
-            conn.query(enrollmentSQL, userData, (err, rows, fields) => {
-                if (err) {
-                    conn.rollback(function () {
-                        appData.error = err.toString();
-                        appData.data = "database operation error!";
-                        res.status(400).json(appData);
-                    });
-                } else {
-                    conn.query(selectSQL, updateParam, (err, rows, fields) => {
-                       if(rows[0].enrolled_num >= rows[0].capacity) {
-                           conn.rollback(function () {
-                               appData.error = "full";
-                               appData.data = "";
-                               res.status(400).json(appData);
-                               // throw "course full";
-                           })
-                       } else {
-                           conn.query(updateSQL, updateParam, (err, rows, fields) => {
-                               if (err) {
-                                   conn.rollback(function () {
-                                       appData.error = err.toString();
-                                       appData.data = "database operation error!";
-                                       res.status(400).json(appData);
-                                   });
-                               } else {
-                                   conn.commit(function (err) {
-                                       if (err) {
-                                           conn.rollback(function () {
-                                               return;
-                                           })
-                                       }
-                                   });
-                                   appData.data = "success";
-                                   res.status(200).json(appData);
-                               }
-                           });
-                       }
-                    });
-                }
+            conn.query(isolationLevel, () => {
+                conn.query(selectSQL, updateParam, (err, rows, fields) => {
+                    if (rows[0].enrolled_num >= rows[0].capacity) {
+                        conn.rollback(function () {
+                            appData.error = "full";
+                            appData.data = "";
+                            res.status(400).json(appData);
+                            // throw "course full";
+                        });
+                    } else {
+                        conn.query(enrollmentSQL, userData, (err, rows, fields) => {
+                            if(err) {
+                                conn.rollback(function () {
+                                    appData.error = err.toString();
+                                    appData.data = "database operation error!";
+                                    res.status(400).json(appData);
+                                });
+                            } else {
+                                conn.query(updateSQL, updateParam, (err, rows, fields) => {
+                                    if (err) {
+                                        conn.rollback(function () {
+                                            appData.error = err.toString();
+                                            appData.data = "database operation error!";
+                                            res.status(400).json(appData);
+                                        });
+                                    } else {
+                                        conn.query(selectSQL, updateParam, (err, rows, fields) => {
+                                            if (rows[0].enrolled_num > rows[0].capacity) {
+                                                conn.rollback(function () {
+                                                    appData.error = "full";
+                                                    appData.data = "";
+                                                    res.status(400).json(appData);
+                                                    // throw "course full";
+                                                });
+                                            } else {
+                                                conn.commit(function (err) {
+                                                    if (err) {
+                                                        conn.rollback(function () {
+                                                            return;
+                                                        })
+                                                    }
+                                                });
+                                                appData.data = "success";
+                                                res.status(200).json(appData);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             });
-            conn.release();
         });
+        conn.release();
     });
 
 });

@@ -25,8 +25,6 @@ import axios from "axios";
 import Profile from "./Profile"
 import Register from "./Register"
 
-let apiBaseUrl = "http://localhost:3001/";
-
 const drawerWidth = 240;
 
 const theme = createMuiTheme({
@@ -39,6 +37,7 @@ const theme = createMuiTheme({
     },
 });
 
+let apiBaseUrl = "http://localhost:3001/";
 const styles = theme => ({
     root: {
         display: 'flex',

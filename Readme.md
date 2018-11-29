@@ -332,7 +332,71 @@ Response:
     ]
 }
 ```  
+
+GET /forum/review/:post_id
+```json
+{
+    "error": "",
+    "data": [
+        {
+            "review_id": 1,
+            "created_at": "2018-11-27T17:45:09.000Z",
+            "content": "this is a test review",
+            "endorsed": 0,
+            "creator": "chenzhu",
+            "post_id": 1
+        }
+    ]
+}
+```
+
+POST /forum/review
+
+Req:
+```json
+{
+	"post_id": 1,
+	"creator": "chenzhu",
+	"content": "this is a test review",
+	"endorsed": 0
+}
+```
+Res
+```angular2html
+{
+    "error": "",
+    "data": "New Review Added"
+}
+```
+
+
+PUT /forum/review
+Req:
+```json
+{
+	"review_id": 1,
+	"creator": "chenzhu",
+	"content": "this is a test review",
+	"endorsed": 0
+}
+```
+Res
+```angular2html
+{
+    "error": "",
+    "data": "Review Modified"
+}
+```
+
+DELETE /forum/review/:review_id
   
+  Res
+  ```angular2html
+  {
+      "error": "",
+      "data": "Review Deleted"
+  }
+  ```
 ---  
   
 Oct 29 11:30 pm, chen zhu:  
