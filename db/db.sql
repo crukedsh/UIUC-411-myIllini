@@ -83,5 +83,3 @@ CREATE TABLE `reviews`(
     On delete Cascade
 );
 
-
-

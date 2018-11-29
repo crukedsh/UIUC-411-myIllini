@@ -128,7 +128,7 @@ const styles = theme => ({
     },
     heading: {
         fontSize: 18,
-        flexBasis: '50%',
+        flexBasis: '100%',
         flexShrink: 0,
     },
     secondaryHeading: {
@@ -144,6 +144,9 @@ const styles = theme => ({
 
     table: {
         minWidth: 700,
+    },
+    tableLong: {
+        minWidth: 2000,
     },
     tablePaper: {
         width: 1000
@@ -385,43 +388,30 @@ class MyCourses extends React.Component {
                             <ExpansionPanel>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                                     <Typography align="left" className={classes.heading}>{row.title}</Typography>
-                                    <Typography align="left"
-                                                className={classes.secondaryHeading}>{row.crn} </Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    <Table className={
-                                        classes.table}>
+                                    <Table>
                                         <TableBody>
                                             <TableRow>
-                                                <TableCell>Capacity</TableCell>
-                                                <TableCell numeric>{row.capacity}</TableCell>
+                                                <TableCell>CRN</TableCell>
+                                                <TableCell numeric>{row.crn}</TableCell>
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell>Enrolled student</TableCell>
-                                                <TableCell numeric>{row.enrolled_num}</TableCell>
+                                                <TableCell>Enrollment</TableCell>
+                                                <TableCell numeric>{row.enrolled_num} / {row.capacity}</TableCell>
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell>Time Slot 1</TableCell>
+                                                <TableCell>Meeting 1</TableCell>
                                                 <TableCell
-                                                    numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]}</TableCell>
+                                                    numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]} @ {row.location[0]}</TableCell>
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell>Location 1</TableCell>
-                                                <TableCell numeric>{row.location[0]}</TableCell>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell>Time Slot 2</TableCell>
+                                                <TableCell>Meeting 2</TableCell>
                                                 <TableCell
-                                                    numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]}</TableCell>
+                                                    numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]} @ {row.location[1]}</TableCell>
                                             </TableRow>
-                                            <TableRow>
-                                                <TableCell>Location 2</TableCell>
-                                                <TableCell numeric>{row.location[1]}</TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                                        <TableBody>
-                                            <TableRow>
-                                                <TableCell>{row.description}</TableCell>
+                                            <TableRow >
+                                                <TableCell colSpan={2}>{row.description}</TableCell>
                                             </TableRow>
                                         </TableBody>
                                     </Table>

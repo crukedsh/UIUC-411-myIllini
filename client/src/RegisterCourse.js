@@ -150,6 +150,7 @@ class RegisterCourse extends React.Component {
         this.state = {
             tableData: [],
             registered: [],
+            dead: [],
             open: props.open
         };
         this.headers = {
@@ -181,12 +182,15 @@ class RegisterCourse extends React.Component {
             axios.post(apiBaseUrl + "students/course-register", payload, {headers: this.headers})
                 .then((response) => {
                     console.log(response);
-                    if (response.status == 400) {
-                        alert("fail to add course!");
-                    } else if (response.status == 200) {
+                    if  (response.status == 200) {
                         let curCrn = this.state.registered;
                         curCrn.push(crn);
                         this.setState({registered: curCrn});
+                    } else {
+                        alert("Failed!");
+                        let curCrn = this.state.dead;
+                        curCrn.push(crn);
+                        this.setState({dead: curCrn});
                     }
                 });
 
@@ -289,51 +293,39 @@ class RegisterCourse extends React.Component {
                             <ExpansionPanel>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                                     <Typography align="left" className={classes.heading}>{row.title}</Typography>
-                                    <Typography align="left"
-                                                className={classes.secondaryHeading}>{row.crn} </Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    <Table className={classes.table}>
+                                    <Table>
                                         <TableBody>
                                             <TableRow>
-                                                <TableCell>Capacity</TableCell>
-                                                <TableCell numeric>{row.capacity}</TableCell>
+                                                <TableCell>CRN</TableCell>
+                                                <TableCell numeric>{row.crn}</TableCell>
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell>Enrolled student</TableCell>
-                                                <TableCell numeric>{row.enrolled_num}</TableCell>
+                                                <TableCell>Enrollment</TableCell>
+                                                <TableCell numeric>{row.enrolled_num} / {row.capacity}</TableCell>
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell>Time Slot 1</TableCell>
+                                                <TableCell>Meeting 1</TableCell>
                                                 <TableCell
-                                                    numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]}</TableCell>
+                                                    numeric>{row.weekday[0]} {row.start_time[0]}-{row.end_time[0]} @ {row.location[0]}</TableCell>
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell>Location 1</TableCell>
-                                                <TableCell numeric>{row.location[0]}</TableCell>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell>Time Slot 2</TableCell>
+                                                <TableCell>Meeting 2</TableCell>
                                                 <TableCell
-                                                    numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]}</TableCell>
+                                                    numeric>{row.weekday[1]} {row.start_time[1]}-{row.end_time[1]} @ {row.location[1]}</TableCell>
                                             </TableRow>
-                                            <TableRow>
-                                                <TableCell>Location 2</TableCell>
-                                                <TableCell numeric>{row.location[1]}</TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                                        <TableBody>
-                                            <TableRow>
-                                                <TableCell>{row.description}</TableCell>
+                                            <TableRow >
+                                                <TableCell colSpan={2}>{row.description}</TableCell>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
                                 </ExpansionPanelDetails>
-                                <Divider/>
                                 <ExpansionPanelActions>
                                     {
                                         this.state.registered.includes(row.crn) ?
-                                            <Button disabled> added </Button> :
+                                            <Button disabled> added </Button> : this.state.dead.includes(row.crn) ?
+                                            <Button disabled> error </Button> :
                                             <Button onClick={
                                                 () => this.registerCourse(row.crn)}>add</Button>
                                     }
