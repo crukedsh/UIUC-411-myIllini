@@ -150,7 +150,8 @@ class RegisterCourse extends React.Component {
         this.state = {
             tableData: [],
             registered: [],
-            dead: [],
+            full: [],
+            conflict: [],
             open: props.open
         };
         this.headers = {
@@ -182,15 +183,18 @@ class RegisterCourse extends React.Component {
             axios.post(apiBaseUrl + "students/course-register", payload, {headers: this.headers})
                 .then((response) => {
                     console.log(response);
-                    if  (response.status == 200) {
+                    if  (response.status == 200 && response.data.error==="") {
                         let curCrn = this.state.registered;
                         curCrn.push(crn);
                         this.setState({registered: curCrn});
-                    } else {
-                        alert("Failed!");
-                        let curCrn = this.state.dead;
+                    } else if (response.data.error==="full"){
+                        let curCrn = this.state.full;
                         curCrn.push(crn);
-                        this.setState({dead: curCrn});
+                        this.setState({full: curCrn});
+                    } else if (response.data.error==="conflict"){
+                        let curCrn = this.state.conflict;
+                        curCrn.push(crn);
+                        this.setState({conflict: curCrn});
                     }
                 });
 
@@ -324,8 +328,9 @@ class RegisterCourse extends React.Component {
                                 <ExpansionPanelActions>
                                     {
                                         this.state.registered.includes(row.crn) ?
-                                            <Button disabled> added </Button> : this.state.dead.includes(row.crn) ?
-                                            <Button disabled> error </Button> :
+                                            <Button disabled> added </Button> : this.state.full.includes(row.crn) ?
+                                            <Button disabled> full </Button> : this.state.conflict.includes(row.crn) ?
+                                            <Button disabled> conflict </Button> :
                                             <Button onClick={
                                                 () => this.registerCourse(row.crn)}>add</Button>
                                     }

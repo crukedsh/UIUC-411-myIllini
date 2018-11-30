@@ -20,20 +20,20 @@ professors.post('/create-course', function(req, res) {
     var course = [req.body.crn, req.body.user_id, req.body.title, req.body.description, req.body.capacity];
     var course_sql = "insert into courses values  (?, ?, ?, ?, ?, 0)";
 
-    var conflict1 = [req.body.crn, req.body.weekday[0],
+    var conflict1 = [req.body.crn, req.body.weekday[0], req.body.crn,
         req.body.start_time[0], req.body.start_time[0],
         req.body.end_time[0], req.body.end_time[0]];
-    var conflict2 = [req.body.crn, req.body.weekday[1],
+    var conflict2 = [req.body.crn, req.body.weekday[1], req.body.crn,
         req.body.start_time[1], req.body.start_time[1],
         req.body.end_time[1], req.body.end_time[1]];
     var conflict_sql = "insert ignore into time_conflicts " +
         "select ?, b.crn " +
         "from schedules b " +
-        "where b.weekday=? and " +
+        "where b.weekday=? and b.crn<>?" +
         "not ((b.start_time<time_format(?, '%H:%i') " +
         "and (b.end_time<time_format(?, '%H:%i'))) " +
         "or ((b.end_time>time_format(?, '%H:%i')) " +
-        "and (b.start_time>time_format(?, '%H:%i')))) ";
+        "and (b.start_time>time_format(?, '%H:%i'))))";
 
     var schedule1 = [req.body.crn, req.body.start_time[0], req.body.end_time[0], req.body.weekday[0], req.body.location[0]];
     var schedule1_sql = "insert into schedules (crn, start_time, end_time, weekday, location) values (?, time_format(?, '%H:%i'), time_format(?, '%H:%i'), ?,?)";
@@ -159,16 +159,16 @@ professors.post('/edit-course', function (req, res) {
     var delete_param = [req.body.crn];
     var delete_sql = "delete from schedules where crn = ?";
 
-    var conflict1 = [req.body.crn, req.body.weekday[0],
+    var conflict1 = [req.body.crn, req.body.weekday[0], req.body.crn,
         req.body.start_time[0], req.body.start_time[0],
         req.body.end_time[0], req.body.end_time[0]];
-    var conflict2 = [req.body.crn, req.body.weekday[1],
+    var conflict2 = [req.body.crn, req.body.weekday[1], req.body.crn,
         req.body.start_time[1], req.body.start_time[1],
         req.body.end_time[1], req.body.end_time[1]];
     var conflict_sql = "insert ignore into time_conflicts " +
         "select ?, b.crn " +
         "from schedules b " +
-        "where b.weekday=? and " +
+        "where b.weekday=? and b.crn<>?" +
         "not ((b.start_time<time_format(?, '%H:%i') " +
         "and (b.end_time<time_format(?, '%H:%i'))) " +
         "or ((b.end_time>time_format(?, '%H:%i')) " +
