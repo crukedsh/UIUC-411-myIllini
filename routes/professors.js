@@ -29,7 +29,7 @@ professors.post('/create-course', function(req, res) {
     var conflict_sql = "insert ignore into time_conflicts " +
         "select ?, b.crn " +
         "from schedules b " +
-        "where b.weekday=? and b.crn<>?" +
+        "where b.weekday=? and b.crn<>? and " +
         "not ((b.start_time<time_format(?, '%H:%i') " +
         "and (b.end_time<time_format(?, '%H:%i'))) " +
         "or ((b.end_time>time_format(?, '%H:%i')) " +
@@ -168,7 +168,7 @@ professors.post('/edit-course', function (req, res) {
     var conflict_sql = "insert ignore into time_conflicts " +
         "select ?, b.crn " +
         "from schedules b " +
-        "where b.weekday=? and b.crn<>?" +
+        "where b.weekday=? and b.crn<>? and " +
         "not ((b.start_time<time_format(?, '%H:%i') " +
         "and (b.end_time<time_format(?, '%H:%i'))) " +
         "or ((b.end_time>time_format(?, '%H:%i')) " +
