@@ -7,12 +7,14 @@ import InfoIcon from '@material-ui/icons/Info';
 import ClassIcon from '@material-ui/icons/Class';
 import HomeIcon from '@material-ui/icons/Home';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
+import ContactMailIcon from '@material-ui/icons/ContactMail';
 import Login from "./Login";
 import MyCourses from "./MyCourses"
 import List from "@material-ui/core/List/List";
 import Divider from "@material-ui/core/Divider/Divider";
 import Profile from "./Profile";
 import Forum from "./Forum";
+import Friends from "./Friends";
 import Badge from "@material-ui/core/Badge/Badge";
 
 const handleAbout = () => {
@@ -164,6 +166,41 @@ class home {
     }
 }
 
+class friends {
+    constructor(appContext, userID, role, open, token) {
+        this.appContext = appContext;
+        this.open = open;
+        this.userID = userID;
+        this.role = role;
+        this.token = token;
+    }
+
+    handleFriends = () => {
+        let self = this;
+        let page = [];
+        page.push(<Friends appContext={self.appContext}
+        open={self.open}
+        userID={self.userID}
+        role={self.role}
+        token={self.token}/>);
+        self.appContext.setState({page: page});
+    };
+
+    render() {
+        return (
+            <div>
+                <ListItem button onClick={this.handleFriends}>
+                    <ListItemIcon>
+                        <ContactMailIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Friends"/>
+                    </ListItem>
+            </div>
+        );
+    }
+}
+
+
 export function drawerItemLogged(appContext, userID, role, open, token) {
     return (
         <div>
@@ -185,7 +222,14 @@ export function drawerItemLogged(appContext, userID, role, open, token) {
                     role,
                     open,
                     token).render()
-            }</List>
+            }{
+                new friends(appContext,
+                    userID,
+                    role,
+                    open,
+                    token).render()
+                }
+            </List>
             <Divider/>
             <List>{new logout(appContext, open).render()} {new about().render()}</List>
         </div>

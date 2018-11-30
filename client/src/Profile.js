@@ -14,6 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
+import ContactMailIcon from '@material-ui/icons/ContactMail';
 import {drawerItemLogged} from './DrawerItems';
 import blue from "@material-ui/core/colors/blue";
 import pink from "@material-ui/core/colors/pink";
@@ -23,7 +24,8 @@ import ListItem from "@material-ui/core/ListItem/ListItem";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import MyCourses from "./MyCourses";
-import Forum from "./Forum"
+import Forum from "./Forum";
+import Friends from "./Friends";
 
 let apiBaseUrl = "http://localhost:3001/";
 
@@ -159,6 +161,17 @@ class Profile extends React.Component {
         self.props.appContext.setState({page: page});
     };
 
+    handleFriends = () => {
+        let self = this;
+        let page = [];
+        page.push(<Friends appContext={self.props.appContext}
+        open={self.state.open}
+        userID={self.props.userID}
+        role={self.props.role}
+        token={self.props.token}/>);
+        self.props.appContext.setState({page: page});
+    };
+
     render() {
         const {classes} = this.props;
 
@@ -217,7 +230,6 @@ class Profile extends React.Component {
 
                     <CssBaseline/>
                     <main className={classes.mainPage}>
-
                         <List>
                             <ListItem button onClick={this.handleCourses}>
                                 <Avatar className={classes.avatar}>
@@ -234,13 +246,18 @@ class Profile extends React.Component {
                                 <Avatar className={classes.avatar}>
                                     <QuestionAnswerIcon/>
                                 </Avatar>
-
                                 <ListItemText
                                     primary="Forum"/>
                             </ListItem>
                             <li>
                                 <Divider inset/>
                             </li>
+                            <ListItem button onClick={this.handleFriends}>
+                                <Avatar className={classes.avatar}>
+                                    <ContactMailIcon/>
+                                </Avatar>
+                                <ListItemText primary="Friends"/>
+                            </ListItem>
                         </List>
                     </main>
                 </MuiThemeProvider>

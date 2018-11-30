@@ -83,3 +83,33 @@ CREATE TABLE `reviews`(
     On delete Cascade
 );
 
+CREATE TABLE `friend_requests`(
+  `request_id` int NOT NULL auto_increment,
+  `sender_id` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  `receiver_id` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  `comment` varchar(100),
+  `status` varchar(20) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT NOW(),
+  `updated_at` datetime NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (`request_id`),
+  FOREIGN KEY (`sender_id`) REFERENCES users(`id`)
+    On delete Cascade,
+  FOREIGN KEY (`receiver_id`) REFERENCES users(`id`)
+        On delete Cascade
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `messages`(
+  `message_id` int NOT NULL auto_increment,
+  `sender_id` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  `receiver_id` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  `content` varchar(100),
+  `status` varchar(20) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT NOW(),
+  `updated_at` datetime NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (`request_id`),
+  FOREIGN KEY (`sender_id`) REFERENCES users(`id`)
+    On delete Cascade,
+  FOREIGN KEY (`receiver_id`) REFERENCES users(`id`)
+        On delete Cascade
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
