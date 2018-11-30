@@ -20,7 +20,7 @@ import TextField from "@material-ui/core/TextField/TextField";
 import Button from "@material-ui/core/Button/Button";
 import DoneIcon from "@material-ui/icons/Done";
 import ClearIcon from "@material-ui/icons/Clear";
-import MyCourse from "./MyCourses";
+import MyCourses from "./MyCourses";
 import axios from "axios";
 import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
@@ -272,7 +272,7 @@ class AddEditCourse extends React.Component {
     handleClickBack() {
         console.log("Back to course!");
         let page = [];
-        page.push(<MyCourse
+        page.push(<MyCourses
             appContext={this.props.appContext}
             role={this.props.role}
             userID={this.props.userID}
