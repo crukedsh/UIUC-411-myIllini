@@ -7,7 +7,7 @@ var token;
 let middleware=require("./authentication")
 
 forum.use(cors());
-//forum.use(middleware.authentication);
+forum.use(middleware.authentication);
 
 process.env.SECRET_KEY = "cs411fall2018";
 
@@ -134,6 +134,34 @@ forum.get('/search/:keyword', function (req, res) {
             return;
         }
         connection.query('SELECT * FROM posts WHERE MATCH (title,content) AGAINST (? IN NATURAL LANGUAGE MODE)', req.params.keyword, function (err, rows, fields) {
+            if (err) {
+                appData.error = err.toString();
+                appData.data = "Error occurred!";
+                res.status(400).json(appData);
+                return;
+            }
+            appData.data=rows;
+            res.status(200).json(appData);
+
+        });
+        connection.release();
+
+    });
+});
+
+forum.get('/search-slow/:keyword', function (req, res) {
+    let appData = {
+        error:"",
+        data:"",
+    };
+    database.connection.getConnection(function (err, connection) {
+        if (err) {
+            appData.error = err.toString();
+            appData.data = "Internal Server Error";
+            res.status(500).json(appData);
+            return;
+        }
+        connection.query(`SELECT * FROM posts WHERE content like '%${req.params.keyword}%' or title like '%${req.params.keyword}%'` , function (err, rows, fields) {
             if (err) {
                 appData.error = err.toString();
                 appData.data = "Error occurred!";
