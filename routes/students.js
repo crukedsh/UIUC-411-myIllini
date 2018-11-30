@@ -62,7 +62,8 @@ students.get('/course-unselected/:userId',function (req, res){
         "data": []
     };
 
-    sql = 'SELECT DISTINCT enrolled_num, c.crn, title, capacity, description, time_format(start_time, \'%H:%i\') as start_time, time_format(end_time, \'%H:%i\') as end_time, weekday, location, schedule_id ' +
+    sql = 'SELECT DISTINCT enrolled_num, c.crn, title, capacity, description, time_format(start_time, \'%H:%i\') as start_time, ' +
+        'time_format(end_time, \'%H:%i\') as end_time, weekday, location, schedule_id ' +
         'FROM courses c left join enrollments e on e.crn=c.crn, schedules s ' +
         'WHERE c.crn not in (select crn from enrollments e where e.user_id=?) and s.crn=c.crn';
 
@@ -125,7 +126,7 @@ students.post('/course-register',function (req, res){
     var updateParam = [req.body.crn];
     var updateSQL = 'update courses set enrolled_num = enrolled_num + 1 where crn = ?';
 
-    var isolationLevel = 'set autocommit = 0; set session transaction isolation level serializable;';
+    var isolationLevel = 'set autocommit = 0; set global transaction isolation level serializable; set session transaction isolation level serializable;';
 
     database.connection.getConnection(function (err, conn) {
         conn.beginTransaction(function (err) {
