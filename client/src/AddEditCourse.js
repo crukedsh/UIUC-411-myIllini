@@ -20,7 +20,7 @@ import TextField from "@material-ui/core/TextField/TextField";
 import Button from "@material-ui/core/Button/Button";
 import DoneIcon from "@material-ui/icons/Done";
 import ClearIcon from "@material-ui/icons/Clear";
-import MyCourse from "./MyCourses";
+import MyCourses from "./MyCourses";
 import axios from "axios";
 import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
@@ -154,6 +154,10 @@ const styles = theme => ({
         width: 230,
         margin: "normal"
     },
+    warning: {
+        color: 'red',
+        fontStyle: "italic"
+    }
 });
 
 class AddEditCourse extends React.Component {
@@ -268,7 +272,7 @@ class AddEditCourse extends React.Component {
     handleClickBack() {
         console.log("Back to course!");
         let page = [];
-        page.push(<MyCourse
+        page.push(<MyCourses
             appContext={this.props.appContext}
             role={this.props.role}
             userID={this.props.userID}
@@ -480,6 +484,11 @@ class AddEditCourse extends React.Component {
                             </form>
 
                         </div>
+                        {this.props.isAdd ? <Typography/> :
+                            <div>
+                                <Typography className={classes.warning}> * Warning: Editing schedules may cause time conflicts for registered students</Typography>
+                            </div>
+                        }
                         <div>
                             <Button color="primary" aria-label="Done" onClick={() => this.handleClickDone()}>
                                 <DoneIcon/>
