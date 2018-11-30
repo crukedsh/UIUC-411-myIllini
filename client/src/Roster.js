@@ -17,6 +17,14 @@ import pink from "@material-ui/core/colors/pink";
 import red from "@material-ui/core/colors/red";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle"
 import MyCourses from "./MyCourses";
+import Table from "@material-ui/core/Table/Table";
+import TableRow from "@material-ui/core/TableRow/TableRow";
+import TableHead from "@material-ui/core/TableHead/TableHead";
+import TableBody from "@material-ui/core/TableBody/TableBody";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import Button from "@material-ui/core/Button/Button";
+import ClearIcon from "@material-ui/icons/Clear";
+import axios from "axios";
 
 let apiBaseUrl = "http://localhost:3001/";
 
@@ -120,6 +128,11 @@ class Roster extends React.Component {
         super(props);
         this.state = {
             open: props.open,
+            tableData: [],
+        };
+        this.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': this.props.token
         };
     }
 
@@ -133,15 +146,15 @@ class Roster extends React.Component {
 
 
     componentWillMount() {
-        console.log(this.state)
         let payload = {
             "crn": this.props.crn
         };
+
         axios.post(apiBaseUrl + "professors/course-roster", payload, {headers: this.headers})
             .then((response) => {
                 console.log(response.data)
                 if (response.status == 400) {
-                    console.log("crn does not exists");
+                    console.log("crn does not exist");
                     alert("crn does not exist");
                 } else if (response.status == 200) {
                     console.log(response.data.data);
@@ -235,18 +248,12 @@ class Roster extends React.Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                        {this.state.tableData.map((row, index) => (
-
-                            <TableRow>
-                                <TableCell>Name</TableCell>
+                        {this.state.tableData.map((row, index) => {return (
+                            <TableRow key={row.user_id}>
                                 <TableCell>{row.first_name} {row.last_name}</TableCell>
+                                <TableCell>{row.user_id}</TableCell>
                             </TableRow>
-
-                            <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>{row.user_id}</TableCell>
-                            </TableRow>
-
+                        );})
                           }
                             </TableBody>
                         </Table>

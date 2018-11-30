@@ -356,16 +356,16 @@ professors.post('/course-info', function (req, res) {
 });
 
 // Professor queries course roster of specific course
-professors.post('/course-info', function(req, res) {
+professors.post('/course-roster', function(req, res) {
     var appData = { // response
         "error": "",
         "data": [],
     };
 
     var sqlParams = [req.body.crn];
-    var sql = "select e.user_id, first_name, last_name"  +
-        "from enrollments e right join users u on e.user_id = u.id" +
-        "where e.crn = ? ordered by last_name";
+    var sql = "select e.user_id, first_name, last_name "  +
+        "from enrollments e inner join users u on e.user_id = u.id " +
+        "where e.crn = ? order by last_name";
 
     database.connection.getConnection(function (err, connection) {
         if(err) {
