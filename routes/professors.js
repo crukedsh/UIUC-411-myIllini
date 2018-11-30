@@ -315,7 +315,7 @@ professors.post('/course-info', function (req, res) {
     };
 
     var sqlParams = [req.body.user_id];
-    var sql = "select c.crn, title, enrolled_num, c.capacity, description, time_format(start_time, '%H:%i') as start_time, time_format(end_time, '%H:%i') as end_time, weekday, location " +
+    var sql = "select distinct c.crn, title, enrolled_num, c.capacity, description, time_format(start_time, '%H:%i') as start_time, time_format(end_time, '%H:%i') as end_time, weekday, location " +
         "from enrollments e right join courses c on c.crn = e.crn, schedules s " +
         "where c.user_id = ? and c.crn = s.crn ";
 
