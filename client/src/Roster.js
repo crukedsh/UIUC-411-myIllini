@@ -26,7 +26,7 @@ import Button from "@material-ui/core/Button/Button";
 import ClearIcon from "@material-ui/icons/Clear";
 import axios from "axios";
 
-let apiBaseUrl = "http://localhost:3001/";
+let apiBaseUrl = "http://chenzhu2.web.illinois.edu/";
 
 const drawerWidth = 240;
 
