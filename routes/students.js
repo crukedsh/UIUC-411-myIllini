@@ -137,8 +137,8 @@ students.post('/course-register',function (req, res){
                     if (rows[0].enrolled_num >= rows[0].capacity) {
                         conn.rollback(function () {
                             appData.error = "full";
-                            appData.data = "";
-                            res.status(400).json(appData);
+                            appData.data = "full";
+                            res.status(200).json(appData);
                             // throw "course full";
                         });
                     } else {
@@ -146,8 +146,8 @@ students.post('/course-register',function (req, res){
                             if (rows.length != 0) {
                                 conn.rollback(function () {
                                     appData.error = "conflict";
-                                    appData.data = "";
-                                    res.status(400).json(appData);
+                                    appData.data = "conflict";
+                                    res.status(200).json(appData);
                                 });
                             } else {
                                 conn.query(enrollmentSQL, userData, (err, rows, fields) => {
@@ -170,8 +170,8 @@ students.post('/course-register',function (req, res){
                                                     if (rows[0].enrolled_num > rows[0].capacity) {
                                                         conn.rollback(function () {
                                                             appData.error = "full";
-                                                            appData.data = "";
-                                                            res.status(400).json(appData);
+                                                            appData.data = "full";
+                                                            res.status(200).json(appData);
                                                             // throw "course full";
                                                         });
                                                     } else {
